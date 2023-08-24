@@ -13,7 +13,7 @@ Vue.use(
   new VueSocketIO({
     // 生产环境建议关闭，开发环境打开(在控制台看到socket连接和事件监听的信息)
     debug: true,
-    connection: SocketIO.connect('http://localhost:3001', {
+    connection: SocketIO.connect('http://192.168.1.10:3001', {
       // 创建时是否自动连接 我们这里设定为false,在指定页面再开启
       autoConnect: false,
       // 路径(默认值：/socket.io/) 

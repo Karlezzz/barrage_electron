@@ -29,7 +29,7 @@
     nanoid
   } from "nanoid";
   import io from 'socket.io-client';
-  const socket = io('ws://localhost:3001');
+  const socket = io('http://192.168.1.10:3001');
   export default {
     name: "Barrage",
     data() {
