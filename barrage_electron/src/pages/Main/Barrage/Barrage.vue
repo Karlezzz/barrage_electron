@@ -66,8 +66,6 @@
         //这是移除所有监听
         socket.removeAllListeners();
         socket.on('broadcast', (data) => {
-          console.log(data);
-          // this.messageContent.push(JSON.parse(data))
           this.$store.dispatch('saveMessage', JSON.parse(data))
         })
       }
@@ -87,7 +85,9 @@
         });
       },
     },
-    beforeDestroy() {},
+    beforeDestroy() {
+      socket.disconnect()
+    },
   };
 </script>
 
