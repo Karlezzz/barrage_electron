@@ -20,8 +20,10 @@
     "echarts": "^5.4.1",
     "nanoid": "^4.0.1",
     "qrcodejs2": "^0.0.2",
+    "socket.io-client": "^4.7.2",
     "vue": "^2.6.14",
     "vue-router": "^3.6.5",
+    "vue-socket.io": "^3.0.10",
     "vuex": "^3.6.2"
   },
   "devDependencies": {

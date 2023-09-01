@@ -14,8 +14,8 @@ const actions = {
     async getRoomInfoList({
         commit
     }) {
-        let result = await reqRoomInfoList();
-        commit('GETROOMINFOLIST', result.data);
+        // let result = await reqRoomInfoList();
+        // commit('GETROOMINFOLIST', result.data);
 
     }
 };
