@@ -7,12 +7,12 @@
 					v-for="(item, index) in messageList"
 					:key="index"
 					:class="{
-						leftMessage: item.name != myName,
-						rightMessage: item.name == myName,
+						leftMessage: msgOwner(item) != myName,
+						rightMessage: msgOwner(item) == myName,
 					}"
 				>
-					<div class="messageAuthor">{{ item.name }}</div>
-					<div class="messageWord">{{ item.msg }}</div>
+					<div class="messageAuthor">{{ msgOwner(item) }}</div>
+					<div class="messageWord">{{ content(item) }}</div>
 				</div>
 			</div>
 			<div class="input">
@@ -45,6 +45,7 @@
 import { nanoid } from 'nanoid'
 import { io } from 'socket.io-client'
 import requests from '@/api/request'
+import { Message } from '../../../../lib/models'
 
 export default {
 	name: 'Barrage',
@@ -56,22 +57,32 @@ export default {
 			socket: null,
 		}
 	},
-  computed: {
-    messageList() {
-      return this.$store.state.barrage_chat.messageList
-    }
-  },
+	computed: {
+		messageList() {
+			return this.$store.state.barrage_chat.messageList
+		},
+	},
 	methods: {
+		content(message) {
+			const { content } = message
+			return content
+		},
+		msgOwner(message) {
+			const {
+				owner: { name },
+			} = message
+			return name
+		},
 		sendMessage() {
-			const newMsg = {
+			const msgInstance = Message.init({
+				owner: {
+					name: 'admin',
+				},
+				content: this.newMessage,
 				type: 'chat',
-				msg: this.newMessage,
-				uid: this.myId,
-				rid: '1',
-				name: 'admin',
-			}
+			})
 			try {
-				this.socket.emit('sendMsg', JSON.stringify(newMsg))
+				this.socket.emit('sendMsg', JSON.stringify(msgInstance))
 			} catch (error) {
 				console.log(error)
 			}
@@ -102,7 +113,7 @@ export default {
 		},
 	},
 	mounted() {
-    this.initScroll()
+		this.initScroll()
 		this.initSocket()
 	},
 	watch: {
