@@ -14,7 +14,10 @@
 				</div>
 			</div>
 			<div class="body">
-				<Function></Function>
+				<Function
+					:user="user"
+					@onSubmitName="onSubmitName"
+				></Function>
 				<Barrage
 					:user="user"
 					@onSendMessage="onSendMessage"
@@ -31,7 +34,7 @@ import Barrage from './Barrage/Barrage.vue'
 import FunctionDetail from './FunctionDetail/FunctionDetail.vue'
 
 import { nanoid } from 'nanoid'
-import { _findOne } from '@/api'
+import { _findOne, _updateOne } from '@/api'
 import { io } from 'socket.io-client'
 import { User, Message } from '../../../lib/models'
 export default {
@@ -45,6 +48,7 @@ export default {
 		return {
 			endpoint: {
 				socket: '/socket',
+				user: '/user',
 			},
 			user: null,
 		}
@@ -61,6 +65,14 @@ export default {
 		},
 	},
 	methods: {
+		async onSubmitName(user) {
+			try {
+				const result = await _updateOne(this.endpoint.user, user)
+				if (result) alert('Successfully!')
+			} catch (error) {
+				alert('Failed!')
+			}
+		},
 		onSendMessage(newMessage) {
 			try {
 				this.socket.emit('sendMsg', JSON.stringify(newMessage))
