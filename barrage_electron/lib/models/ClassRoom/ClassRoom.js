@@ -6,13 +6,13 @@ class ClassRoom {
     this.beginTime = options.beginTime || (new Date().valueOf())
     this.endTime = options.endTime
     this.ownerRoom = options.ownerRoom
-    this.creator = options.creator
+    // this.creator = options.creator
   }
 
   get isValid() {
     return !!this.id
     && !!this.ownerRoom 
-    && !!this.creator 
+    // && !!this.creator 
     && !!this.beginTime 
   }
 

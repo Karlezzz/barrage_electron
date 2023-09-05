@@ -4,14 +4,15 @@ class Room {
     options = options || {}
     this.id = options.id
     this.name = options.name || 'Classroom'
+    this.password = options.password
     this.created = options.created || (new Date().valueOf())
     this.modified = options.modified || (new Date().valueOf())
-    this.owner = options.owner
+    // this.owner = options.owner
     this.classRoom = ClassRoom.initFromArray(options.classRoom) || []
   }
 
   get isValid() {
-    return !!this.id && !!this.owner
+    return !!this.id
   }
 
   static init(options = {}) {

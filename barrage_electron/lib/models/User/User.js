@@ -1,14 +1,13 @@
-const { nanoid } = require('nanoid')
 class User {
   constructor(options = {}) {
     options = options || {}
     this.name = options.name
-    this.id = options.id || setId(options)
+    this.id = options.id
     this.ipAddress = options.ipAddress
     this.created = options.created || new Date().getTime()
     this.modified = options.modified || this.created
     this.connections = [],
-    this.identify = options.identify
+    this.identify = options.identify || 'teacher'
   }
 
   updateModified() {
@@ -50,10 +49,6 @@ class User {
   }
 }
 
-function setId(options) {
-  const { id } = options
-  return id ? id : nanoid()
-}
 
 module.exports = {
   User
