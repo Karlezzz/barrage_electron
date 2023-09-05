@@ -7,12 +7,12 @@
 					v-for="(item, index) in messageList"
 					:key="index"
 					:class="{
-						leftMessage: msgOwner(item) != myName,
-						rightMessage: msgOwner(item) == myName,
+						leftMessage: messageUserId(item) !== userId,
+						rightMessage: messageUserId(item) === userId,
 					}"
 				>
-					<div class="messageAuthor">{{ msgOwner(item) }}</div>
-					<div class="messageWord">{{ content(item) }}</div>
+					<div class="messageAuthor">{{ messageUserName(item) }}</div>
+					<div class="messageWord">{{ messageContent(item) }}</div>
 				</div>
 			</div>
 			<div class="input">
@@ -44,8 +44,8 @@
 <script>
 import { nanoid } from 'nanoid'
 import { io } from 'socket.io-client'
-import requests from '@/api/request'
-import { Message } from '../../../../lib/models'
+import { Message, User } from '../../../../lib/models'
+import { _findOne } from '@/api'
 
 export default {
 	name: 'Barrage',
@@ -55,29 +55,43 @@ export default {
 			myId: nanoid(),
 			newMessage: '',
 			socket: null,
+			user: null,
+			endpoint: {
+				socket: '/socket',
+			},
 		}
 	},
 	computed: {
+		userName() {
+			return this.user ? this.user.name : ''
+		},
+		userId() {
+			return this.user ? this.user.id : ''
+		},
 		messageList() {
-			return this.$store.state.barrage_chat.messageList
+			return this.$store.state.barrage.messageList
 		},
 	},
 	methods: {
-		content(message) {
+		messageContent(message) {
 			const { content } = message
 			return content
 		},
-		msgOwner(message) {
+		messageUserName(message) {
 			const {
-				owner: { name },
+				user: { name },
 			} = message
 			return name
 		},
+		messageUserId(message) {
+			const {
+				user: { id },
+			} = message
+			return id
+		},
 		sendMessage() {
 			const msgInstance = Message.init({
-				owner: {
-					name: 'admin',
-				},
+				user: this.user,
 				content: this.newMessage,
 				type: 'chat',
 			})
@@ -91,7 +105,7 @@ export default {
 
 		async initSocket() {
 			try {
-				const socketUrl = await this.getSocketUrl()
+				const { socketUrl } = await this.getSocketUrl()
 				this.socket = io(socketUrl, {
 					transports: ['websocket'],
 				})
@@ -104,20 +118,30 @@ export default {
 			}
 		},
 		async getSocketUrl() {
-			const result = await requests.get('/socket/url')
-			return result.data.data
+			try {
+				const result = await _findOne(this.endpoint.socket)
+				if (result) return result
+			} catch (error) {
+				console.log(error)
+			}
 		},
 		initScroll() {
 			let div = document.querySelector('.message')
 			div.scrollTop = div.scrollHeight
 		},
+		initUser() {
+			this.user = User.init({
+				id: nanoid(),
+				name: 'Teacher',
+			})
+		},
 	},
 	mounted() {
 		this.initScroll()
 		this.initSocket()
+		this.initUser()
 	},
 	watch: {
-		// 屏幕滚动始终在最后一条
 		messageList() {
 			this.$nextTick(() => {
 				let div = document.querySelector('.message')
