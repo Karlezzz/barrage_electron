@@ -1,6 +1,13 @@
+const { ClassRoom } = require('./ClassRoom')
 const { Message } = require('./Message')
-const { Owner } = require('./Owner')
+const { Response } = require('./Response')
+const { Room } = require('./Room')
+const { User } = require('./User')
 module.exports = {
+  ClassRoom,
   Message,
-  Owner
+  Response,
+  Room,
+  User,
+
 }
