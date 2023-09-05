@@ -49,8 +49,8 @@
 							<i class="fa-solid fa-user"></i>
 							<input
 								type="text"
-								placeholder="ROOMID"
-								v-model="roomId"
+								placeholder="ROOMCODE"
+								v-model="roomCode"
 							/>
 						</div>
 						<!-- 密码 -->
@@ -159,10 +159,11 @@ export default {
 		return {
 			isShowRoomName: false,
 			roomName: null,
-			roomId: null,
+			roomCode: null,
 			roomPassword: null,
 			// roomInfoList: this. $store.state.enter.roomInfoList,
 			roomInfoList: [],
+      room: null,
 			endpoint: {
 				room: '/room',
 			},
@@ -203,11 +204,13 @@ export default {
 			return Room.init({
 				id: nanoid(),
 				name: this.roomName,
+        code: this.code,
 				password: this.roomPassword,
 			})
 		},
 	},
 	created() {
+    this.room = this.initRoom()
 		// this.$store.dispatch('getRoomInfoList');
 	},
 }
