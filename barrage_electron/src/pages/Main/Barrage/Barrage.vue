@@ -46,6 +46,7 @@ import { nanoid } from 'nanoid'
 import { io } from 'socket.io-client'
 import requests from '@/api/request'
 import { Message } from '../../../../lib/models'
+import { _findOne } from '@/api'
 
 export default {
 	name: 'Barrage',
@@ -55,11 +56,14 @@ export default {
 			myId: nanoid(),
 			newMessage: '',
 			socket: null,
+			endpoint: {
+				socket: '/socket',
+			},
 		}
 	},
 	computed: {
 		messageList() {
-			return this.$store.state.barrage_chat.messageList
+			return this.$store.state.barrage.messageList
 		},
 	},
 	methods: {
@@ -91,7 +95,7 @@ export default {
 
 		async initSocket() {
 			try {
-				const socketUrl = await this.getSocketUrl()
+				const { socketUrl } = await this.getSocketUrl()
 				this.socket = io(socketUrl, {
 					transports: ['websocket'],
 				})
@@ -104,8 +108,13 @@ export default {
 			}
 		},
 		async getSocketUrl() {
-			const result = await requests.get('/socket/url')
-			return result.data.data
+			try {
+				const result = await _findOne(this.endpoint.socket)
+				console.log(result)
+				if (result) return result
+			} catch (error) {
+				console.log(error)
+			}
 		},
 		initScroll() {
 			let div = document.querySelector('.message')
