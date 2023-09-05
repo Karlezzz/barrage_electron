@@ -29,7 +29,7 @@
 				</div>
 				<div
 					class="send"
-					@click="sendMessage"
+					@click="onSendMessage"
 				>
 					<img
 						src="../image/Send.png"
@@ -43,9 +43,9 @@
 
 <script>
 import { nanoid } from 'nanoid'
-import { io } from 'socket.io-client'
+// import { io } from 'socket.io-client'
 import { Message, User } from '../../../../lib/models'
-import { _findOne } from '@/api'
+// import { _findOne } from '@/api'
 
 export default {
 	name: 'Barrage',
@@ -55,11 +55,13 @@ export default {
 			myId: nanoid(),
 			newMessage: '',
 			socket: null,
-			user: null,
 			endpoint: {
 				socket: '/socket',
 			},
 		}
+	},
+	props: {
+		user: { type: Object, default: () => {} },
 	},
 	computed: {
 		userName() {
@@ -89,57 +91,59 @@ export default {
 			} = message
 			return id
 		},
-		sendMessage() {
+		// sendMessage() {
+		// 	const msgInstance = Message.init({
+		// 		user: this.user,
+		// 		content: this.newMessage,
+		// 		type: 'chat',
+		// 	})
+		// 	try {
+		// 		this.socket.emit('sendMsg', JSON.stringify(msgInstance))
+		// 	} catch (error) {
+		// 		console.log(error)
+		// 	}
+		// 	this.newMessage = ''
+		// },
+		onSendMessage() {
 			const msgInstance = Message.init({
 				user: this.user,
 				content: this.newMessage,
 				type: 'chat',
 			})
-			try {
-				this.socket.emit('sendMsg', JSON.stringify(msgInstance))
-			} catch (error) {
-				console.log(error)
-			}
+			this.$emit('onSendMessage', msgInstance)
 			this.newMessage = ''
 		},
 
-		async initSocket() {
-			try {
-				const { socketUrl } = await this.getSocketUrl()
-				this.socket = io(socketUrl, {
-					transports: ['websocket'],
-				})
-				this.socket.removeAllListeners()
-				this.socket.on('broadcast', data => {
-					this.$store.dispatch('saveMessage', JSON.parse(data))
-				})
-			} catch (error) {
-				console.log(error)
-			}
-		},
-		async getSocketUrl() {
-			try {
-				const result = await _findOne(this.endpoint.socket)
-				if (result) return result
-			} catch (error) {
-				console.log(error)
-			}
-		},
+		// async initSocket() {
+		// 	try {
+		// 		const { socketUrl } = await this.getSocketUrl()
+		// 		this.socket = io(socketUrl, {
+		// 			transports: ['websocket'],
+		// 		})
+		// 		this.socket.removeAllListeners()
+		// 		this.socket.on('broadcast', data => {
+		// 			this.$store.dispatch('saveMessage', JSON.parse(data))
+		// 		})
+		// 	} catch (error) {
+		// 		console.log(error)
+		// 	}
+		// },
+		// async getSocketUrl() {
+		// 	try {
+		// 		const result = await _findOne(this.endpoint.socket)
+		// 		if (result) return result
+		// 	} catch (error) {
+		// 		console.log(error)
+		// 	}
+		// },
 		initScroll() {
 			let div = document.querySelector('.message')
 			div.scrollTop = div.scrollHeight
 		},
-		initUser() {
-			this.user = User.init({
-				id: nanoid(),
-				name: 'Teacher',
-			})
-		},
 	},
 	mounted() {
 		this.initScroll()
-		this.initSocket()
-		this.initUser()
+		// this.initSocket()
 	},
 	watch: {
 		messageList() {
