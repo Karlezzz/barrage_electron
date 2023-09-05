@@ -11,5 +11,4 @@ module.exports = {
   Response,
   Room,
   User,
-
 }

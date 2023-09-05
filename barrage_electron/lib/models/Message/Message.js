@@ -27,7 +27,7 @@ class Message {
   }
 
   get isValid() {
-    return !!this.User
+    return !!this.user
   }
 
 }
