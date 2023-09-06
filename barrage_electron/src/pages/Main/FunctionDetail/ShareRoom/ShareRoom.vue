@@ -40,7 +40,7 @@ export default {
 	},
 	computed: {
 		url() {
-			return `http://${this.clientUrl}:3000/${this.roomCode}`
+			return `http://${this.clientUrl}:3000/#/barrage/${this.roomCode}`
 		},
 		room() {
 			return this.$store.state.room.roomInfo
