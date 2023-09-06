@@ -9,8 +9,8 @@
 					/>
 				</div>
 				<div class="roomName">
-					<div class="name">体育课</div>
-					<div class="id">id:12345</div>
+					<div class="name">{{ roomName }}</div>
+					<div class="id">RoomCode:{{roomCode}}</div>
 				</div>
 			</div>
 			<div class="body">
@@ -176,10 +176,7 @@ export default {
 	position: absolute;
 	top: 0;
 	left: 250px;
-	/* width: 150px; */
-	/* height: 90px; */
 	height: 15%;
-
 	color: #e1e1e3;
 	font-size: 30px;
 	letter-spacing: 2px;
@@ -191,8 +188,8 @@ export default {
 
 .head .roomName .id {
 	position: absolute;
-	top: 30px;
-	left: 130px;
+	top: 55px;
+	left: 0px;
 	/* background-color: red; */
 	height: 50px;
 	font-size: 14px;
