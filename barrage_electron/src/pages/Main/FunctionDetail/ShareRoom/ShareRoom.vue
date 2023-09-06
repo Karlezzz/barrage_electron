@@ -15,7 +15,6 @@
 					<p>房间地址:</p>
 					<p class="__url">{{ url }}</p>
 				</div>
-				<!-- 房间地址二维码 -->
 				<div
 					class="qrCode"
 					ref="qrCodeUrl"
@@ -57,23 +56,21 @@ export default {
 	},
 	methods: {
 		createQrCode() {
-			this.$nextTick(() => {
+			// this.$nextTick(() => {
 				this.qrcode = new QRCode(this.$refs.qrCodeUrl, {
-					text: this.url, // 需要转换为二维码的内容
+					text: this.url,
 					width: 150,
 					height: 150,
 					colorDark: '#1d1d1f',
 					colorLight: '#e1e1e3',
 					correctLevel: QRCode.CorrectLevel.H,
 				})
-			})
+			// })
 		},
 	},
 	mounted() {
 		this.createQrCode()
-		console.log(this.url)
 	},
-	beforeDestroy() {},
 }
 </script>
 
