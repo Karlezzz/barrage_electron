@@ -57,6 +57,7 @@ export default {
 	methods: {
 		createQrCode() {
 			// this.$nextTick(() => {
+			setTimeout(() => {
 				this.qrcode = new QRCode(this.$refs.qrCodeUrl, {
 					text: this.url,
 					width: 150,
@@ -65,6 +66,8 @@ export default {
 					colorLight: '#e1e1e3',
 					correctLevel: QRCode.CorrectLevel.H,
 				})
+			}, 1000)
+
 			// })
 		},
 	},
@@ -109,9 +112,9 @@ export default {
 	margin-left: 5%;
 	text-align: center;
 }
-.message .__url{
-  font-size: 12px;
-  user-select: all;
+.message .__url {
+	font-size: 12px;
+	user-select: all;
 }
 
 .message p {
