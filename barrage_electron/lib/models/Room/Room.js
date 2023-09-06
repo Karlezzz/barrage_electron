@@ -3,7 +3,7 @@ class Room {
   constructor(options) {
     options = options || {}
     this.id = options.id
-    this.code = options.code || '10000'
+    this.code = options.code || 10000
     this.name = options.name || 'Classroom'
     this.password = options.password
     this.created = options.created || (new Date().valueOf())
@@ -13,7 +13,15 @@ class Room {
   }
 
   get isValid() {
+    let passwordValid = true
+    if (this.password && this.password.length !== 6) {
+      passwordValid = false
+    }
     return !!this.id
+      && typeof (this.code) === 'number'
+      && this.code.length === 5
+      && this.name.length <= 8
+      && passwordValid
   }
 
   static init(options = {}) {
