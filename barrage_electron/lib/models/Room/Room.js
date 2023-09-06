@@ -3,6 +3,7 @@ class Room {
   constructor(options) {
     options = options || {}
     this.id = options.id
+    this.code = options.code || '10000'
     this.name = options.name || 'Classroom'
     this.password = options.password
     this.created = options.created || (new Date().valueOf())
