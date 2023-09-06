@@ -22,7 +22,7 @@
 					:user="user"
 					@onSendMessage="onSendMessage"
 				></Barrage>
-				<FunctionDetail></FunctionDetail>
+				<FunctionDetail :clientUrl="clientUrl"></FunctionDetail>
 			</div>
 		</div>
 	</div>
@@ -49,8 +49,10 @@ export default {
 			endpoint: {
 				socket: '/socket',
 				user: '/user',
+				client: '/client',
 			},
 			user: null,
+			clientUrl: null,
 		}
 	},
 	computed: {
@@ -109,10 +111,25 @@ export default {
 				name: 'Teacher',
 			})
 		},
+		async getClientUrl() {
+			try {
+				const result = await _findOne(this.endpoint.client)
+				if (result) return result
+			} catch (error) {
+				return 'https://www.dgut.edu.cn/'
+			}
+		},
+		async initClientUrl() {
+			this.clientUrl = await this.getClientUrl()
+		},
+		async init() {
+			await this.initSocket()
+			await this.initUser()
+			await this.initClientUrl()
+		},
 	},
 	mounted() {
-		this.initSocket()
-		this.initUser()
+		this.init()
 	},
 }
 </script>

@@ -30,7 +30,7 @@
 								/>
 							</div>
 							<!-- 房间信息列表 -->
-							<div
+							<!-- <div
 								class="roomIdList"
 								v-if="isShowRoomName"
 							>
@@ -42,15 +42,15 @@
 								>
 									{{ item.roomName }}
 								</div>
-							</div>
+							</div> -->
 						</div>
 						<!-- 房间id -->
 						<div class="input-filed moreRoomName">
 							<i class="fa-solid fa-user"></i>
 							<input
 								type="text"
-								placeholder="ROOMID"
-								v-model="roomId"
+								placeholder="ROOMCODE"
+								v-model="roomCode"
 							/>
 						</div>
 						<!-- 密码 -->
@@ -159,10 +159,10 @@ export default {
 		return {
 			isShowRoomName: false,
 			roomName: null,
-			roomId: null,
+			roomCode: null,
 			roomPassword: null,
 			// roomInfoList: this. $store.state.enter.roomInfoList,
-			roomInfoList: [],
+			// roomInfoList: [],
 			endpoint: {
 				room: '/room',
 			},
@@ -203,6 +203,7 @@ export default {
 			return Room.init({
 				id: nanoid(),
 				name: this.roomName,
+        code: this.roomCode,
 				password: this.roomPassword,
 			})
 		},
