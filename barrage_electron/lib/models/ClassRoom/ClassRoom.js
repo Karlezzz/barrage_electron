@@ -6,6 +6,7 @@ class ClassRoom {
     this.beginTime = options.beginTime || (new Date().valueOf())
     this.endTime = options.endTime
     this.ownerRoom = options.ownerRoom
+    this.members = options.members || []
     // this.creator = options.creator
   }
 
