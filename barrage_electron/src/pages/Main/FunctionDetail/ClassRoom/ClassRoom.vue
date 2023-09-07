@@ -14,6 +14,7 @@
 					<input
 						type="text"
 						class="__input"
+						v-model="this.className"
 					/>
 				</div>
 				<div class="__form-item">
@@ -21,6 +22,7 @@
 					<input
 						type="text"
 						class="__input"
+						v-model="this.beginTime"
 					/>
 				</div>
 				<div class="__form-item">
@@ -28,28 +30,71 @@
 					<input
 						type="text"
 						class="__input"
+            v-model="this.endTime"
 					/>
 				</div>
 			</div>
-			<div class="__submit">Class Begin</div>
+			<div
+				class="__submit"
+				@click="onSubmitClassRoom"
+			>
+				{{ $label }}
+			</div>
 		</div>
 	</transition>
 </template>
 
 <script>
+import { ClassRoom } from '../../../../../lib/models'
 export default {
 	name: 'ClassRoom',
 	props: {
 		isShowClassRoom: { type: Boolean, default: false },
+	},
+	data() {
+		return {
+			className: null,
+			beginTime: null,
+			endTime: null,
+		}
+	},
+	computed: {
+		$label() {
+			return this.$isOnClass ? 'Class End' : 'Class Begin'
+		},
+		$isOnClass() {
+			return this.classRoom ? this.classRoom.isOnClass : false
+		},
+		room() {
+			return this.$store.state.room.roomInfo
+		},
+		roomCode() {
+			return this.room ? this.room.code : null
+		},
+		classRoom() {
+			return this.$store.state.room.classRoomInfo
+				? this.$store.state.classRoomInfo
+				: ClassRoom.init({
+						name: this.className,
+						ownerRoomCode: this.roomCode,
+				  })
+		},
+	},
+	methods: {
+		onSubmitClassRoom() {
+			this.$emit('onSubmitClassRoom', {
+				classRoom: this.classRoom,
+			})
+		},
 	},
 }
 </script>
 
 <style scoped>
 .class-room {
-  display: flex;
-  text-align: center;
-  flex-direction: column;
+	display: flex;
+	text-align: center;
+	flex-direction: column;
 	width: 96%;
 	height: 80%;
 	margin-top: 2%;
@@ -78,18 +123,18 @@ export default {
 }
 
 .__form-item {
-  width: 90%;
-  height: 30%;
-  margin-top: 10px;
-  color: #e1e1e3;
+	width: 90%;
+	height: 30%;
+	margin-top: 10px;
+	color: #e1e1e3;
 }
 
-.__form-item .__label{
-  margin-left: -30%;
+.__form-item .__label {
+	margin-left: -30%;
 }
 
-.__form-item input{
-  height: 25px;
+.__form-item input {
+	height: 25px;
 	width: 80%;
 	border: none;
 	border-bottom: 1px solid #ea7724;
@@ -98,21 +143,20 @@ export default {
 	padding-left: 10px;
 	font-size: 16px;
 	color: #e1e1e3;
-
 }
 
-.__submit{
- width: 80%;
- height: 40px;
+.__submit {
+	width: 80%;
+	height: 40px;
 	border: none;
-  margin-top: 10%;
-  margin-left: 10%;
+	margin-top: 10%;
+	margin-left: 10%;
 	color: #e1e1e3;
 	font-size: 17px;
 	text-align: center;
 	background-color: #526af0;
 	border-radius: 15px;
 	cursor: pointer;
-  line-height: 200%;
+	line-height: 200%;
 }
 </style>

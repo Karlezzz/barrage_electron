@@ -9,6 +9,7 @@
 		<Screen :isShowScreen="functionStatusList.isShowScreen"></Screen>
 		<ClassRoom
 			:isShowClassRoom="functionStatusList.isShowClassRoom"
+      @onSubmitClassRoom="onSubmitClassRoom"
 		></ClassRoom>
 	</div>
 </template>
@@ -48,6 +49,11 @@ export default {
 			this.functionStatusList = value
 		})
 	},
+  methods: {
+    onSubmitClassRoom({classRoom}) {
+      this.$emit('onSubmitClassRoom', {classRoom})
+    }
+  }
 }
 </script>
 

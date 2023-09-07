@@ -10,7 +10,7 @@
 				</div>
 				<div class="roomName">
 					<div class="name">{{ roomName }}</div>
-					<div class="id">RoomCode:{{roomCode}}</div>
+					<div class="id">RoomCode:{{ roomCode }}</div>
 				</div>
 			</div>
 			<div class="body">
@@ -22,7 +22,10 @@
 					:user="user"
 					@onSendMessage="onSendMessage"
 				></Barrage>
-				<FunctionDetail :clientUrl="clientUrl"></FunctionDetail>
+				<FunctionDetail
+					:clientUrl="clientUrl"
+					@onSubmitClassRoom="onSubmitClassRoom"
+				></FunctionDetail>
 			</div>
 		</div>
 	</div>
@@ -67,6 +70,9 @@ export default {
 		},
 	},
 	methods: {
+		onSubmitClassRoom({ classRoom }) {
+			console.log(classRoom)
+		},
 		async onSubmitName(user) {
 			try {
 				const result = await _updateOne(this.endpoint.user, user)
