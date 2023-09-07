@@ -13,7 +13,7 @@ class ClassRoom {
 
   get isValid() {
     return !!this.id
-    && !!this.ownerRoom 
+    && !!this.ownerRoomCode 
     // && !!this.creator 
   }
 
