@@ -7,10 +7,12 @@ const state = {
 const mutations = {
   SETROOMINFO(state, data) {
     state.roomInfo = data
+  },
+  SETCLASSROOMINFO(state, data) {
+    state.classRoomInfo = data
   }
 };
 const actions = {
-  // 获取房间信息列表
   async enterRoom({ commit }, { endpoint, data }) {
     try {
       const result = await _createOne(endpoint, data)
