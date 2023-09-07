@@ -1,8 +1,10 @@
 <template>
 	<div class="box">
 		<div class="main">
+      
 			<div class="head">
 				<div class="logo">
+          
 					<img
 						src="../../assets/dgut2.png"
 						alt=""
@@ -14,6 +16,7 @@
 				</div>
 			</div>
 			<div class="body">
+        <button @click="back">back</button>
 				<Function
 					:user="user"
 					@onSubmitName="onSubmitName"
@@ -26,6 +29,7 @@
 					:clientUrl="clientUrl"
 					@onSubmitClassRoom="onSubmitClassRoom"
 				></FunctionDetail>
+        
 			</div>
 		</div>
 	</div>
@@ -37,7 +41,7 @@ import Barrage from './Barrage/Barrage.vue'
 import FunctionDetail from './FunctionDetail/FunctionDetail.vue'
 
 import { nanoid } from 'nanoid'
-import { _findOne, _updateOne } from '@/api'
+import { _findOne, _updateOne, _createOne } from '@/api'
 import { io } from 'socket.io-client'
 import { User, Message } from '../../../lib/models'
 export default {
@@ -53,6 +57,7 @@ export default {
 				socket: '/socket',
 				user: '/user',
 				client: '/client',
+        classRoom: '/classRoom'
 			},
 			user: null,
 			clientUrl: null,
@@ -70,8 +75,20 @@ export default {
 		},
 	},
 	methods: {
-		onSubmitClassRoom({ classRoom }) {
-			console.log(classRoom)
+    back() {
+      this.$router.push('/enter')
+    },
+		async onSubmitClassRoom({ classRoom }) {
+      try {
+        const result = await _createOne(this.endpoint.classRoom, classRoom)
+        if(result) {
+          console.log(result);
+          this.$store.commit('room/SETCLASSROOMINFO', result)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+
 		},
 		async onSubmitName(user) {
 			try {

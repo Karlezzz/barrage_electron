@@ -14,24 +14,29 @@
 					<input
 						type="text"
 						class="__input"
-						v-model="this.className"
+						v-model="className"
 					/>
 				</div>
 				<div class="__form-item">
-					<div class="__label">Begin Time:</div>
-					<input
+					<div class="__label">
+						Begin Time:<span class="__label--content">{{ $beginTime }}</span>
+					</div>
+
+					<!-- <input
 						type="text"
 						class="__input"
-						v-model="this.beginTime"
-					/>
+						v-model="beginTime"
+					/> -->
 				</div>
 				<div class="__form-item">
-					<div class="__label">End Time:</div>
-					<input
+					<div class="__label">
+						End Time:<span class="__label--content">{{ $endTime }}</span>
+					</div>
+					<!-- <input
 						type="text"
 						class="__input"
-            v-model="this.endTime"
-					/>
+						v-model="endTime"
+					/> -->
 				</div>
 			</div>
 			<div
@@ -45,6 +50,7 @@
 </template>
 
 <script>
+import { nanoid } from 'nanoid'
 import { ClassRoom } from '../../../../../lib/models'
 export default {
 	name: 'ClassRoom',
@@ -53,9 +59,10 @@ export default {
 	},
 	data() {
 		return {
-			className: null,
-			beginTime: null,
-			endTime: null,
+			className: '',
+			beginTime: new Date().valueOf(),
+			endTime: '',
+			initTimer: null,
 		}
 	},
 	computed: {
@@ -73,19 +80,38 @@ export default {
 		},
 		classRoom() {
 			return this.$store.state.room.classRoomInfo
-				? this.$store.state.classRoomInfo
-				: ClassRoom.init({
-						name: this.className,
-						ownerRoomCode: this.roomCode,
-				  })
+		},
+		$beginTime() {
+			return new Date(this.beginTime).toLocaleTimeString()
+		},
+		$endTime() {
+			return this.classRoom && this.classRoom.endTime
+				? new Date(this.classRoom.endTime).toLocaleTimeString()
+				: '-- : -- : --'
 		},
 	},
 	methods: {
 		onSubmitClassRoom() {
+      const classRoom = ClassRoom.init({
+        name: this.name,
+        ownerRoomCode: this.roomCode,
+        id: nanoid()
+      })
+      const _classRoom = this.classRoom ? this.classRoom : classRoom 
 			this.$emit('onSubmitClassRoom', {
-				classRoom: this.classRoom,
+				classRoom: _classRoom,
 			})
+      
+
 		},
+	},
+	mounted() {
+		this.initTimer = setInterval(() => {
+			this.beginTime = new Date().valueOf()
+		})
+	},
+	beforeDestroy() {
+		clearInterval(this.initTimer)
 	},
 }
 </script>
@@ -116,7 +142,6 @@ export default {
 .__form {
 	width: 98%;
 	height: 60%;
-
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -129,8 +154,9 @@ export default {
 	color: #e1e1e3;
 }
 
-.__form-item .__label {
-	margin-left: -30%;
+.__label--content {
+	margin-left: 5%;
+	color: #ea7724;
 }
 
 .__form-item input {
