@@ -83,6 +83,18 @@
 				</div>
 				<div class="functionName">分享房间</div>
 			</div>
+      <div
+				class="functionItem"
+				@click="selectFunction(5)"
+			>
+				<div class="icon">
+					<img
+						src="../image/classRoom.png"
+						alt=""
+					/>
+				</div>
+				<div class="functionName">创建课堂</div>
+			</div>
 			<div
 				class="openBarrage"
 				@click="startBarrage"
@@ -112,11 +124,12 @@ export default {
 				isShowVote: false,
 				isShowScreen: false,
 				isShowShareRoom: false,
+        isShowClassRoom: false
 			},
 			isOpenBarrage: false,
 			barrageStatus: null,
 			isEditName: false,
-			adminName: '111',
+			adminName: 'Teacher',
 		}
 	},
   props: {
@@ -136,7 +149,7 @@ export default {
       this.$emit('onSubmitName', this.user)
 		},
 		selectFunction(index) {
-			//1.member 2.vote 3.screen 4.share
+			//1.member 2.vote 3.screen 4.share 5.classRoom
 			for (let i in this.functionStatusList) {
 				this.functionStatusList[i] = false
 			}
@@ -144,6 +157,7 @@ export default {
 			if (index == 2) this.functionStatusList.isShowVote = true
 			if (index == 3) this.functionStatusList.isShowScreen = true
 			if (index == 4) this.functionStatusList.isShowShareRoom = true
+      if(index == 5) this.functionStatusList.isShowClassRoom = true
 
 			// 将功能栏状态值传给FunctionDetail组件
 			this.$bus.$emit('getFunctionStatusList', this.functionStatusList)

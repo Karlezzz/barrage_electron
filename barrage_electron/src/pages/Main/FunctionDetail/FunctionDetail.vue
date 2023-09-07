@@ -7,6 +7,9 @@
 			:clientUrl="clientUrl"
 		></ShareRoom>
 		<Screen :isShowScreen="functionStatusList.isShowScreen"></Screen>
+		<ClassRoom
+			:isShowClassRoom="functionStatusList.isShowClassRoom"
+		></ClassRoom>
 	</div>
 </template>
 
@@ -15,6 +18,7 @@ import Screen from './Screen/Screen.vue'
 import ShareRoom from './ShareRoom/ShareRoom.vue'
 import Vote from './Vote/Vote.vue'
 import Member from './Member/Member.vue'
+import ClassRoom from './ClassRoom/ClassRoom.vue'
 export default {
 	name: 'FunctionDetail',
 	components: {
@@ -22,6 +26,7 @@ export default {
 		Vote,
 		ShareRoom,
 		Screen,
+		ClassRoom,
 	},
 	props: {
 		clientUrl: { type: String, default: '' },
@@ -33,6 +38,7 @@ export default {
 				isShowVote: false,
 				isShowScreen: false,
 				isShowShareRoom: false,
+				isShowClassRoom: false,
 			},
 		}
 	},
