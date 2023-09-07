@@ -1,15 +1,19 @@
 import { _createOne } from "@/api";
 
 const state = {
-  roomInfo: {}
+  roomInfo: null,
+  classRoomInfo: null
 };
 const mutations = {
   SETROOMINFO(state, data) {
     state.roomInfo = data
+  },
+  SETCLASSROOMINFO(state, data) {
+    state.classRoomInfo = data
+    state.classRoomInfo.isOnClass = !state.classRoomInfo.isOnClass
   }
 };
 const actions = {
-  // 获取房间信息列表
   async enterRoom({ commit }, { endpoint, data }) {
     try {
       const result = await _createOne(endpoint, data)
