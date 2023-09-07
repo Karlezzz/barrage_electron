@@ -8,7 +8,7 @@ class User {
     this.ipAddress = options.ipAddress
     this.created = options.created || new Date().getTime()
     this.modified = options.modified || this.created
-    this.connections = Connection.initFromArray(options.connections) || []
+    // this.connections = Connection.initFromArray(options.connections) || []
     this.identify = options.identify || 'teacher'
   }
 
