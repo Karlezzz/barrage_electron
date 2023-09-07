@@ -17,7 +17,7 @@
 							<i class="fa-solid fa-user"></i>
 							<input
 								type="text"
-								placeholder="ROOMNAME (Less than 8)"
+								placeholder="ROOMNAME"
 								v-model="roomName"
 							/>
 							<div
@@ -49,7 +49,7 @@
 							<i class="fa-solid fa-user"></i>
 							<input
 								type="text"
-								placeholder="ROOMCODE (5 numbers)"
+								placeholder="ROOMCODE"
 								v-model="roomCode"
 							/>
 						</div>
@@ -58,7 +58,7 @@
 							<i class="fa-solid fa-user"></i>
 							<input
 								type="password"
-								placeholder="PASSWORD (6 numbers)"
+								placeholder="PASSWORD"
 							/>
 						</div>
 						<!-- <input
