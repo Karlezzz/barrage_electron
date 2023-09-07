@@ -1,7 +1,8 @@
 import { _createOne } from "@/api";
 
 const state = {
-  roomInfo: {}
+  roomInfo: null,
+  classRoomInfo: null
 };
 const mutations = {
   SETROOMINFO(state, data) {
