@@ -93,7 +93,7 @@
 						alt=""
 					/>
 				</div>
-				<div class="functionName">创建课堂</div>
+				<div class="functionName" :style="{'color': classRoomOnClass ? '#ea7724' : '#e1e1e3'}">{{ $classRoomLabel }}</div>
 			</div>
 			<div
 				class="openBarrage"
@@ -177,6 +177,15 @@ export default {
 		barStatus() {
 			return this.isOpenBarrage == false ? '开启弹幕' : '关闭弹幕'
 		},
+    classRoom() {
+      return this.$store.state.room.classRoomInfo
+    },
+    classRoomOnClass() {
+      return this.classRoom ? this.classRoom.isOnClass : false
+    },
+    $classRoomLabel() {
+      return this.classRoomOnClass ? '正在上课' : '创建课堂'
+    }
 	},
 	mounted() {
 		// this.barrageStatus = this.isOpenBarrage == false ? '开启弹幕' : '关闭弹幕'
