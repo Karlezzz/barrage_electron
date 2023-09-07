@@ -62,7 +62,8 @@ export default {
 			className: '',
 			beginTime: new Date().valueOf(),
 			endTime: '',
-			initTimer: null,
+			beginTimer: null,
+			endTimer: null,
 		}
 	},
 	computed: {
@@ -85,33 +86,52 @@ export default {
 			return new Date(this.beginTime).toLocaleTimeString()
 		},
 		$endTime() {
-			return this.classRoom && this.classRoom.endTime
-				? new Date(this.classRoom.endTime).toLocaleTimeString()
-				: '-- : -- : --'
+			// return this.classRoom && this.classRoom.endTime
+			// 	? new Date(this.classRoom.endTime).toLocaleTimeString()
+			// 	: '-- : -- : --'
+			return typeof this.endTime === 'string'
+				? this.endTime
+				: new Date(this.endTime).toLocaleTimeString()
 		},
 	},
 	methods: {
 		onSubmitClassRoom() {
-      const classRoom = ClassRoom.init({
-        name: this.name,
-        ownerRoomCode: this.roomCode,
-        id: nanoid()
-      })
-      const _classRoom = this.classRoom ? this.classRoom : classRoom 
+			const classRoom = ClassRoom.init({
+				name: this.name,
+				ownerRoomCode: this.roomCode,
+				id: nanoid(),
+			})
+			const _classRoom = this.classRoom ? this.classRoom : classRoom
+			clearInterval(this.beginTimer)
+			clearInterval(this.endTimer)
 			this.$emit('onSubmitClassRoom', {
 				classRoom: _classRoom,
 			})
-      
-
+			if (!this.$isOnClass) {
+				this.endTimer = setInterval(() => {
+					this.endTime = new Date().valueOf()
+				})
+			} else {
+				this.endTime = '-- : -- : --'
+			}
 		},
 	},
 	mounted() {
-		this.initTimer = setInterval(() => {
-			this.beginTime = new Date().valueOf()
-		})
+		if (!this.$isOnClass) {
+			this.beginTimer = setInterval(() => {
+				this.beginTime = new Date().valueOf()
+				this.endTime = '-- : -- : --'
+			})
+		} else {
+			this.beginTime = this.classRoom.beginTime
+			this.endTimer = setInterval(() => {
+				this.endTime = new Date().valueOf()
+			})
+		}
 	},
 	beforeDestroy() {
-		clearInterval(this.initTimer)
+		clearInterval(this.beginTimer)
+		clearInterval(this.endTimer)
 	},
 }
 </script>
