@@ -5,8 +5,9 @@ class ClassRoom {
     this.id = options.id
     this.beginTime = options.beginTime || (new Date().valueOf())
     this.endTime = options.endTime
-    this.ownerRoom = options.ownerRoom
+    this.ownerRoomCode = options.ownerRoomCode
     this.members = options.members || []
+    this.isOnClass = options.isOnClass || false
     // this.creator = options.creator
   }
 
@@ -14,7 +15,6 @@ class ClassRoom {
     return !!this.id
     && !!this.ownerRoom 
     // && !!this.creator 
-    && !!this.beginTime 
   }
 
   static init(options = {}) {
