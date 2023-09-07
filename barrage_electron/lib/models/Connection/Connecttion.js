@@ -1,5 +1,5 @@
-import { ClassRoom } from "../ClassRoom"
-import { Message } from "../Message"
+const { ClassRoom } = require("../ClassRoom")
+const { Message } = require("../Message")
 
 class Connection {
   constructor(options) {
