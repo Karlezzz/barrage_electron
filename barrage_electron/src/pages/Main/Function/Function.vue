@@ -45,7 +45,7 @@
 						alt=""
 					/>
 				</div>
-				<div class="functionName">在线成员</div>
+				<div class="functionName">Online Members</div>
 			</div>
 			<div
 				class="functionItem"
@@ -57,7 +57,7 @@
 						alt=""
 					/>
 				</div>
-				<div class="functionName">发起投票</div>
+				<div class="functionName">Vote</div>
 			</div>
 			<div
 				class="functionItem"
@@ -69,7 +69,7 @@
 						alt=""
 					/>
 				</div>
-				<div class="functionName">投屏</div>
+				<div class="functionName">Screen sharing</div>
 			</div>
 			<div
 				class="functionItem"
@@ -81,7 +81,7 @@
 						alt=""
 					/>
 				</div>
-				<div class="functionName">分享房间</div>
+				<div class="functionName">Room sharing</div>
 			</div>
       <div
 				class="functionItem"
@@ -178,7 +178,7 @@ export default {
 	},
 	computed: {
 		barStatus() {
-			return this.isOpenBarrage == false ? '开启弹幕' : '关闭弹幕'
+			return this.isOpenBarrage == false ? 'Open barrage' : 'Close barrage'
 		},
     classRoom() {
       return this.$store.state.room.classRoomInfo
@@ -187,7 +187,7 @@ export default {
       return this.classRoom ? this.classRoom.isOnClass : false
     },
     $classRoomLabel() {
-      return this.classRoomOnClass ? '正在上课' : '创建课堂'
+      return this.classRoomOnClass ? 'In class' : 'Create classroom'
     }
 	},
 	mounted() {
@@ -291,7 +291,7 @@ export default {
 .function .functionList .functionItem {
 	margin-left: 1%;
 	margin-top: 5px;
-	width: 98%;
+	width: 99%;
 	height: 50px;
 	border-radius: 10px;
 	overflow: hidden;
@@ -313,13 +313,13 @@ export default {
 
 .function .functionList .functionItem .functionName {
 	float: left;
-	width: 100px;
+	width: 140px;
 	height: 30px;
 	color: #e1e1e3;
 	letter-spacing: 1px;
 	margin-top: 13px;
-	margin-left: 40px;
-	font-size: 15px;
+	margin-left: 20px;
+	font-size: 14px;
 }
 
 .function .functionList .functionItem:hover {
@@ -327,7 +327,6 @@ export default {
 }
 
 .function .functionList .openBarrage {
-	/* background-color: #303032; */
 	background-color: #526af0;
 	width: 98%;
 	height: 50px;
@@ -354,12 +353,12 @@ export default {
 
 .function .openBarrage .word {
 	float: left;
-	width: 100px;
+	width: 130px;
 	height: 30px;
 	color: #e1e1e3;
 	letter-spacing: 1px;
 	margin-top: 14px;
-	margin-left: 40px;
+	margin-left: 20px;
 	font-size: 15px;
 }
 </style>

@@ -1,7 +1,6 @@
 <template>
 	<div class="box">
 		<div class="main">
-      
 			<div class="head">
 				<div class="logo">
 					<img
@@ -27,7 +26,6 @@
 					:clientUrl="clientUrl"
 					@onSubmitClassRoom="onSubmitClassRoom"
 				></FunctionDetail>
-        
 			</div>
 		</div>
 	</div>
@@ -55,7 +53,7 @@ export default {
 				socket: '/socket',
 				user: '/user',
 				client: '/client',
-        classRoom: '/classRoom'
+				classRoom: '/classRoom',
 			},
 			user: null,
 			clientUrl: null,
@@ -74,15 +72,15 @@ export default {
 	},
 	methods: {
 		async onSubmitClassRoom({ classRoom }) {
-      try {
-        const result = await _createOne(this.endpoint.classRoom, classRoom)
-        if(result) {
-          console.log(result);
-          this.$store.commit('room/SETCLASSROOMINFO', result)
-        }
-      } catch (error) {
-        console.log(error)
-      }
+			try {
+				const result = await _createOne(this.endpoint.classRoom, classRoom)
+				if (result) {
+					console.log(result)
+					this.$store.commit('room/SETCLASSROOMINFO', result)
+				}
+			} catch (error) {
+				console.log(error)
+			}
 		},
 		async onSubmitName(user) {
 			try {

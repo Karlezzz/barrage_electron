@@ -8,13 +8,13 @@
 			v-if="isShowMember"
 		>
 			<div class="member_head">
-				<p>在线成员</p>
+				<p>Online Members</p>
 				<p>
 					<img
 						src="../../image/在线人数green.png"
 						alt=""
 					/>
-					99人
+					99
 				</p>
 			</div>
 			<div class="member_body">
@@ -58,18 +58,20 @@ export default {
 .member {
 	width: 96%;
 	height: 96%;
-	/* background-color: skyblue; */
 	margin-top: 2%;
 	margin-left: 2%;
 	overflow: hidden;
 }
 
 .member .member_head {
-	/* background-color: lightcoral; */
 	width: 98%;
 	height: 14%;
 	margin: 0 0 0 1%;
 	border-bottom: 1px solid #fff;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
 }
 
 .member .member_head p:nth-child(1) {
@@ -85,6 +87,7 @@ export default {
 	letter-spacing: 2px;
 	color: #e1e1e3;
 	padding-left: 130px;
+	margin-top: 10px;
 }
 
 .member .member_head p:nth-child(2) img {

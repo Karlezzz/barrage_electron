@@ -15,7 +15,7 @@
 						'background-color': isShowCreateVote ? '#526af0' : '#232227',
 					}"
 				>
-					发起投票
+					New
 				</div>
 				<div
 					class="twoVoteSelect"
@@ -24,7 +24,7 @@
 						'background-color': isShowHistoryVote ? '#526af0' : '#232227',
 					}"
 				>
-					历史投票
+					History
 				</div>
 			</div>
 			<div class="vote_body">

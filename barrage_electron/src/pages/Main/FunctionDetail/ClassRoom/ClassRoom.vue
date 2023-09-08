@@ -21,22 +21,11 @@
 					<div class="__label">
 						Begin Time:<span class="__label--content">{{ $beginTime }}</span>
 					</div>
-
-					<!-- <input
-						type="text"
-						class="__input"
-						v-model="beginTime"
-					/> -->
 				</div>
 				<div class="__form-item">
 					<div class="__label">
 						End Time:<span class="__label--content">{{ $endTime }}</span>
 					</div>
-					<!-- <input
-						type="text"
-						class="__input"
-						v-model="endTime"
-					/> -->
 				</div>
 			</div>
 			<div
@@ -86,9 +75,6 @@ export default {
 			return new Date(this.beginTime).toLocaleTimeString()
 		},
 		$endTime() {
-			// return this.classRoom && this.classRoom.endTime
-			// 	? new Date(this.classRoom.endTime).toLocaleTimeString()
-			// 	: '-- : -- : --'
 			return typeof this.endTime === 'string'
 				? this.endTime
 				: new Date(this.endTime).toLocaleTimeString()
@@ -149,7 +135,6 @@ export default {
 }
 
 .__title {
-	/* background-color: lightcoral; */
 	width: 98%;
 	height: 14%;
 	text-align: center;

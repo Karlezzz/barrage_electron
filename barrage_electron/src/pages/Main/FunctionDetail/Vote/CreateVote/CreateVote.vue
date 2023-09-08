@@ -10,7 +10,7 @@
 			<div class="topic">
 				<input
 					type="text"
-					placeholder="输入投票问题"
+					placeholder="Vote question"
 					v-model="voteTitle"
 				/>
 			</div>
@@ -41,7 +41,7 @@
 				<div class="input">
 					<input
 						type="text"
-						placeholder="选择投票时限"
+						placeholder="Select time"
 						v-model="voteTime"
 						disabled
 					/>
@@ -69,7 +69,7 @@
 				class="sendVote"
 				@click="postVote"
 			>
-				<button>发起投票</button>
+				<button>Start voting</button>
 			</div>
 		</div>
 	</transition>
@@ -86,7 +86,7 @@ export default {
 			selectList: [
 				{
 					id: '001',
-					content: '选项一',
+					content: 'Section One',
 					isEdit: false,
 				},
 			],
@@ -95,23 +95,23 @@ export default {
 			voteTimeList: [
 				{
 					id: 1,
-					content: '一分钟',
+					content: '1 minute',
 				},
 				{
 					id: 2,
-					content: '五分钟',
+					content: '5 minutes',
 				},
 				{
 					id: 3,
-					content: '十分钟',
+					content: '10 minutes',
 				},
 				{
 					id: 4,
-					content: '半小时',
+					content: '30 minutes',
 				},
 				{
 					id: 5,
-					content: '一小时',
+					content: '60 minutes',
 				},
 			],
 			voteTime: '',
