@@ -10,9 +10,9 @@
 			<div class="share">
 				<div class="title">{{ roomName }}</div>
 				<div class="message">
-					<p>房间号:{{ roomCode }}</p>
-					<p>房间密码:{{ roomPassword }}</p>
-					<p>房间地址:</p>
+					<p>Room code: <span class="__label">{{ roomCode }}</span></p>
+					<p>Room password: <span class="__label">{{ roomPassword }}</span></p>
+					<p>Room Url:</p>
 					<p class="__url">{{ url }}</p>
 				</div>
 				<div
@@ -103,18 +103,23 @@ export default {
 	align-items: center;
 	font-size: 20px;
 	letter-spacing: 2px;
-	color: #e1e1e3;
+	color: #ea7724;
 }
 
 .message {
-	width: 90%;
+	width: 98%;
 	height: 16%;
-	margin-left: 5%;
+	margin-left: 1%;
 	text-align: center;
 }
 .message .__url {
 	font-size: 12px;
 	user-select: all;
+  color: #ea7724;
+}
+.message .__label {
+	font-size: 16px;
+  color: #ea7724;
 }
 
 .message p {
