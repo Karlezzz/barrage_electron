@@ -31,7 +31,7 @@
 				/>
 			</div>
 			<div class="line"></div>
-			<div class="createNewRoom">Create a new barrage room?</div>
+			<div class="createNewRoom" @click="backToEnter">Create a new barrage room</div>
 		</div>
 		<div class="functionList">
 			<div
@@ -136,6 +136,9 @@ export default {
 		user: { type: Object, default: () => {} },
 	},
 	methods: {
+    backToEnter() {
+      this.$router.push('/enter')
+    },
 		editName() {
 			this.isEditName = true
 			setTimeout(() => {
