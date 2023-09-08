@@ -4,7 +4,6 @@
       
 			<div class="head">
 				<div class="logo">
-          
 					<img
 						src="../../assets/dgut2.png"
 						alt=""
@@ -16,7 +15,6 @@
 				</div>
 			</div>
 			<div class="body">
-        <button @click="back">back</button>
 				<Function
 					:user="user"
 					@onSubmitName="onSubmitName"
@@ -75,9 +73,6 @@ export default {
 		},
 	},
 	methods: {
-    back() {
-      this.$router.push('/enter')
-    },
 		async onSubmitClassRoom({ classRoom }) {
       try {
         const result = await _createOne(this.endpoint.classRoom, classRoom)
@@ -88,7 +83,6 @@ export default {
       } catch (error) {
         console.log(error)
       }
-
 		},
 		async onSubmitName(user) {
 			try {
