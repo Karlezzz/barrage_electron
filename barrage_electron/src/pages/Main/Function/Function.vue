@@ -31,7 +31,12 @@
 				/>
 			</div>
 			<div class="line"></div>
-			<div class="createNewRoom" @click="backToEnter">Create a new barrage room</div>
+			<div
+				class="createNewRoom"
+				@click="backToEnter"
+			>
+				Create a new barrage room
+			</div>
 		</div>
 		<div class="functionList">
 			<div
@@ -83,7 +88,7 @@
 				</div>
 				<div class="functionName">Room sharing</div>
 			</div>
-      <div
+			<div
 				class="functionItem"
 				@click="selectFunction(5)"
 			>
@@ -93,7 +98,12 @@
 						alt=""
 					/>
 				</div>
-				<div class="functionName" :style="{'color': classRoomOnClass ? '#ea7724' : '#e1e1e3'}">{{ $classRoomLabel }}</div>
+				<div
+					class="functionName"
+					:style="{ color: classRoomOnClass ? '#ea7724' : '#e1e1e3' }"
+				>
+					{{ $classRoomLabel }}
+				</div>
 			</div>
 			<div
 				class="openBarrage"
@@ -124,7 +134,7 @@ export default {
 				isShowVote: false,
 				isShowScreen: false,
 				isShowShareRoom: false,
-        isShowClassRoom: false
+				isShowClassRoom: false,
 			},
 			isOpenBarrage: false,
 			barrageStatus: null,
@@ -132,13 +142,23 @@ export default {
 			adminName: 'Teacher',
 		}
 	},
-  props: {
+	props: {
 		user: { type: Object, default: () => {} },
 	},
 	methods: {
-    backToEnter() {
-      this.$router.push('/enter')
-    },
+		backToEnter() {
+			this.$store
+				.commit('room/SETCLASSROOMINFO', null)
+				.then(() => {
+					this.$store.commit('room/SETROOMINFO', null)
+				})
+        .then(()=> {
+          this.$store.commit('barrage/SETMESSAGE', [])
+        })
+				.then(() => {
+					this.$router.push('/enter')
+				})
+		},
 		editName() {
 			this.isEditName = true
 			setTimeout(() => {
@@ -147,9 +167,9 @@ export default {
 		},
 		onSubmitName(e) {
 			this.adminName = e.target.value
-      this.user.setUserName(this.adminName)
+			this.user.setUserName(this.adminName)
 			this.isEditName = false
-      this.$emit('onSubmitName', this.user)
+			this.$emit('onSubmitName', this.user)
 		},
 		selectFunction(index) {
 			//1.member 2.vote 3.screen 4.share 5.classRoom
@@ -160,7 +180,7 @@ export default {
 			if (index == 2) this.functionStatusList.isShowVote = true
 			if (index == 3) this.functionStatusList.isShowScreen = true
 			if (index == 4) this.functionStatusList.isShowShareRoom = true
-      if(index == 5) this.functionStatusList.isShowClassRoom = true
+			if (index == 5) this.functionStatusList.isShowClassRoom = true
 
 			// 将功能栏状态值传给FunctionDetail组件
 			this.$bus.$emit('getFunctionStatusList', this.functionStatusList)
@@ -180,15 +200,15 @@ export default {
 		barStatus() {
 			return this.isOpenBarrage == false ? 'Open barrage' : 'Close barrage'
 		},
-    classRoom() {
-      return this.$store.state.room.classRoomInfo
-    },
-    classRoomOnClass() {
-      return this.classRoom ? this.classRoom.isOnClass : false
-    },
-    $classRoomLabel() {
-      return this.classRoomOnClass ? 'In class' : 'Create classroom'
-    }
+		classRoom() {
+			return this.$store.state.room.classRoomInfo
+		},
+		classRoomOnClass() {
+			return this.classRoom ? this.classRoom.isOnClass : false
+		},
+		$classRoomLabel() {
+			return this.classRoomOnClass ? 'In class' : 'Create classroom'
+		},
 	},
 	mounted() {
 		// this.barrageStatus = this.isOpenBarrage == false ? '开启弹幕' : '关闭弹幕'
