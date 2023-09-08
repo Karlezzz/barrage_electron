@@ -75,17 +75,16 @@ export default {
 	methods: {
 		async onSubmitVote({ vote }) {
 			try {
-				const result = _createOne(this.endpoint.vote, vote)
+				const result = await _createOne(this.endpoint.vote, vote)
+				if (result) console.log(result)
 			} catch (error) {
 				console.log(error)
 			}
-			console.log(vote)
 		},
 		async onSubmitClassRoom({ classRoom }) {
 			try {
 				const result = await _createOne(this.endpoint.classRoom, classRoom)
 				if (result) {
-					console.log(result)
 					this.$store.commit('room/SETCLASSROOMINFO', result)
 				}
 			} catch (error) {
