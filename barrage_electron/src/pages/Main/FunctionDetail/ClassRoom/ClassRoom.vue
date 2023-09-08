@@ -83,7 +83,7 @@ export default {
 	methods: {
 		onSubmitClassRoom() {
 			const classRoom = ClassRoom.init({
-				name: this.name,
+				name: this.className,
 				ownerRoomCode: this.roomCode,
 				id: nanoid(),
 			})
