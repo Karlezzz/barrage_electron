@@ -40,7 +40,7 @@ import FunctionDetail from './FunctionDetail/FunctionDetail.vue'
 import { nanoid } from 'nanoid'
 import { _findOne, _updateOne, _createOne } from '@/api'
 import { io } from 'socket.io-client'
-import { User, Message } from '../../../lib/models'
+import { User } from '../../../lib/models'
 export default {
 	name: 'Main',
 	components: {
@@ -86,6 +86,7 @@ export default {
 				const result = await _createOne(this.endpoint.classRoom, classRoom)
 				if (result) {
 					this.$store.commit('room/SETCLASSROOMINFO', result)
+					this.initSocket()
 				}
 			} catch (error) {
 				console.log(error)
@@ -147,7 +148,7 @@ export default {
 			this.clientUrl = await this.getClientUrl()
 		},
 		async init() {
-			await this.initSocket()
+			// await this.initSocket()
 			await this.initUser()
 			await this.initClientUrl()
 		},
