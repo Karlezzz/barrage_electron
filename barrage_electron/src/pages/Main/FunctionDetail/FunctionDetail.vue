@@ -1,7 +1,10 @@
 <template>
 	<div class="functionDetail">
 		<Member :isShowMember="functionStatusList.isShowMember"></Member>
-		<Vote :isShowVote="functionStatusList.isShowVote"></Vote>
+		<Vote
+			:isShowVote="functionStatusList.isShowVote"
+			@onSubmitVote="onSubmitVote"
+		></Vote>
 		<ShareRoom
 			:isShowShareRoom="functionStatusList.isShowShareRoom"
 			:clientUrl="clientUrl"
@@ -9,7 +12,7 @@
 		<Screen :isShowScreen="functionStatusList.isShowScreen"></Screen>
 		<ClassRoom
 			:isShowClassRoom="functionStatusList.isShowClassRoom"
-      @onSubmitClassRoom="onSubmitClassRoom"
+			@onSubmitClassRoom="onSubmitClassRoom"
 		></ClassRoom>
 	</div>
 </template>
@@ -49,11 +52,14 @@ export default {
 			this.functionStatusList = value
 		})
 	},
-  methods: {
-    onSubmitClassRoom({classRoom}) {
-      this.$emit('onSubmitClassRoom', {classRoom})
-    }
-  }
+	methods: {
+		onSubmitClassRoom({ classRoom }) {
+			this.$emit('onSubmitClassRoom', { classRoom })
+		},
+		onSubmitVote({ vote }) {
+			this.$emit('onSubmitVote', { vote })
+		},
+	},
 }
 </script>
 

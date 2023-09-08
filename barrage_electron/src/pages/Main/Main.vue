@@ -25,6 +25,7 @@
 				<FunctionDetail
 					:clientUrl="clientUrl"
 					@onSubmitClassRoom="onSubmitClassRoom"
+					@onSubmitVote="onSubmitVote"
 				></FunctionDetail>
 			</div>
 		</div>
@@ -54,6 +55,7 @@ export default {
 				user: '/user',
 				client: '/client',
 				classRoom: '/classRoom',
+				vote: '/vote',
 			},
 			user: null,
 			clientUrl: null,
@@ -71,6 +73,14 @@ export default {
 		},
 	},
 	methods: {
+		async onSubmitVote({ vote }) {
+			try {
+				const result = _createOne(this.endpoint.vote, vote)
+			} catch (error) {
+				console.log(error)
+			}
+			console.log(vote)
+		},
 		async onSubmitClassRoom({ classRoom }) {
 			try {
 				const result = await _createOne(this.endpoint.classRoom, classRoom)
