@@ -1,17 +1,20 @@
+const { nanoid } = require('nanoid')
 const { VoteOption } = require('../VoteOption')
 class Vote {
   constructor(options) {
     options = options || {}
+    this.id = nanoid()
     this.created = options.created || (new Date().valueOf())
-    this.duration = this.created + options.duration
+    this.duration = options.duration
+    this.endTime = this.created + options.duration
     this.question = options.question
-    this.sections = VoteOption.initFromArray(options.sections) || []
+    this.voteOptions = VoteOption.initFromArray(options.voteOptions) || []
   }
 
   get isValid() {
     return !!this.question
-    && !!this.sections
-    && this.sections.length > 2
+    && !!this.voteOptions
+    && this.voteOptions.length >= 2
     && this.created
     && this.duration
   }

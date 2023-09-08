@@ -1,6 +1,9 @@
+const { nanoid } = require("nanoid")
+
 class VoteOption {
   constructor(options) {
     options = options || {}
+    this.id = nanoid()
     this.optionValue = options.optionValue
     this.selectMembers = options.selectMembers || []
   }
