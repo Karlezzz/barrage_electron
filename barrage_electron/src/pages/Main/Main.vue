@@ -32,7 +32,10 @@
 				:content="endClassContent"
 				@onSubmitConfirm="onSubmitConfirm"
 			></Confirm>
-			<Alert :content="alertContent" @onSubmitAlert="onSubmitAlert"></Alert>
+			<Alert
+				:content="alertContent"
+				@onSubmitAlert="onSubmitAlert"
+			></Alert>
 		</div>
 	</div>
 </template>
@@ -86,15 +89,23 @@ export default {
 		},
 	},
 	methods: {
-    onSubmitAlert() {
-      this.alertContent = null
-    },
+		onSubmitAlert() {
+			this.alertContent = null
+		},
 		async onSubmitVote({ vote }) {
 			try {
 				const result = await _createOne(this.endpoint.vote, vote)
-				if (result) console.log(result)
+				if (result) {
+					this.alertContent = {
+						content: 'Create vote successfully!',
+						button: 'OK',
+					}
+				}
 			} catch (error) {
-				console.log(error)
+				this.alertContent = {
+					content: 'Create vote failed!',
+					button: 'OK',
+				}
 			}
 		},
 		async onSubmitConfirm(flag) {
@@ -111,10 +122,18 @@ export default {
 				const result = await _createOne(this.endpoint.classRoom, classRoom)
 				if (result) {
 					this.$store.commit('room/SETCLASSROOMINFO', result)
-					// await this.initSocket()
+					const { isOnClass } = this.$store.state.room.classRoomInfo
+					const content = isOnClass ? 'CLass begin !' : 'Class end !'
+					this.alertContent = {
+						content,
+						button: 'OK',
+					}
 				}
 			} catch (error) {
-				console.log(error)
+				this.alertContent = {
+					content: 'Failed!',
+					button: 'OK',
+				}
 			}
 		},
 		async onSubmitClassRoom({ classRoom, callback }) {
@@ -199,7 +218,6 @@ export default {
 			this.clientUrl = await this.getClientUrl()
 		},
 		async init() {
-			// await this.initSocket()
 			await this.initUser()
 			await this.initClientUrl()
 		},
