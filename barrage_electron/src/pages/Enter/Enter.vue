@@ -81,6 +81,11 @@
 					/>
 				</div>
 			</div>
+			<Alert
+				v-if="popUpContent"
+				@onSubmitAlert="onSubmitAlert"
+				:content="popUpContent"
+			></Alert>
 		</div>
 	</div>
 </template>
@@ -88,8 +93,12 @@
 <script>
 import { Room } from '../../../lib/models'
 import { nanoid } from 'nanoid'
+import Alert from '../../components/Popup/Alert.vue'
 export default {
 	name: 'Enter',
+	components: {
+		Alert,
+	},
 	data() {
 		return {
 			isShowRoomName: false,
@@ -101,9 +110,13 @@ export default {
 			endpoint: {
 				room: '/room',
 			},
+			popUpContent: null,
 		}
 	},
 	methods: {
+		onSubmitAlert() {
+			this.popUpContent = null
+		},
 		showRoomNameList() {
 			this.isShowRoomName = !this.isShowRoomName
 		},
@@ -114,16 +127,26 @@ export default {
 		},
 		async addBarrage() {
 			if (!!this.roomCode && !!this.roomName) {
-				await this.$store
-					.dispatch('room/enterRoom', {
-						endpoint: this.endpoint.room,
-						data: this.initRoom(),
-					})
-					.then(() => {
-						this.$router.push('/main')
-					})
+				await this.$store.dispatch('room/enterRoom', {
+					endpoint: this.endpoint.room,
+					data: this.initRoom(),
+				})
+				if (this.$store.state.room.roomInfo) {
+					this.$router.push('/main')
+				} else {
+					this.popUpContent = {
+						content: 'Connect failed! Please contact admin!',
+						button: 'OK',
+					}
+				}
 			} else {
-				alert('Room code and room name are required!')
+				this.popUpContent = ''
+				this.$nextTick(() => {
+					this.popUpContent = {
+						content: 'Room name and code are required!',
+						button: 'OK',
+					}
+				})
 			}
 		},
 		initRoom() {
