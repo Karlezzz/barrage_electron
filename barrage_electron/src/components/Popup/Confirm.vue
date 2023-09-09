@@ -1,16 +1,16 @@
 <template>
-	<div class="alert">
+	<div class="alert" v-if="!!content">
 		<div class="__content">{{ $mainContent }}</div>
 		<div class="__button">
 			<div
 				class="__first-button"
-				@click="onSubmitPopup(true)"
+				@click="onSubmitConfirm(true)"
 			>
 				{{ $confirm }}
 			</div>
 			<div
 				class="__second-button"
-				@click="onSubmitPopup(false)"
+				@click="onSubmitConfirm(false)"
 			>
 				{{ $cancel }}
 			</div>
@@ -38,9 +38,10 @@ export default {
 			return this.$button ? this.$button.cancel : ''
 		},
 	},
-	method: {
-		onSubmitPopup(flag) {
-			this.$emit('onSubmitPopup', flag)
+	methods: {
+		onSubmitConfirm(flag) {
+      // console.log(flag);
+			this.$emit('onSubmitConfirm', flag)
 		},
 	},
 }
