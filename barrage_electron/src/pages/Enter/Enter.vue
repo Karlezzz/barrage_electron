@@ -82,7 +82,6 @@
 				</div>
 			</div>
 			<Alert
-				v-if="popUpContent"
 				@onSubmitAlert="onSubmitAlert"
 				:content="popUpContent"
 			></Alert>
@@ -140,13 +139,10 @@ export default {
 					}
 				}
 			} else {
-				this.popUpContent = ''
-				this.$nextTick(() => {
-					this.popUpContent = {
-						content: 'Room name and code are required!',
-						button: 'OK',
-					}
-				})
+				this.popUpContent = {
+					content: 'Room name and code are required!',
+					button: 'OK',
+				}
 			}
 		},
 		initRoom() {
