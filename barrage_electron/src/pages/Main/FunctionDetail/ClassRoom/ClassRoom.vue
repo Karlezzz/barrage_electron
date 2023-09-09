@@ -103,6 +103,7 @@ export default {
 			} else {
 				clearInterval(this.endTimer)
 				this.endTime = '-- : -- : --'
+        this.className = ''
 			}
 		},
 	},
