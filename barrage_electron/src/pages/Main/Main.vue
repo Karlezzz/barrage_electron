@@ -48,7 +48,7 @@ import Confirm from '../../components/Popup/Confirm.vue'
 import Alert from '../../components/Popup/Alert.vue'
 
 import { nanoid } from 'nanoid'
-import { _findOne, _updateOne, _createOne } from '@/api'
+import { _findOne, _updateOne, _createOne, _findAll } from '@/api'
 import { io } from 'socket.io-client'
 import { User } from '../../../lib/models'
 export default {
@@ -109,6 +109,9 @@ export default {
 				return 'https://www.dgut.edu.cn/'
 			}
 		},
+    async getAllVotes() {
+      await this.$store.dispatch('vote/getAllVotes')
+    },
 		async initClientUrl() {
 			this.clientUrl = await this.getClientUrl()
 		},
