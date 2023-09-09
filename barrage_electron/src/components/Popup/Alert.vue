@@ -1,5 +1,5 @@
 <template>
-	<div class="alert">
+	<div class="alert" v-if="content">
 		<div class="__content">{{ $mainContent }}</div>
 		<div class="__button" @click="onSubmitAlert">{{ $buttonContent }}</div>
 	</div>
