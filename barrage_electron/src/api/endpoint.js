@@ -7,9 +7,9 @@ const endpoint = {
   vote: '/vote',
 }
 
-module.exports = {
-  endpoint
-}
+// module.exports = {
+//   endpoint
+// }
 
 export {
   endpoint
