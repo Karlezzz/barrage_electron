@@ -32,6 +32,7 @@
 				:content="endClassContent"
 				@onSubmitConfirm="onSubmitConfirm"
 			></Confirm>
+			<Alert :content="alertContent" @onSubmitAlert="onSubmitAlert"></Alert>
 		</div>
 	</div>
 </template>
@@ -41,6 +42,7 @@ import Function from './Function/Function.vue'
 import Barrage from './Barrage/Barrage.vue'
 import FunctionDetail from './FunctionDetail/FunctionDetail.vue'
 import Confirm from '../../components/Popup/Confirm.vue'
+import Alert from '../../components/Popup/Alert.vue'
 
 import { nanoid } from 'nanoid'
 import { _findOne, _updateOne, _createOne } from '@/api'
@@ -53,6 +55,7 @@ export default {
 		Barrage,
 		FunctionDetail,
 		Confirm,
+		Alert,
 	},
 	data() {
 		return {
@@ -67,7 +70,8 @@ export default {
 			clientUrl: null,
 			endClassContent: null,
 			classRoom: null,
-      classRoomCallback:null
+			classRoomCallback: null,
+			alertContent: null,
 		}
 	},
 	computed: {
@@ -82,6 +86,9 @@ export default {
 		},
 	},
 	methods: {
+    onSubmitAlert() {
+      this.alertContent = null
+    },
 		async onSubmitVote({ vote }) {
 			try {
 				const result = await _createOne(this.endpoint.vote, vote)
@@ -93,9 +100,9 @@ export default {
 		async onSubmitConfirm(flag) {
 			if (flag) {
 				await this._submitClassRoom({ classRoom: this.classRoom })
-        this.classRoomCallback()
-        await this.$store.commit('room/SETCLASSROOMINFO', null)
-        this.socket.disconnect()
+				this.classRoomCallback()
+				await this.$store.commit('room/SETCLASSROOMINFO', null)
+				this.socket.disconnect()
 			}
 			this.endClassContent = null
 		},
@@ -112,28 +119,36 @@ export default {
 		},
 		async onSubmitClassRoom({ classRoom, callback }) {
 			this.classRoom = classRoom
-      this.classRoomCallback = callback
+			this.classRoomCallback = callback
 			const { isOnClass } = classRoom
 			if (isOnClass) {
-					this.endClassContent = {
-						content: 'Confirm the end of class?',
-						button: {
-							confirm: 'Confirm',
-							cancel: 'Cancel',
-						},
-					}
+				this.endClassContent = {
+					content: 'Confirm the end of class?',
+					button: {
+						confirm: 'Confirm',
+						cancel: 'Cancel',
+					},
+				}
 				return
 			}
 			await this._submitClassRoom({ classRoom })
-      await this.initSocket()
-      this.classRoomCallback()
+			await this.initSocket()
+			this.classRoomCallback()
 		},
 		async onSubmitName(user) {
 			try {
 				const result = await _updateOne(this.endpoint.user, user)
-				if (result) alert('Successfully!')
+				if (result) {
+					this.alertContent = {
+						content: 'Change name successfully!',
+						button: 'OK',
+					}
+				}
 			} catch (error) {
-				alert('Failed!')
+				this.alertContent = {
+					content: 'Change name failed!',
+					button: 'OK',
+				}
 			}
 		},
 		onSendMessage(newMessage) {
