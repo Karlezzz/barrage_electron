@@ -48,20 +48,6 @@ export default {
 	props: ['isShowHistoryVote'],
 	data() {
 		return {
-			// historyVoteList: [
-			// 	{
-			// 		id: 1,
-			// 		content: '今晚吃什么',
-			// 	},
-			// 	{
-			// 		id: 2,
-			// 		content: '几点下课',
-			// 	},
-			// 	{
-			// 		id: 3,
-			// 		content: '有没有作业',
-			// 	},
-			// ],
 			isShowDetail: false,
 			detailInfo: '',
 		}
@@ -70,7 +56,7 @@ export default {
 		historyVoteList() {
 			return this.$store.state.vote.votes || []
 		},
-    isShow() {
+		isShow() {
 			if (this.isShowHistoryVote == true) {
 				if (this.isShowDetail == true) return false
 				else if (this.isShowDetail == false) return true
@@ -83,86 +69,16 @@ export default {
 			this.isShowDetail = true
 
 			this.charts(this.convert(vote))
-			//将id发请求，得到回应数据绑定给detailInfo,detailInfo传入子组件进行展示
 		},
 		getBackDetail() {
 			this.isShowDetail = false
 		},
-		//配置echarts
 		charts(option) {
-			let np = new Promise((resolve, reject) => {
+			const ch = new Promise((resolve, reject) => {
 				resolve()
 			})
-			np.then(() => {
+			ch.then(() => {
 				this.myEcharts = this.echarts.init(document.getElementById('cartsArea'))
-				// const option = {
-				// 	title: {
-				// 		show: true,
-				// 		x: '10%',
-				// 		y: '10%',
-				// 		text: 'TestTestTestTestTest',
-				// 		textStyle: {
-				// 			fontSize: '15px',
-				// 			color: '#e1e1e3',
-				// 		},
-				// 	},
-				// 	tooltip: {
-				// 		trigger: 'item',
-				// 	},
-				// 	legend: {
-				// 		orient: 'horizontal',
-				// 		x: 'right',
-				// 		y: 'bottom',
-				// 		selectedMode: false,
-				// 		type: 'scroll',
-				// 		textStyle: {
-				// 			color: '#e1e1e3',
-				// 		},
-				// 	},
-				// 	series: [
-				// 		{
-				// 			name: 'Test',
-				// 			type: 'pie',
-				// 			center: ['50%', '50%'],
-				// 			radius: ['40', '80'],
-				// 			avoidLabelOverlap: false,
-				// 			label: {
-				// 				show: false,
-				// 				position: 'center',
-				// 			},
-				// 			data: [
-				// 				{
-				// 					value: 1048,
-				// 					name: '吃饭',
-				// 				},
-				// 				{
-				// 					value: 735,
-				// 					name: '睡觉',
-				// 				},
-				// 				{
-				// 					value: 580,
-				// 					name: '上课',
-				// 				},
-				// 				{
-				// 					value: 484,
-				// 					name: '健身',
-				// 				},
-				// 				{
-				// 					value: 300,
-				// 					name: '约会',
-				// 				},
-				// 				{
-				// 					value: 100,
-				// 					name: '洗澡',
-				// 				},
-				// 				{
-				// 					value: 300,
-				// 					name: '做作业',
-				// 				},
-				// 			],
-				// 		},
-				// 	],
-				// }
 				this.myEcharts.setOption(option)
 			})
 		},
@@ -171,86 +87,95 @@ export default {
 
 			this.isShowDetail = false
 		},
-    convert(vote) {
-      const option = {
-					title: {
-						show: true,
-						x: '10%',
-						y: '10%',
-						text: 'TestTestTestTestTest',
-						textStyle: {
-							fontSize: '15px',
-							color: '#e1e1e3',
-						},
+		convert(vote) {
+			const { question, voteOptions } = vote
+      voteOptions.forEach((vo)=> {
+        vo = {
+          ...vo,
+          name: vo.optionValue,
+          value: vo.selectMembers.length
+        }
+      })
+			const option = {
+				title: {
+					show: true,
+					x: '10%',
+					y: '10%',
+					text: question,
+					textStyle: {
+						fontSize: '15px',
+						color: '#e1e1e3',
 					},
-					tooltip: {
-						trigger: 'item',
+				},
+				tooltip: {
+					trigger: 'item',
+				},
+				legend: {
+					orient: 'horizontal',
+					x: 'right',
+					y: 'bottom',
+					selectedMode: false,
+					type: 'scroll',
+					textStyle: {
+						color: '#e1e1e3',
 					},
-					legend: {
-						orient: 'horizontal',
-						x: 'right',
-						y: 'bottom',
-						selectedMode: false,
-						type: 'scroll',
-						textStyle: {
-							color: '#e1e1e3',
+				},
+				series: [
+					{
+						// name: 'Test111',
+						type: 'pie',
+						center: ['50%', '50%'],
+						radius: ['40', '80'],
+						avoidLabelOverlap: false,
+						label: {
+							show: false,
+							position: 'center',
 						},
+						// data: [
+						// 	{
+						// 		value: 1048,
+						// 		name: '吃饭',
+						// 	},
+						// 	{
+						// 		value: 735,
+						// 		name: '睡觉',
+						// 	},
+						// 	{
+						// 		value: 580,
+						// 		name: '上课',
+						// 	},
+						// 	{
+						// 		value: 484,
+						// 		name: '健身',
+						// 	},
+						// 	{
+						// 		value: 300,
+						// 		name: '约会',
+						// 	},
+						// 	{
+						// 		value: 100,
+						// 		name: '洗澡',
+						// 	},
+						// 	{
+						// 		value: 300,
+						// 		name: '做作业',
+						// 	},
+						// ],
+            data: voteOptions
 					},
-					series: [
-						{
-							name: 'Test',
-							type: 'pie',
-							center: ['50%', '50%'],
-							radius: ['40', '80'],
-							avoidLabelOverlap: false,
-							label: {
-								show: false,
-								position: 'center',
-							},
-							data: [
-								{
-									value: 1048,
-									name: '吃饭',
-								},
-								{
-									value: 735,
-									name: '睡觉',
-								},
-								{
-									value: 580,
-									name: '上课',
-								},
-								{
-									value: 484,
-									name: '健身',
-								},
-								{
-									value: 300,
-									name: '约会',
-								},
-								{
-									value: 100,
-									name: '洗澡',
-								},
-								{
-									value: 300,
-									name: '做作业',
-								},
-							],
-						},
-					],
-				}
-        return option
-    }
+				],
+			}
+			return option
+		},
 	},
 	watch: {
 		historyVoteList: {
-      deep:true,
-      handler() {
-        const newVote = this.historyVoteList[this.historyVoteList.length - 1]
-        this.charts(this.convert(newVote))
-      }
-    },
+			deep: true,
+			handler() {
+				const newVote = this.historyVoteList[this.historyVoteList.length - 1]
+				this.charts(this.convert(newVote))
+			},
+		},
 	},
 }
 </script>
