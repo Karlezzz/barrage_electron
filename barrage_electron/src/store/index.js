@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
-import barrage from './Barrage/barrage_chat'
+import barrage from './Barrage/barrage'
 import room from './Room/room'
 import axios from './Axios/axios'
 export default new Vuex.Store({

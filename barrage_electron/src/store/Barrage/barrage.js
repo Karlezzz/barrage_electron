@@ -1,5 +1,4 @@
-import { nanoid } from 'nanoid'
-import { ipcRenderer, IpcRenderer } from 'electron'
+import { ipcRenderer } from 'electron'
 const state = {
   messageList: []
 }
@@ -15,9 +14,8 @@ const mutations = {
 const actions = {
   saveMessage({ commit }, data) {
     commit('PUTMESSAGE', data)
-
   }
 }
 export default {
-  state, mutations, actions
+  namespaced: true, state, mutations, actions
 }
