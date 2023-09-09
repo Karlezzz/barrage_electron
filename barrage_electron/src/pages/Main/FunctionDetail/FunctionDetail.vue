@@ -53,8 +53,8 @@ export default {
 		})
 	},
 	methods: {
-		onSubmitClassRoom({ classRoom }) {
-			this.$emit('onSubmitClassRoom', { classRoom })
+		onSubmitClassRoom({ classRoom, callback }) {
+			this.$emit('onSubmitClassRoom', { classRoom, callback })
 		},
 		onSubmitVote({ vote }) {
 			this.$emit('onSubmitVote', { vote })

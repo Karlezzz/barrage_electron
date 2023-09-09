@@ -28,6 +28,10 @@
 					@onSubmitVote="onSubmitVote"
 				></FunctionDetail>
 			</div>
+			<Confirm
+				:content="endClassContent"
+				@onSubmitConfirm="onSubmitConfirm"
+			></Confirm>
 		</div>
 	</div>
 </template>
@@ -36,6 +40,7 @@
 import Function from './Function/Function.vue'
 import Barrage from './Barrage/Barrage.vue'
 import FunctionDetail from './FunctionDetail/FunctionDetail.vue'
+import Confirm from '../../components/Popup/Confirm.vue'
 
 import { nanoid } from 'nanoid'
 import { _findOne, _updateOne, _createOne } from '@/api'
@@ -47,6 +52,7 @@ export default {
 		Function,
 		Barrage,
 		FunctionDetail,
+		Confirm,
 	},
 	data() {
 		return {
@@ -59,6 +65,9 @@ export default {
 			},
 			user: null,
 			clientUrl: null,
+			endClassContent: null,
+			classRoom: null,
+      classRoomCallback:null
 		}
 	},
 	computed: {
@@ -81,16 +90,43 @@ export default {
 				console.log(error)
 			}
 		},
-		async onSubmitClassRoom({ classRoom }) {
+		async onSubmitConfirm(flag) {
+			if (flag) {
+				await this._submitClassRoom({ classRoom: this.classRoom })
+        this.classRoomCallback()
+        await this.$store.commit('room/SETCLASSROOMINFO', null)
+        this.socket.disconnect()
+			}
+			this.endClassContent = null
+		},
+		async _submitClassRoom({ classRoom }) {
 			try {
 				const result = await _createOne(this.endpoint.classRoom, classRoom)
 				if (result) {
 					this.$store.commit('room/SETCLASSROOMINFO', result)
-					this.initSocket()
+					// await this.initSocket()
 				}
 			} catch (error) {
 				console.log(error)
 			}
+		},
+		async onSubmitClassRoom({ classRoom, callback }) {
+			this.classRoom = classRoom
+      this.classRoomCallback = callback
+			const { isOnClass } = classRoom
+			if (isOnClass) {
+					this.endClassContent = {
+						content: 'Confirm the end of class?',
+						button: {
+							confirm: 'Confirm',
+							cancel: 'Cancel',
+						},
+					}
+				return
+			}
+			await this._submitClassRoom({ classRoom })
+      await this.initSocket()
+      this.classRoomCallback()
 		},
 		async onSubmitName(user) {
 			try {
