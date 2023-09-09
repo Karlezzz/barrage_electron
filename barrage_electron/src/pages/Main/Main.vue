@@ -54,11 +54,11 @@ import { User } from '../../../lib/models'
 export default {
 	name: 'Main',
 	components: {
-		Function,
-		Barrage,
-		FunctionDetail,
-		Confirm,
 		Alert,
+		Barrage,
+		Confirm,
+		FunctionDetail,
+		Function,
 	},
 	data() {
 		return {
@@ -69,28 +69,62 @@ export default {
 				classRoom: '/classRoom',
 				vote: '/vote',
 			},
-			user: null,
+			alertContent: null,
 			clientUrl: null,
-			endClassContent: null,
 			classRoom: null,
 			classRoomCallback: null,
-			alertContent: null,
+			endClassContent: null,
+			user: null,
 		}
 	},
 	computed: {
+		roomCode() {
+			return this.roomInfo ? this.roomInfo.code : ''
+		},
 		roomInfo() {
 			return this.$store.state.room.roomInfo
 		},
 		roomName() {
 			return this.roomInfo ? this.roomInfo.name : ''
 		},
-		roomCode() {
-			return this.roomInfo ? this.roomInfo.code : ''
-		},
 	},
 	methods: {
-		onSubmitAlert() {
-			this.alertContent = null
+		async init() {
+			await this.initUser()
+			await this.initClientUrl()
+		},
+		async getSocketUrl() {
+			try {
+				const result = await _findOne(this.endpoint.socket)
+				if (result) return result
+			} catch (error) {
+				console.log(error)
+			}
+		},
+		async getClientUrl() {
+			try {
+				const result = await _findOne(this.endpoint.client)
+				if (result) return result
+			} catch (error) {
+				return 'https://www.dgut.edu.cn/'
+			}
+		},
+		async initClientUrl() {
+			this.clientUrl = await this.getClientUrl()
+		},
+		async initSocket() {
+			try {
+				const { socketUrl } = await this.getSocketUrl()
+				this.socket = io(socketUrl, {
+					transports: ['websocket'],
+				})
+				this.socket.removeAllListeners()
+				this.socket.on('broadcast', data => {
+					this.$store.dispatch('saveMessage', JSON.parse(data))
+				})
+			} catch (error) {
+				console.log(error)
+			}
 		},
 		async onSubmitVote({ vote }) {
 			try {
@@ -116,25 +150,6 @@ export default {
 				this.socket.disconnect()
 			}
 			this.endClassContent = null
-		},
-		async _submitClassRoom({ classRoom }) {
-			try {
-				const result = await _createOne(this.endpoint.classRoom, classRoom)
-				if (result) {
-					this.$store.commit('room/SETCLASSROOMINFO', result)
-					const { isOnClass } = this.$store.state.room.classRoomInfo
-					const content = isOnClass ? 'CLass begin !' : 'Class end !'
-					this.alertContent = {
-						content,
-						button: 'OK',
-					}
-				}
-			} catch (error) {
-				this.alertContent = {
-					content: 'Failed!',
-					button: 'OK',
-				}
-			}
 		},
 		async onSubmitClassRoom({ classRoom, callback }) {
 			this.classRoom = classRoom
@@ -170,34 +185,23 @@ export default {
 				}
 			}
 		},
-		onSendMessage(newMessage) {
+		async _submitClassRoom({ classRoom }) {
 			try {
-				this.socket.emit('sendMsg', JSON.stringify(newMessage))
+				const result = await _createOne(this.endpoint.classRoom, classRoom)
+				if (result) {
+					this.$store.commit('room/SETCLASSROOMINFO', result)
+					const { isOnClass } = this.$store.state.room.classRoomInfo
+					const content = isOnClass ? 'CLass begin !' : 'Class end !'
+					this.alertContent = {
+						content,
+						button: 'OK',
+					}
+				}
 			} catch (error) {
-				console.log(error)
-			}
-			this.newMessage = ''
-		},
-		async initSocket() {
-			try {
-				const { socketUrl } = await this.getSocketUrl()
-				this.socket = io(socketUrl, {
-					transports: ['websocket'],
-				})
-				this.socket.removeAllListeners()
-				this.socket.on('broadcast', data => {
-					this.$store.dispatch('saveMessage', JSON.parse(data))
-				})
-			} catch (error) {
-				console.log(error)
-			}
-		},
-		async getSocketUrl() {
-			try {
-				const result = await _findOne(this.endpoint.socket)
-				if (result) return result
-			} catch (error) {
-				console.log(error)
+				this.alertContent = {
+					content: 'Failed!',
+					button: 'OK',
+				}
 			}
 		},
 		initUser() {
@@ -206,20 +210,16 @@ export default {
 				name: 'Teacher',
 			})
 		},
-		async getClientUrl() {
+		onSendMessage(newMessage) {
 			try {
-				const result = await _findOne(this.endpoint.client)
-				if (result) return result
+				this.socket.emit('sendMsg', JSON.stringify(newMessage))
 			} catch (error) {
-				return 'https://www.dgut.edu.cn/'
+				console.log(error)
 			}
+			this.newMessage = ''
 		},
-		async initClientUrl() {
-			this.clientUrl = await this.getClientUrl()
-		},
-		async init() {
-			await this.initUser()
-			await this.initClientUrl()
+		onSubmitAlert() {
+			this.alertContent = null
 		},
 	},
 	mounted() {
