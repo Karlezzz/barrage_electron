@@ -146,18 +146,11 @@ export default {
 		user: { type: Object, default: () => {} },
 	},
 	methods: {
-		backToEnter() {
-			this.$store
-				.commit('room/SETCLASSROOMINFO', null)
-				.then(() => {
-					this.$store.commit('room/SETROOMINFO', null)
-				})
-        .then(()=> {
-          this.$store.commit('barrage/SETMESSAGE', [])
-        })
-				.then(() => {
-					this.$router.push('/enter')
-				})
+		async backToEnter() {
+			await this.$store.commit('room/SETCLASSROOMINFO', null)
+			await this.$store.commit('room/SETROOMINFO', null)
+			await this.$store.commit('barrage/SETMESSAGE', [])
+			this.$router.push('/enter')
 		},
 		editName() {
 			this.isEditName = true
