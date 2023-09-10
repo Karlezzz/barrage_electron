@@ -14,33 +14,19 @@
 						src="../../image/在线人数green.png"
 						alt=""
 					/>
-					99
+					{{ userNumber }}
 				</p>
 			</div>
-			<div class="member_body">
-				<div class="memberItem">
-					<div class="memberName">Karle</div>
-					<div class="memberId">1234567</div>
-				</div>
-				<div class="memberItem">
-					<div class="memberName">Karle</div>
-					<div class="memberId">1234567</div>
-				</div>
-				<div class="memberItem">
-					<div class="memberName">Karle</div>
-					<div class="memberId">1234567</div>
-				</div>
-				<div class="memberItem">
-					<div class="memberName">Karle</div>
-					<div class="memberId">1234567</div>
-				</div>
-				<div class="memberItem">
-					<div class="memberName">Karle</div>
-					<div class="memberId">1234567</div>
-				</div>
-				<div class="memberItem">
-					<div class="memberName">Karle</div>
-					<div class="memberId">1234567</div>
+			<div
+				class="member_body"
+			>
+				<div
+					class="memberItem"
+					v-for="(m, idx) in users"
+					:key="idx"
+				>
+					<div class="memberName">{{ m.name }}</div>
+					<div class="memberId">{{ m.id }}</div>
 				</div>
 			</div>
 		</div>
@@ -51,6 +37,19 @@
 export default {
 	name: 'Member',
 	props: ['isShowMember'],
+  data() {
+    return {
+      flag:this.isShowMember
+    }
+  },
+	computed: {
+		users() {
+			return this.$store.state.barrage.users
+		},
+		userNumber() {
+			return this.users.length
+		},
+	},
 }
 </script>
 

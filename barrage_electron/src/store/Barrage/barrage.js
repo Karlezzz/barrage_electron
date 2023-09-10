@@ -1,6 +1,7 @@
 import { ipcRenderer } from 'electron'
 const state = {
-  messageList: []
+  messageList: [],
+  users: []
 }
 const mutations = {
   PUTMESSAGE(state, data) {
@@ -9,12 +10,12 @@ const mutations = {
   },
   SETMESSAGE(state, data) {
     state.messageList = data
+  },
+  SETUSERS(state, data) {
+    state.users.push(data)
   }
 }
 const actions = {
-  saveMessage({ commit }, data) {
-    commit('PUTMESSAGE', data)
-  }
 }
 export default {
   namespaced: true, state, mutations, actions
