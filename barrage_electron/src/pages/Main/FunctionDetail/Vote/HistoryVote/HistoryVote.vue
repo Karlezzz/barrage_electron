@@ -21,7 +21,7 @@
 					<a
 						href="#"
 						:title="item.content"
-						>{{ item.content }}</a
+						>{{ item.question }}</a
 					>
 				</div>
 			</div>
@@ -88,14 +88,14 @@ export default {
 			this.isShowDetail = false
 		},
 		convert(vote) {
-			const { question, voteOptions } = vote
-      voteOptions.forEach((vo)=> {
-        vo = {
-          ...vo,
-          name: vo.optionValue,
-          value: vo.selectMembers.length
-        }
-      })
+			let { question, voteOptions } = vote
+			voteOptions = voteOptions.map(vo => {
+				return {
+					...vo,
+					name: vo.optionValue,
+					value: vo.selectMembers.length,
+				}
+			})
 			const option = {
 				title: {
 					show: true,
@@ -122,46 +122,9 @@ export default {
 				},
 				series: [
 					{
-						// name: 'Test111',
 						type: 'pie',
-						center: ['50%', '50%'],
-						radius: ['40', '80'],
-						avoidLabelOverlap: false,
-						label: {
-							show: false,
-							position: 'center',
-						},
-						// data: [
-						// 	{
-						// 		value: 1048,
-						// 		name: '吃饭',
-						// 	},
-						// 	{
-						// 		value: 735,
-						// 		name: '睡觉',
-						// 	},
-						// 	{
-						// 		value: 580,
-						// 		name: '上课',
-						// 	},
-						// 	{
-						// 		value: 484,
-						// 		name: '健身',
-						// 	},
-						// 	{
-						// 		value: 300,
-						// 		name: '约会',
-						// 	},
-						// 	{
-						// 		value: 100,
-						// 		name: '洗澡',
-						// 	},
-						// 	{
-						// 		value: 300,
-						// 		name: '做作业',
-						// 	},
-						// ],
-            data: voteOptions
+						radius: ['50%'],
+						data: voteOptions,
 					},
 				],
 			}
