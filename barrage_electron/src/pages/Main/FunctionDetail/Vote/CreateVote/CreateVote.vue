@@ -11,13 +11,13 @@
 				<input
 					type="text"
 					placeholder="Vote question"
-					v-model="voteTitle"
+					v-model="voteQuestion"
 				/>
 			</div>
 			<div class="select">
 				<div
 					class="selectItem"
-					v-for="(item, index) in selectList"
+					v-for="(item, index) in voteOptions"
 					:key="index"
 					ref="selectItem"
 				>
@@ -25,13 +25,13 @@
 						v-if="!item.isEdit"
 						ref="one"
 						@click="changeSelect(item, index)"
-						>{{ item.content }}</span
+						>{{ item.optionValue }}</span
 					>
 					<input
 						v-if="item.isEdit"
 						type="text"
 						@blur="confirmSelect(item, $event)"
-						:value="item.content"
+						:value="item.optionValue"
 						ref="selectInput"
 					/>
 				</div>
@@ -42,11 +42,11 @@
 					<input
 						type="text"
 						placeholder="Select time"
-						v-model="voteTime"
+						v-model="duration.content"
 						disabled
 					/>
 					<img
-						src="@/pages/Enter/image/下拉.png"
+            src="./images/下拉.png"
 						alt=""
 						@click="showTimeList"
 					/>
@@ -57,7 +57,7 @@
 				>
 					<div
 						class="timeListItem"
-						v-for="(item, index) in voteTimeList"
+						v-for="(item, index) in durationList"
 						:key="index"
 						@click="selectTime(item)"
 					>
@@ -67,7 +67,7 @@
 			</div>
 			<div
 				class="sendVote"
-				@click="postVote"
+				@click="onSubmitVote"
 			>
 				<button>Start voting</button>
 			</div>
@@ -76,45 +76,41 @@
 </template>
 
 <script>
+import { Vote } from '../../../../../../lib/models'
+
 export default {
 	name: 'CreateVote',
 	props: ['isShowCreateVote'],
 	data() {
 		return {
-			voteTitle: '',
+			voteQuestion: '',
 			isShowTimeList: false,
-			selectList: [
-				{
-					id: '001',
-					content: 'Section One',
-					isEdit: false,
-				},
-			],
+			voteOptions: [],
 			newSelect: '',
 			isEdit: false,
-			voteTimeList: [
+			durationList: [
 				{
-					id: 1,
 					content: '1 minute',
+					timestamp: 60000,
 				},
 				{
-					id: 2,
 					content: '5 minutes',
+					timestamp: 300000,
 				},
 				{
-					id: 3,
 					content: '10 minutes',
+					timestamp: 600000,
 				},
 				{
-					id: 4,
 					content: '30 minutes',
+					timestamp: 1800000,
 				},
 				{
-					id: 5,
 					content: '60 minutes',
+					timestamp: 3600000,
 				},
 			],
-			voteTime: '',
+			duration: '',
 		}
 	},
 	methods: {
@@ -122,9 +118,8 @@ export default {
 			this.isShowTimeList = !this.isShowTimeList
 		},
 		addNewSelect(value) {
-			this.selectList.push({
-				id: '',
-				content: '',
+			this.voteOptions.push({
+				optionValue: '',
 				isEdit: true,
 			})
 			setTimeout(() => {
@@ -135,7 +130,7 @@ export default {
 		},
 		confirmSelect(item, e) {
 			item.isEdit = false
-			item.content = e.target.value
+			item.optionValue = e.target.value
 		},
 		changeSelect(item, index) {
 			item.isEdit = true
@@ -145,16 +140,16 @@ export default {
 			}, 10)
 		},
 		selectTime(item) {
-			this.voteTime = item.content
+			this.duration = item
 			this.isShowTimeList = false
 		},
-		postVote() {
-			const voteInfo = {
-				voteTitle: this.voteTitle,
-				selectList: this.selectList,
-				voteTime: this.voteTime,
-			}
-			//发送请求，将对象发出
+		onSubmitVote() {
+			const vote = Vote.init({
+				question: this.voteQuestion,
+				voteOptions: this.voteOptions,
+				duration: this.duration.timestamp,
+			})
+			this.$emit('onSubmitVote', { vote })
 		},
 	},
 }
@@ -240,7 +235,6 @@ export default {
 	width: 100%;
 	height: 30%;
 	margin-top: 10px;
-	/* margin-left: -10px; */
 }
 
 .createVoteCard .time .input {
@@ -280,7 +274,6 @@ export default {
 	height: 81px;
 	margin-left: 10px;
 	overflow: scroll;
-	/* border: 1px solid #ea7724; */
 	border-top: none;
 	border-bottom-right-radius: 10px;
 	border-bottom-left-radius: 10px;
@@ -289,7 +282,6 @@ export default {
 .createVoteCard .time .timeList .timeListItem {
 	width: 100%;
 	height: 20px;
-	/* border-bottom: #ea7724 1px solid; */
 	color: #e1e1e3;
 	text-align: center;
 	font-size: 15px;

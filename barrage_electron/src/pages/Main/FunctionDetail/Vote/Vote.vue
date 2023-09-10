@@ -15,7 +15,7 @@
 						'background-color': isShowCreateVote ? '#526af0' : '#232227',
 					}"
 				>
-					New
+					Create
 				</div>
 				<div
 					class="twoVoteSelect"
@@ -28,7 +28,10 @@
 				</div>
 			</div>
 			<div class="vote_body">
-				<CreateVote :isShowCreateVote="isShowCreateVote"></CreateVote>
+				<CreateVote
+					:isShowCreateVote="isShowCreateVote"
+					@onSubmitVote="onSubmitVote"
+				></CreateVote>
 				<HistoryVote :isShowHistoryVote="isShowHistoryVote"></HistoryVote>
 			</div>
 		</div>
@@ -52,12 +55,14 @@ export default {
 		}
 	},
 	methods: {
-		// 选择创建投票还是历史投票
 		selectVote(index) {
 			this.isShowCreateVote = false
 			this.isShowHistoryVote = false
 			if (index == 1) this.isShowCreateVote = true
 			if (index == 2) this.isShowHistoryVote = true
+		},
+		onSubmitVote({ vote }) {
+			this.$emit('onSubmitVote', { vote })
 		},
 	},
 }

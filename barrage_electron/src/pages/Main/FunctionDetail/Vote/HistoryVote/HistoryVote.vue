@@ -21,7 +21,7 @@
 					<a
 						href="#"
 						:title="item.content"
-						>{{ item.content }}</a
+						>{{ item.question }}</a
 					>
 				</div>
 			</div>
@@ -48,119 +48,14 @@ export default {
 	props: ['isShowHistoryVote'],
 	data() {
 		return {
-			historyVoteList: [
-				{
-					id: 1,
-					content: '今晚吃什么',
-				},
-				{
-					id: 2,
-					content: '几点下课',
-				},
-				{
-					id: 3,
-					content: '有没有作业',
-				},
-			],
 			isShowDetail: false,
 			detailInfo: '',
 		}
 	},
-	methods: {
-		showHistoryVoteDetail(item) {
-			this.isShowDetail = true
-			this.charts()
-			//将id发请求，得到回应数据绑定给detailInfo,detailInfo传入子组件进行展示
-		},
-		getBackDetail(value) {
-			this.isShowDetail = false
-		},
-		//配置echarts
-		charts() {
-			let np = new Promise((resolve, reject) => {
-				resolve()
-			})
-			np.then(() => {
-				this.myEcharts = this.echarts.init(document.getElementById('cartsArea'))
-				let option = {
-					title: {
-						show: true,
-						x: '10%',
-						y: '10%',
-						text: 'TestTestTestTestTest',
-						textStyle: {
-							fontSize: '15px',
-							color: '#e1e1e3',
-						},
-					},
-					tooltip: {
-						trigger: 'item',
-					},
-					legend: {
-						orient: 'horizontal',
-						x: 'right',
-						y: 'bottom',
-						selectedMode: false,
-						type: 'scroll',
-						textStyle: {
-							color: '#e1e1e3',
-							// fontSize:14
-						},
-					},
-					series: [
-						{
-							name: 'Test',
-							type: 'pie',
-							center: ['50%', '50%'],
-							radius: ['40', '80'],
-							avoidLabelOverlap: false,
-							label: {
-								show: false,
-								position: 'center',
-							},
-							data: [
-								{
-									value: 1048,
-									name: '吃饭',
-								},
-								{
-									value: 735,
-									name: '睡觉',
-								},
-								{
-									value: 580,
-									name: '上课',
-								},
-								{
-									value: 484,
-									name: '健身',
-								},
-								{
-									value: 300,
-									name: '约会',
-								},
-								{
-									value: 100,
-									name: '洗澡',
-								},
-								{
-									value: 300,
-									name: '做作业',
-								},
-							],
-						},
-					],
-				}
-				this.myEcharts.setOption(option)
-			})
-		},
-		getBack() {
-			this.myEcharts.dispose()
-
-			this.isShowDetail = false
-		},
-	},
 	computed: {
+		historyVoteList() {
+			return this.$store.state.vote.votes || []
+		},
 		isShow() {
 			if (this.isShowHistoryVote == true) {
 				if (this.isShowDetail == true) return false
@@ -169,7 +64,82 @@ export default {
 			return false
 		},
 	},
-	mounted() {},
+	methods: {
+		showHistoryVoteDetail(vote) {
+			this.isShowDetail = true
+
+			this.charts(this.convert(vote))
+		},
+		getBackDetail() {
+			this.isShowDetail = false
+		},
+		charts(option) {
+			const ch = new Promise((resolve, reject) => {
+				resolve()
+			})
+			ch.then(() => {
+				this.myEcharts = this.echarts.init(document.getElementById('cartsArea'))
+				this.myEcharts.setOption(option)
+			})
+		},
+		getBack() {
+			this.myEcharts.dispose()
+
+			this.isShowDetail = false
+		},
+		convert(vote) {
+			let { question, voteOptions } = vote
+			voteOptions = voteOptions.map(vo => {
+				return {
+					...vo,
+					name: vo.optionValue,
+					value: vo.selectMembers.length,
+				}
+			})
+			const option = {
+				title: {
+					show: true,
+					x: '10%',
+					y: '10%',
+					text: question,
+					textStyle: {
+						fontSize: '15px',
+						color: '#e1e1e3',
+					},
+				},
+				tooltip: {
+					trigger: 'item',
+				},
+				legend: {
+					orient: 'horizontal',
+					x: 'right',
+					y: 'bottom',
+					selectedMode: false,
+					type: 'scroll',
+					textStyle: {
+						color: '#e1e1e3',
+					},
+				},
+				series: [
+					{
+						type: 'pie',
+						radius: ['50%'],
+						data: voteOptions,
+					},
+				],
+			}
+			return option
+		},
+	},
+	watch: {
+		historyVoteList: {
+			deep: true,
+			handler() {
+				const newVote = this.historyVoteList[this.historyVoteList.length - 1]
+				this.charts(this.convert(newVote))
+			},
+		},
+	},
 }
 </script>
 

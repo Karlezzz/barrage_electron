@@ -25,8 +25,17 @@
 				<FunctionDetail
 					:clientUrl="clientUrl"
 					@onSubmitClassRoom="onSubmitClassRoom"
+					@onSubmitVote="onSubmitVote"
 				></FunctionDetail>
 			</div>
+			<Confirm
+				:content="endClassContent"
+				@onSubmitConfirm="onSubmitConfirm"
+			></Confirm>
+			<Alert
+				:content="alertContent"
+				@onSubmitAlert="onSubmitAlert"
+			></Alert>
 		</div>
 	</div>
 </template>
@@ -35,68 +44,70 @@
 import Function from './Function/Function.vue'
 import Barrage from './Barrage/Barrage.vue'
 import FunctionDetail from './FunctionDetail/FunctionDetail.vue'
+import Confirm from '../../components/Popup/Confirm.vue'
+import Alert from '../../components/Popup/Alert.vue'
 
 import { nanoid } from 'nanoid'
-import { _findOne, _updateOne, _createOne } from '@/api'
+import { _findOne, _updateOne, _createOne, _findAll } from '@/api'
 import { io } from 'socket.io-client'
-import { User, Message } from '../../../lib/models'
+import { User } from '../../../lib/models'
+import { endpoint } from '@/api/endpoint'
 export default {
 	name: 'Main',
 	components: {
-		Function,
+		Alert,
 		Barrage,
+		Confirm,
 		FunctionDetail,
+		Function,
 	},
 	data() {
 		return {
-			endpoint: {
-				socket: '/socket',
-				user: '/user',
-				client: '/client',
-				classRoom: '/classRoom',
-			},
-			user: null,
+			alertContent: null,
 			clientUrl: null,
+			classRoom: null,
+			classRoomCallback: null,
+			endClassContent: null,
+			user: null,
 		}
 	},
 	computed: {
+		roomCode() {
+			return this.roomInfo ? this.roomInfo.code : ''
+		},
 		roomInfo() {
 			return this.$store.state.room.roomInfo
 		},
 		roomName() {
 			return this.roomInfo ? this.roomInfo.name : ''
 		},
-		roomCode() {
-			return this.roomInfo ? this.roomInfo.code : ''
-		},
 	},
 	methods: {
-		async onSubmitClassRoom({ classRoom }) {
+		async init() {
+			await this.initUser()
+			await this.initClientUrl()
+		},
+		async getSocketUrl() {
 			try {
-				const result = await _createOne(this.endpoint.classRoom, classRoom)
-				if (result) {
-					console.log(result)
-					this.$store.commit('room/SETCLASSROOMINFO', result)
-				}
+				const result = await _findOne(endpoint.socket)
+				if (result) return result
 			} catch (error) {
 				console.log(error)
 			}
 		},
-		async onSubmitName(user) {
+		async getClientUrl() {
 			try {
-				const result = await _updateOne(this.endpoint.user, user)
-				if (result) alert('Successfully!')
+				const result = await _findOne(endpoint.client)
+				if (result) return result
 			} catch (error) {
-				alert('Failed!')
+				return 'https://www.dgut.edu.cn/'
 			}
 		},
-		onSendMessage(newMessage) {
-			try {
-				this.socket.emit('sendMsg', JSON.stringify(newMessage))
-			} catch (error) {
-				console.log(error)
-			}
-			this.newMessage = ''
+    async getAllVotes() {
+      await this.$store.dispatch('vote/getAllVotes')
+    },
+		async initClientUrl() {
+			this.clientUrl = await this.getClientUrl()
 		},
 		async initSocket() {
 			try {
@@ -112,12 +123,83 @@ export default {
 				console.log(error)
 			}
 		},
-		async getSocketUrl() {
+		async onSubmitVote({ vote }) {
 			try {
-				const result = await _findOne(this.endpoint.socket)
-				if (result) return result
+				const result = await _createOne(endpoint.vote, vote)
+				if (result) {
+          this.$store.commit('vote/SETVOTES', result)
+					this.alertContent = {
+						content: 'Create vote successfully!',
+						button: 'OK',
+					}
+				}
 			} catch (error) {
-				console.log(error)
+				this.alertContent = {
+					content: 'Create vote failed!',
+					button: 'OK',
+				}
+			}
+		},
+		async onSubmitConfirm(flag) {
+			if (flag) {
+				await this._submitClassRoom({ classRoom: this.classRoom })
+				this.classRoomCallback()
+				await this.$store.commit('room/SETCLASSROOMINFO', null)
+				this.socket.disconnect()
+			}
+			this.endClassContent = null
+		},
+		async onSubmitClassRoom({ classRoom, callback }) {
+			this.classRoom = classRoom
+			this.classRoomCallback = callback
+			const { isOnClass } = classRoom
+			if (isOnClass) {
+				this.endClassContent = {
+					content: 'Confirm the end of class?',
+					button: {
+						confirm: 'Confirm',
+						cancel: 'Cancel',
+					},
+				}
+				return
+			}
+			await this._submitClassRoom({ classRoom })
+			await this.initSocket()
+			this.classRoomCallback()
+		},
+		async onSubmitName(user) {
+			try {
+				const result = await _updateOne(endpoint.user, user)
+				if (result) {
+					this.alertContent = {
+						content: 'Change name successfully!',
+						button: 'OK',
+					}
+				}
+			} catch (error) {
+				this.alertContent = {
+					content: 'Change name failed!',
+					button: 'OK',
+				}
+			}
+		},
+		async _submitClassRoom({ classRoom }) {
+			try {
+				const result = await _createOne(endpoint.classRoom, classRoom)
+				if (result) {
+					this.$store.commit('room/SETCLASSROOMINFO', result)
+					const { isOnClass } = this.$store.state.room.classRoomInfo
+					const content = isOnClass ? 'CLass begin !' : 'Class end !'
+					this.alertContent = {
+						content,
+						button: 'OK',
+					}
+				}
+			} catch (error) {
+				this.alertContent = {
+					content: 'Failed!',
+					button: 'OK',
+				}
 			}
 		},
 		initUser() {
@@ -126,21 +208,16 @@ export default {
 				name: 'Teacher',
 			})
 		},
-		async getClientUrl() {
+		onSendMessage(newMessage) {
 			try {
-				const result = await _findOne(this.endpoint.client)
-				if (result) return result
+				this.socket.emit('sendMsg', JSON.stringify(newMessage))
 			} catch (error) {
-				return 'https://www.dgut.edu.cn/'
+				console.log(error)
 			}
+			this.newMessage = ''
 		},
-		async initClientUrl() {
-			this.clientUrl = await this.getClientUrl()
-		},
-		async init() {
-			await this.initSocket()
-			await this.initUser()
-			await this.initClientUrl()
+		onSubmitAlert() {
+			this.alertContent = null
 		},
 	},
 	mounted() {
@@ -151,7 +228,6 @@ export default {
 
 <style scoped>
 .box {
-	/* height: 100%; */
 	height: 100vh;
 	width: 100%;
 	border-radius: 50px;
@@ -161,7 +237,6 @@ export default {
 	position: relative;
 	width: 100%;
 	height: 100%;
-	/* min-height: 100vh; */
 	background-color: #1d1d1f;
 	overflow: hidden;
 	border-radius: 50px;
@@ -169,16 +244,13 @@ export default {
 
 .head {
 	width: 100%;
-	/* height: 90px; */
 	height: 15%;
-	/* background-color: #ff0000; */
 }
 
 .head .logo {
 	width: 200px;
 	height: 100%;
 	margin-left: 20px;
-	/* background-color: red; */
 }
 
 .head .logo img {
@@ -205,15 +277,12 @@ export default {
 	position: absolute;
 	top: 55px;
 	left: 0px;
-	/* background-color: red; */
 	height: 50px;
 	font-size: 14px;
 }
 
 .body {
-	/* background-color: rgb(255, 255, 255); */
 	width: 100%;
-	/* height: 510px; */
 	height: 90%;
 }
 </style>

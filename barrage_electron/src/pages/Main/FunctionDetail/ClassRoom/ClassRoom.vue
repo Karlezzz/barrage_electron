@@ -83,22 +83,27 @@ export default {
 	methods: {
 		onSubmitClassRoom() {
 			const classRoom = ClassRoom.init({
-				name: this.name,
+				name: this.className,
 				ownerRoomCode: this.roomCode,
 				id: nanoid(),
 			})
 			const _classRoom = this.classRoom ? this.classRoom : classRoom
-			clearInterval(this.beginTimer)
-			clearInterval(this.endTimer)
+
 			this.$emit('onSubmitClassRoom', {
 				classRoom: _classRoom,
+        callback: this.classRoomCallback
 			})
-			if (!this.$isOnClass) {
+		},
+		classRoomCallback() {
+			if (this.$isOnClass) {
+				clearInterval(this.beginTimer)
 				this.endTimer = setInterval(() => {
 					this.endTime = new Date().valueOf()
 				})
 			} else {
+				clearInterval(this.endTimer)
 				this.endTime = '-- : -- : --'
+        this.className = ''
 			}
 		},
 	},
