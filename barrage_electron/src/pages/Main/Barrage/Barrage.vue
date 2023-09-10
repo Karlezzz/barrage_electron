@@ -1,5 +1,4 @@
 <template>
-	<!-- Barrage.vue -->
 	<div class="barrage">
 		<div class="chatArea">
 			<div class="message">
@@ -43,9 +42,7 @@
 
 <script>
 import { nanoid } from 'nanoid'
-// import { io } from 'socket.io-client'
-import { Message, User } from '../../../../lib/models'
-// import { _findOne } from '@/api'
+import { Message } from '../../../../lib/models'
 
 export default {
 	name: 'Barrage',
@@ -55,9 +52,6 @@ export default {
 			myId: nanoid(),
 			newMessage: '',
 			socket: null,
-			endpoint: {
-				socket: '/socket',
-			},
 		}
 	},
 	props: {
@@ -91,19 +85,6 @@ export default {
 			} = message
 			return id
 		},
-		// sendMessage() {
-		// 	const msgInstance = Message.init({
-		// 		user: this.user,
-		// 		content: this.newMessage,
-		// 		type: 'chat',
-		// 	})
-		// 	try {
-		// 		this.socket.emit('sendMsg', JSON.stringify(msgInstance))
-		// 	} catch (error) {
-		// 		console.log(error)
-		// 	}
-		// 	this.newMessage = ''
-		// },
 		onSendMessage() {
 			const msgInstance = Message.init({
 				user: this.user,
@@ -113,29 +94,6 @@ export default {
 			this.$emit('onSendMessage', msgInstance)
 			this.newMessage = ''
 		},
-
-		// async initSocket() {
-		// 	try {
-		// 		const { socketUrl } = await this.getSocketUrl()
-		// 		this.socket = io(socketUrl, {
-		// 			transports: ['websocket'],
-		// 		})
-		// 		this.socket.removeAllListeners()
-		// 		this.socket.on('broadcast', data => {
-		// 			this.$store.dispatch('saveMessage', JSON.parse(data))
-		// 		})
-		// 	} catch (error) {
-		// 		console.log(error)
-		// 	}
-		// },
-		// async getSocketUrl() {
-		// 	try {
-		// 		const result = await _findOne(this.endpoint.socket)
-		// 		if (result) return result
-		// 	} catch (error) {
-		// 		console.log(error)
-		// 	}
-		// },
 		initScroll() {
 			let div = document.querySelector('.message')
 			div.scrollTop = div.scrollHeight
@@ -143,7 +101,6 @@ export default {
 	},
 	mounted() {
 		this.initScroll()
-		// this.initSocket()
 	},
 	watch: {
 		messageList() {
@@ -165,7 +122,6 @@ export default {
 	float: left;
 	width: 55%;
 	height: 90%;
-	/* background-color: yellow; */
 	display: flex;
 	justify-content: center;
 	align-items: center;

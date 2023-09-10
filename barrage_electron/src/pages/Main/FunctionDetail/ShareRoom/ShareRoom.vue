@@ -7,11 +7,19 @@
 			class="box"
 			v-show="isShowShareRoom"
 		>
-			<div class="share">
+			<div
+				class="share"
+				v-show="classRoom"
+			>
 				<div class="title">{{ roomName }}</div>
 				<div class="message">
-					<p>Room code: <span class="__label">{{ roomCode }}</span></p>
-					<p>Room password: <span class="__label">{{ roomPassword }}</span></p>
+					<p>Class Room : {{ classRoomName }}</p>
+					<p>
+						Room code: <span class="__label">{{ roomCode }}</span>
+					</p>
+					<p>
+						Room password: <span class="__label">{{ roomPassword }}</span>
+					</p>
 					<p>Room Url:</p>
 					<p class="__url">{{ url }}</p>
 				</div>
@@ -19,6 +27,12 @@
 					class="qrCode"
 					ref="qrCodeUrl"
 				></div>
+			</div>
+			<div
+				class="share --onClass"
+				v-show="!classRoom"
+			>
+				Please create a classroom first !
 			</div>
 		</div>
 	</transition>
@@ -53,22 +67,27 @@ export default {
 		roomPassword() {
 			return this.room ? this.room.password : 'No password'
 		},
+		classRoom() {
+			return this.$store.state.room.classRoomInfo
+		},
+		classRoomName() {
+			return this.classRoom ? this.classRoom.name : ''
+		},
 	},
 	methods: {
 		createQrCode() {
-			// this.$nextTick(() => {
-			setTimeout(() => {
-				this.qrcode = new QRCode(this.$refs.qrCodeUrl, {
-					text: this.url,
-					width: 150,
-					height: 150,
-					colorDark: '#1d1d1f',
-					colorLight: '#e1e1e3',
-					correctLevel: QRCode.CorrectLevel.H,
-				})
-			}, 1000)
-
-			// })
+			this.$nextTick(() => {
+				setTimeout(() => {
+					this.qrcode = new QRCode(this.$refs.qrCodeUrl, {
+						text: this.url,
+						width: 150,
+						height: 150,
+						colorDark: '#1d1d1f',
+						colorLight: '#e1e1e3',
+						correctLevel: QRCode.CorrectLevel.H,
+					})
+				}, 1000)
+			})
 		},
 	},
 	mounted() {
@@ -85,13 +104,16 @@ export default {
 
 .share {
 	width: 100%;
-	height: 60%;
+	height: 70%;
 	background-color: #323337;
 	border-radius: 15px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
+}
+.--onClass {
+	color: #e1e1e3;
 }
 
 .title {
@@ -115,11 +137,11 @@ export default {
 .message .__url {
 	font-size: 12px;
 	user-select: all;
-  color: #ea7724;
+	color: #ea7724;
 }
 .message .__label {
 	font-size: 16px;
-  color: #ea7724;
+	color: #ea7724;
 }
 
 .message p {
@@ -129,7 +151,7 @@ export default {
 }
 
 .qrCode {
-	margin-top: 60px;
+	margin-top: 80px;
 	margin-bottom: 15%;
 	width: 150px;
 	height: 130px;

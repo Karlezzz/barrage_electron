@@ -10,7 +10,7 @@ const mutations = {
   },
   SETCLASSROOMINFO(state, data) {
     state.classRoomInfo = data
-    state.classRoomInfo.isOnClass = !state.classRoomInfo.isOnClass
+    // state.classRoomInfo.isOnClass = !state.classRoomInfo.isOnClass
   }
 };
 const actions = {

@@ -1,7 +1,10 @@
 <template>
 	<div class="functionDetail">
 		<Member :isShowMember="functionStatusList.isShowMember"></Member>
-		<Vote :isShowVote="functionStatusList.isShowVote"></Vote>
+		<Vote
+			:isShowVote="functionStatusList.isShowVote"
+			@onSubmitVote="onSubmitVote"
+		></Vote>
 		<ShareRoom
 			:isShowShareRoom="functionStatusList.isShowShareRoom"
 			:clientUrl="clientUrl"
@@ -9,7 +12,7 @@
 		<Screen :isShowScreen="functionStatusList.isShowScreen"></Screen>
 		<ClassRoom
 			:isShowClassRoom="functionStatusList.isShowClassRoom"
-      @onSubmitClassRoom="onSubmitClassRoom"
+			@onSubmitClassRoom="onSubmitClassRoom"
 		></ClassRoom>
 	</div>
 </template>
@@ -44,16 +47,18 @@ export default {
 		}
 	},
 	mounted() {
-		//接收Function组件传来的功能状态值列表
 		this.$bus.$on('getFunctionStatusList', value => {
 			this.functionStatusList = value
 		})
 	},
-  methods: {
-    onSubmitClassRoom({classRoom}) {
-      this.$emit('onSubmitClassRoom', {classRoom})
-    }
-  }
+	methods: {
+		onSubmitClassRoom({ classRoom, callback }) {
+			this.$emit('onSubmitClassRoom', { classRoom, callback })
+		},
+		onSubmitVote({ vote }) {
+			this.$emit('onSubmitVote', { vote })
+		},
+	},
 }
 </script>
 
@@ -65,6 +70,5 @@ export default {
 	margin-top: 0.5%;
 	border-radius: 10px;
 	overflow: hidden;
-	/* background-color: #fff; */
 }
 </style>
