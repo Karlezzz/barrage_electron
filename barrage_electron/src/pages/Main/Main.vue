@@ -117,7 +117,7 @@ export default {
 				})
 				this.socket.removeAllListeners()
 				this.socket.on('broadcast', data => {
-					this.$store.dispatch('saveMessage', JSON.parse(data))
+					this.$store.commit('barrage/PUTMESSAGE', JSON.parse(data))
 				})
 			} catch (error) {
 				console.log(error)
