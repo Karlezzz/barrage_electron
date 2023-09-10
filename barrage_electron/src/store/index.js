@@ -4,7 +4,7 @@ Vue.use(Vuex)
 import barrage from './Barrage/barrage'
 import room from './Room/room'
 import axios from './Axios/axios'
-import vote from './Vote/vote'
+import vote from './Vote/Vote'
 export default new Vuex.Store({
   modules: {
     axios,
