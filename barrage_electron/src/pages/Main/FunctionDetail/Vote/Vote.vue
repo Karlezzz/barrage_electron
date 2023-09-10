@@ -15,7 +15,7 @@
 						'background-color': isShowCreateVote ? '#526af0' : '#232227',
 					}"
 				>
-					New
+					Create
 				</div>
 				<div
 					class="twoVoteSelect"

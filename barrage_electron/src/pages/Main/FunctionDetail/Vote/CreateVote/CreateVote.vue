@@ -235,7 +235,6 @@ export default {
 	width: 100%;
 	height: 30%;
 	margin-top: 10px;
-	/* margin-left: -10px; */
 }
 
 .createVoteCard .time .input {
@@ -275,7 +274,6 @@ export default {
 	height: 81px;
 	margin-left: 10px;
 	overflow: scroll;
-	/* border: 1px solid #ea7724; */
 	border-top: none;
 	border-bottom-right-radius: 10px;
 	border-bottom-left-radius: 10px;
@@ -284,7 +282,6 @@ export default {
 .createVoteCard .time .timeList .timeListItem {
 	width: 100%;
 	height: 20px;
-	/* border-bottom: #ea7724 1px solid; */
 	color: #e1e1e3;
 	text-align: center;
 	font-size: 15px;

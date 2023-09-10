@@ -40,7 +40,6 @@ export default {
 	},
 	methods: {
 		onSubmitConfirm(flag) {
-      // console.log(flag);
 			this.$emit('onSubmitConfirm', flag)
 		},
 	},

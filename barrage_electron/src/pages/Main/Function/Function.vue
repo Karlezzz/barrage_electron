@@ -1,5 +1,4 @@
 <template>
-	<!-- Function.vue -->
 	<div class="function">
 		<div class="personInfo">
 			<img
@@ -165,7 +164,6 @@ export default {
 			this.$emit('onSubmitName', this.user)
 		},
 		selectFunction(index) {
-			//1.member 2.vote 3.screen 4.share 5.classRoom
 			for (let i in this.functionStatusList) {
 				this.functionStatusList[i] = false
 			}
@@ -175,7 +173,6 @@ export default {
 			if (index == 4) this.functionStatusList.isShowShareRoom = true
 			if (index == 5) this.functionStatusList.isShowClassRoom = true
 
-			// 将功能栏状态值传给FunctionDetail组件
 			this.$bus.$emit('getFunctionStatusList', this.functionStatusList)
 		},
 		startBarrage() {
@@ -204,7 +201,6 @@ export default {
 		},
 	},
 	mounted() {
-		// this.barrageStatus = this.isOpenBarrage == false ? '开启弹幕' : '关闭弹幕'
 		ipcRenderer.on('hasCloseBarrage', () => {
 			this.isOpenBarrage = false
 		})
@@ -228,7 +224,6 @@ export default {
 	margin-top: 10px;
 	margin-left: 3%;
 	width: 94%;
-	/* height: 20%; */
 	height: 100px;
 	background-color: #323337;
 	border-radius: 20px;

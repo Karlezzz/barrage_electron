@@ -93,6 +93,7 @@
 import { Room } from '../../../lib/models'
 import { nanoid } from 'nanoid'
 import Alert from '../../components/Popup/Alert.vue'
+import { endpoint } from '@/api/endpoint'
 export default {
 	name: 'Enter',
 	components: {
@@ -104,11 +105,7 @@ export default {
 			roomName: null,
 			roomCode: null,
 			roomPassword: null,
-			// roomInfoList: this. $store.state.enter.roomInfoList,
 			// roomInfoList: [],
-			endpoint: {
-				room: '/room',
-			},
 			popUpContent: null,
 		}
 	},
@@ -127,7 +124,7 @@ export default {
 		async addBarrage() {
 			if (!!this.roomCode && !!this.roomName) {
 				await this.$store.dispatch('room/enterRoom', {
-					endpoint: this.endpoint.room,
+					endpoint: endpoint.room,
 					data: this.initRoom(),
 				})
 				if (this.$store.state.room.roomInfo) {
@@ -154,9 +151,6 @@ export default {
 			})
 		},
 	},
-	created() {
-		// this.$store.dispatch('getRoomInfoList');
-	},
 }
 </script>
 
@@ -182,7 +176,6 @@ export default {
 	width: 2000px;
 	height: 2000px;
 	border-radius: 50%;
-	/* background: linear-gradient(-45deg, #4481eb, #04befe); */
 	background-color: #ea7724;
 	top: -10%;
 	right: 48%;
@@ -341,7 +334,6 @@ export default {
 
 .moreRoomName {
 	position: relative;
-	/* background-color: red; */
 }
 
 .moreRoomName .img {
@@ -365,9 +357,7 @@ export default {
 }
 
 .roomIdList {
-	/* display: none; */
 	position: absolute;
-	/* top: 159px; */
 	top: 100%;
 	left: 7%;
 	height: 160px;
@@ -381,10 +371,8 @@ export default {
 }
 
 .roomIdList .listItem {
-	/* margin-bottom: 5px; */
 	height: 40px;
 	width: 100%;
-
 	background-color: #f0f0f0;
 	display: flex;
 	justify-content: center;

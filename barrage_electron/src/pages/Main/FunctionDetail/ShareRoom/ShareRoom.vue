@@ -13,9 +13,7 @@
 			>
 				<div class="title">{{ roomName }}</div>
 				<div class="message">
-          <p>
-            Class Room : {{ classRoomName }} 
-          </p>
+					<p>Class Room : {{ classRoomName }}</p>
 					<p>
 						Room code: <span class="__label">{{ roomCode }}</span>
 					</p>
@@ -30,9 +28,12 @@
 					ref="qrCodeUrl"
 				></div>
 			</div>
-      <div class="share --onClass" v-show="!classRoom">
-        Please create a classroom first !
-      </div>
+			<div
+				class="share --onClass"
+				v-show="!classRoom"
+			>
+				Please create a classroom first !
+			</div>
 		</div>
 	</transition>
 </template>
@@ -69,24 +70,23 @@ export default {
 		classRoom() {
 			return this.$store.state.room.classRoomInfo
 		},
-    classRoomName() {
-      return this.classRoom ? this.classRoom.name : ''
-    }
+		classRoomName() {
+			return this.classRoom ? this.classRoom.name : ''
+		},
 	},
 	methods: {
 		createQrCode() {
 			this.$nextTick(() => {
-			setTimeout(() => {
-				this.qrcode = new QRCode(this.$refs.qrCodeUrl, {
-					text: this.url,
-					width: 150,
-					height: 150,
-					colorDark: '#1d1d1f',
-					colorLight: '#e1e1e3',
-					correctLevel: QRCode.CorrectLevel.H,
-				})
-			}, 1000)
-
+				setTimeout(() => {
+					this.qrcode = new QRCode(this.$refs.qrCodeUrl, {
+						text: this.url,
+						width: 150,
+						height: 150,
+						colorDark: '#1d1d1f',
+						colorLight: '#e1e1e3',
+						correctLevel: QRCode.CorrectLevel.H,
+					})
+				}, 1000)
 			})
 		},
 	},
@@ -112,8 +112,8 @@ export default {
 	align-items: center;
 	flex-direction: column;
 }
-.--onClass{
-  color: #e1e1e3;
+.--onClass {
+	color: #e1e1e3;
 }
 
 .title {

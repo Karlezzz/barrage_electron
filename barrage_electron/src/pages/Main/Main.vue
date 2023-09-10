@@ -51,6 +51,7 @@ import { nanoid } from 'nanoid'
 import { _findOne, _updateOne, _createOne, _findAll } from '@/api'
 import { io } from 'socket.io-client'
 import { User } from '../../../lib/models'
+import { endpoint } from '@/api/endpoint'
 export default {
 	name: 'Main',
 	components: {
@@ -62,13 +63,6 @@ export default {
 	},
 	data() {
 		return {
-			endpoint: {
-				socket: '/socket',
-				user: '/user',
-				client: '/client',
-				classRoom: '/classRoom',
-				vote: '/vote',
-			},
 			alertContent: null,
 			clientUrl: null,
 			classRoom: null,
@@ -95,7 +89,7 @@ export default {
 		},
 		async getSocketUrl() {
 			try {
-				const result = await _findOne(this.endpoint.socket)
+				const result = await _findOne(endpoint.socket)
 				if (result) return result
 			} catch (error) {
 				console.log(error)
@@ -103,7 +97,7 @@ export default {
 		},
 		async getClientUrl() {
 			try {
-				const result = await _findOne(this.endpoint.client)
+				const result = await _findOne(endpoint.client)
 				if (result) return result
 			} catch (error) {
 				return 'https://www.dgut.edu.cn/'
@@ -131,7 +125,7 @@ export default {
 		},
 		async onSubmitVote({ vote }) {
 			try {
-				const result = await _createOne(this.endpoint.vote, vote)
+				const result = await _createOne(endpoint.vote, vote)
 				if (result) {
           this.$store.commit('vote/SETVOTES', result)
 					this.alertContent = {
@@ -175,7 +169,7 @@ export default {
 		},
 		async onSubmitName(user) {
 			try {
-				const result = await _updateOne(this.endpoint.user, user)
+				const result = await _updateOne(endpoint.user, user)
 				if (result) {
 					this.alertContent = {
 						content: 'Change name successfully!',
@@ -191,7 +185,7 @@ export default {
 		},
 		async _submitClassRoom({ classRoom }) {
 			try {
-				const result = await _createOne(this.endpoint.classRoom, classRoom)
+				const result = await _createOne(endpoint.classRoom, classRoom)
 				if (result) {
 					this.$store.commit('room/SETCLASSROOMINFO', result)
 					const { isOnClass } = this.$store.state.room.classRoomInfo
@@ -234,7 +228,6 @@ export default {
 
 <style scoped>
 .box {
-	/* height: 100%; */
 	height: 100vh;
 	width: 100%;
 	border-radius: 50px;
@@ -244,7 +237,6 @@ export default {
 	position: relative;
 	width: 100%;
 	height: 100%;
-	/* min-height: 100vh; */
 	background-color: #1d1d1f;
 	overflow: hidden;
 	border-radius: 50px;
@@ -252,16 +244,13 @@ export default {
 
 .head {
 	width: 100%;
-	/* height: 90px; */
 	height: 15%;
-	/* background-color: #ff0000; */
 }
 
 .head .logo {
 	width: 200px;
 	height: 100%;
 	margin-left: 20px;
-	/* background-color: red; */
 }
 
 .head .logo img {
@@ -288,15 +277,12 @@ export default {
 	position: absolute;
 	top: 55px;
 	left: 0px;
-	/* background-color: red; */
 	height: 50px;
 	font-size: 14px;
 }
 
 .body {
-	/* background-color: rgb(255, 255, 255); */
 	width: 100%;
-	/* height: 510px; */
 	height: 90%;
 }
 </style>

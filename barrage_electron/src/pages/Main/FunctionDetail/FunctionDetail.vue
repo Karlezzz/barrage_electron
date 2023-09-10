@@ -47,7 +47,6 @@ export default {
 		}
 	},
 	mounted() {
-		//接收Function组件传来的功能状态值列表
 		this.$bus.$on('getFunctionStatusList', value => {
 			this.functionStatusList = value
 		})
@@ -71,6 +70,5 @@ export default {
 	margin-top: 0.5%;
 	border-radius: 10px;
 	overflow: hidden;
-	/* background-color: #fff; */
 }
 </style>
