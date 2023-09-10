@@ -103,9 +103,9 @@ export default {
 				return 'https://www.dgut.edu.cn/'
 			}
 		},
-    async getAllVotes() {
-      await this.$store.dispatch('vote/getAllVotes')
-    },
+		async getAllVotes() {
+			await this.$store.dispatch('vote/getAllVotes')
+		},
 		async initClientUrl() {
 			this.clientUrl = await this.getClientUrl()
 		},
@@ -119,6 +119,11 @@ export default {
 				this.socket.on('broadcast', data => {
 					this.$store.commit('barrage/PUTMESSAGE', JSON.parse(data))
 				})
+				this.socket.on('userLogin', res => {
+          const {data} = res
+          this.$store.commit('barrage/SETUSERS', data[0])
+					console.log(data)
+				})
 			} catch (error) {
 				console.log(error)
 			}
@@ -127,7 +132,7 @@ export default {
 			try {
 				const result = await _createOne(endpoint.vote, vote)
 				if (result) {
-          this.$store.commit('vote/SETVOTES', result)
+					this.$store.commit('vote/SETVOTES', result)
 					this.alertContent = {
 						content: 'Create vote successfully!',
 						button: 'OK',
