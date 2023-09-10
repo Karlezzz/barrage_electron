@@ -4,7 +4,7 @@ class Message {
     options = options || {}
     this.content = options.content || ''
     this.user = User.init(options.user)
-    this.created = options.created || new Date().getTime()
+    this.created = options.created || (new Date().valueOf())
     this.modified = options.modified || this.created
     this.type = options.type || 'chat'
   }
