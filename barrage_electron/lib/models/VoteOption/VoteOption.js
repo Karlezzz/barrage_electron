@@ -1,11 +1,12 @@
 const { nanoid } = require("nanoid")
+const { User } = require('../User')
 
 class VoteOption {
   constructor(options) {
     options = options || {}
     this.id = nanoid()
     this.optionValue = options.optionValue
-    this.selectMembers = options.selectMembers || []
+    this.selectMembers = User.initFromArray(options.selectMembers) || []
   }
 
   get isValid() {
