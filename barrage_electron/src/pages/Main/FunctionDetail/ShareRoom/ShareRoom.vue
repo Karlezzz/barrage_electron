@@ -53,7 +53,7 @@ export default {
 	},
 	computed: {
 		url() {
-			return `http://${this.clientUrl}:3000/#/barrage/${this.roomCode}`
+			return `http://${this.clientUrl}:3000/#/barrage/${this.roomCode}/${this.classRoomCode}`
 		},
 		room() {
 			return this.$store.state.room.roomInfo
@@ -73,6 +73,9 @@ export default {
 		classRoomName() {
 			return this.classRoom ? this.classRoom.name : ''
 		},
+    classRoomCode() {
+      return this.classRoom ? this.classRoom.id : ''
+    },
 	},
 	methods: {
 		createQrCode() {
@@ -86,7 +89,7 @@ export default {
 						colorLight: '#e1e1e3',
 						correctLevel: QRCode.CorrectLevel.H,
 					})
-				}, 1000)
+				}, 2000)
 			})
 		},
 	},
