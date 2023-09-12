@@ -20,7 +20,10 @@
 					v-model="newMessage"
 					@keyup.enter="sendMessage"
 				/>
-				<div class="emoji">
+				<div
+					class="emoji"
+					@click="showEmojiList"
+				>
 					<img
 						src="../image/emoji.png"
 						alt=""
@@ -36,6 +39,14 @@
 					/>
 				</div>
 			</div>
+			<VEmojiPicker
+				v-show="isShowEmojiList"
+				@select="selectEmoji"
+				:showSearch="false"
+				:dark="true"
+				:emojiSize="30"
+				class="__emoji"
+			/>
 		</div>
 	</div>
 </template>
@@ -43,15 +54,20 @@
 <script>
 import { nanoid } from 'nanoid'
 import { Message } from '../../../../lib/models'
+import { VEmojiPicker } from 'v-emoji-picker'
 
 export default {
 	name: 'Barrage',
+	components: {
+		VEmojiPicker,
+	},
 	data() {
 		return {
 			myName: 'admin',
 			myId: nanoid(),
 			newMessage: '',
 			socket: null,
+			isShowEmojiList: false,
 		}
 	},
 	props: {
@@ -69,6 +85,14 @@ export default {
 		},
 	},
 	methods: {
+		showEmojiList() {
+			this.isShowEmojiList = !this.isShowEmojiList
+		},
+		selectEmoji(emoji) {
+			const { data } = emoji
+			this.newMessage = data
+			this.isShowEmojiList = false
+		},
 		messageContent(message) {
 			const { content } = message
 			return content
@@ -128,6 +152,7 @@ export default {
 }
 
 .barrage .chatArea {
+	position: relative;
 	width: 98%;
 	height: 98%;
 	background-color: #222325;
@@ -254,5 +279,13 @@ export default {
 .barrage .chatArea .send img {
 	width: 30px;
 	height: 30px;
+}
+
+.__emoji {
+	position: absolute;
+	width: 20%;
+	height: 40%;
+	bottom: 10%;
+	right: 10%;
 }
 </style>
