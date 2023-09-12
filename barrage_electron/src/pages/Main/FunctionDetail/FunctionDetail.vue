@@ -9,7 +9,7 @@
 			:isShowShareRoom="functionStatusList.isShowShareRoom"
 			:clientUrl="clientUrl"
 		></ShareRoom>
-		<Screen :isShowScreen="functionStatusList.isShowScreen"></Screen>
+		<!-- <Screen :isShowScreen="functionStatusList.isShowScreen"></Screen> -->
 		<ClassRoom
 			:isShowClassRoom="functionStatusList.isShowClassRoom"
 			@onSubmitClassRoom="onSubmitClassRoom"

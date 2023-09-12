@@ -63,7 +63,7 @@
 				</div>
 				<div class="functionName">Vote</div>
 			</div>
-			<div
+			<!-- <div
 				class="functionItem"
 				@click="selectFunction(3)"
 			>
@@ -74,7 +74,7 @@
 					/>
 				</div>
 				<div class="functionName">Screen sharing</div>
-			</div>
+			</div> -->
 			<div
 				class="functionItem"
 				@click="selectFunction(4)"
@@ -247,7 +247,17 @@ export default {
 
 .adminName .__input {
 	width: 98%;
+	border: none;
+	border-bottom: 1px solid #ea7724;
+	background-color: #ffffff00;
+	margin-top: 1%;
+	padding-left: 10px;
+	font-size: 16px;
+	color: #e1e1e3;
 }
+
+
+
 .adminName .__content {
 	width: 98%;
 	font-size: 14px;
