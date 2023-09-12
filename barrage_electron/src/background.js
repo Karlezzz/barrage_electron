@@ -22,7 +22,7 @@ app.on('ready', async () => {
 
   session.defaultSession.loadExtension("C:/Users/Karle/AppData/Local/Google/Chrome/User Data/Default/Extensions/nhdogjmejiglipccpnnnanhbledajbpd/6.5.0_0");
   mainWindow = new BrowserWindow({
-    width: 1300,
+    width: 1200,
     // width: 1000,
     height: 600,
     transparent: true,
