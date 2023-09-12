@@ -141,6 +141,7 @@ export default {
 	font-size: 12px;
 	user-select: all;
 	color: #ea7724;
+  overflow: auto;
 }
 .message .__label {
 	font-size: 16px;
