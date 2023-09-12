@@ -1,11 +1,15 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
-import barrage_chat from './Barrage/barrage_chat'
-import enter from './Enter/enter'
+import barrage from './Barrage/barrage'
+import room from './Room/room'
+import axios from './Axios/axios'
+import vote from './Vote/Vote'
 export default new Vuex.Store({
-    modules: {
-        barrage_chat,
-        enter
-    }, 
+  modules: {
+    axios,
+    barrage,
+    room,
+    vote
+  },
 })
