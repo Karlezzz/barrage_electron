@@ -93,7 +93,12 @@ export default {
 	},
 	watch: {
 		isShowShareRoom: function (newV, oldV) {
-			if (newV) this.createQrCode()
+			if (newV && !this.qrcode) {
+        this.createQrCode()
+      } else if(newV && this.qrcode) {
+        this.qrcode.clear()
+        this.qrcode.makeCode(this.url)
+      }
 		},
 	},
 }
@@ -141,7 +146,10 @@ export default {
 	font-size: 12px;
 	user-select: all;
 	color: #ea7724;
-	overflow: auto;
+	overflow: hidden;
+	word-wrap:break-word;
+	white-space:pre-wrap;
+	text-overflow: ellipsis;
 }
 .message .__label {
 	font-size: 16px;
