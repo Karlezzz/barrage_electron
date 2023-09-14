@@ -6,7 +6,10 @@
 		>
 			<div class="forms-container">
 				<div class="signin-signup">
-					<div class="form sign-in-form">
+					<form
+						action="#"
+						class="sign-in-form"
+					>
 						<h2 class="title">Welcome Barrage</h2>
 						<div class="input-filed moreRoomName">
 							<i class="fa-solid fa-user"></i>
@@ -62,8 +65,11 @@
 						>
 							ADD
 						</div>
-					</div>
-					<div class="form sign-up-form">
+					</form>
+					<form
+						action="#"
+						class="sign-up-form"
+					>
 						<h2 class="title">Setting SEVER</h2>
 						<!-- 房间名称 -->
 						<div class="input-filed">
@@ -88,7 +94,7 @@
 							class="btn solid"
 							@click="created"
 						/>
-					</div>
+					</form>
 				</div>
 			</div>
 			<div class="panels-container">
@@ -237,6 +243,7 @@ export default {
 	width: 2000px;
 	height: 2000px;
 	border-radius: 50%;
+	/* background: linear-gradient(-45deg, #4481eb, #04befe); */
 	background-color: #ea7724;
 	top: -10%;
 	right: 48%;
@@ -265,9 +272,7 @@ export default {
 	transition: 1s 0.7s ease-in-out;
 }
 
-
-
-.form {
+form {
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -276,13 +281,14 @@ export default {
 	grid-row: 1/2;
 	padding: 0 5rem;
 	overflow: hidden;
+	transition: 0.2s 0.7s ease-in-out;
 }
 
-.sign-in-form {
+form.sign-in-form {
 	z-index: 2;
 }
 
-.sign-up-form {
+form.sign-up-form {
 	z-index: 1;
 	opacity: 0;
 }
@@ -324,6 +330,7 @@ export default {
 }
 
 .input-filed input::placeholder {
+	/* color: #aaa; */
 	color: #ea7724;
 	font-weight: 550;
 }
@@ -339,7 +346,7 @@ export default {
 	text-transform: uppercase;
 	font-size: 1.2rem;
 	font-weight: 600;
-	margin: 10px 15px;
+	margin: 10px 5px;
 	transition: 0.5s;
 	display: flex;
 	justify-content: center;
@@ -398,7 +405,7 @@ export default {
 .btn.transparent {
 	background: none;
 	border: 2px solid #fff;
-	margin: 10px 90px;
+	margin: 20px 90px;
 	font-size: 1.1rem;
 	width: 130px;
 	height: 41px;
@@ -408,63 +415,6 @@ export default {
 .image {
 	width: 100%;
 	transition: 0.9s 0.8s ease-in-out;
-}
-
-.moreRoomName {
-	position: relative;
-}
-
-.moreRoomName .img {
-	display: inline-block;
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	width: 35px;
-	height: 35px;
-	cursor: pointer;
-}
-
-.moreRoomName .img img {
-	width: 100%;
-	height: 100%;
-}
-
-.moreRoomName .img:hover {
-	background-color: #e6e4e484;
-	border-radius: 10px;
-}
-
-.roomIdList {
-	position: absolute;
-	top: 100%;
-	left: 7%;
-	height: 160px;
-	width: 292px;
-	background-color: #ea7724;
-	border-bottom-left-radius: 50px;
-	border-bottom-right-radius: 50px;
-	/* background-color: red; */
-	overflow: scroll;
-	z-index: 999;
-}
-
-.roomIdList .listItem {
-	height: 40px;
-	width: 100%;
-	background-color: #f0f0f0;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	color: #ea7724;
-	font-size: 1.1rem;
-	font-weight: 600;
-	border-bottom: 1px solid #c3c3c7c9;
-	cursor: pointer;
-}
-
-.roomIdList .listItem:hover {
-	background-color: #ea7724;
-	color: white;
 }
 
 .right-panel .content,
@@ -498,13 +448,75 @@ export default {
 	left: 25%;
 }
 
-.container.sign-up-mode .form.sign-in-form {
+.container.sign-up-mode form.sign-in-form {
 	opacity: 0;
 	z-index: 1;
 }
 
-.container.sign-up-mode .form.sign-up-form {
+.container.sign-up-mode form.sign-up-form {
 	z-index: 2;
 	opacity: 1;
+}
+
+.moreRoomName {
+	position: relative;
+	/* background-color: red; */
+}
+
+.moreRoomName .img {
+	display: inline-block;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	width: 35px;
+	height: 35px;
+	cursor: pointer;
+}
+
+.moreRoomName .img img {
+	width: 100%;
+	height: 100%;
+}
+
+.moreRoomName .img:hover {
+	background-color: #e6e4e484;
+	border-radius: 10px;
+}
+
+.roomIdList {
+	/* display: none; */
+	position: absolute;
+	/* top: 159px; */
+	top: 100%;
+	left: 7%;
+	height: 160px;
+	width: 292px;
+	background-color: #ea7724;
+	border-bottom-left-radius: 50px;
+	border-bottom-right-radius: 50px;
+	/* background-color: red; */
+	overflow: scroll;
+	z-index: 999;
+}
+
+.roomIdList .listItem {
+	/* margin-bottom: 5px; */
+	height: 40px;
+	width: 100%;
+
+	background-color: #f0f0f0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: #ea7724;
+	font-size: 1.1rem;
+	font-weight: 600;
+	border-bottom: 1px solid #c3c3c7c9;
+	cursor: pointer;
+}
+
+.roomIdList .listItem:hover {
+	background-color: #ea7724;
+	color: white;
 }
 </style>
