@@ -1,7 +1,5 @@
-import {
-  createProtocol
-} from 'vue-cli-plugin-electron-builder/lib'
-import {
+import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
+const {
   app,
   BrowserWindow,
   ipcMain,
@@ -9,21 +7,21 @@ import {
   Menu,
   screen,
   session,
-  nativeImage
-} from 'electron'
+  nativeImage,
+} = require('electron')
+
 
 const path = require('path')
 let mainWindow
 let tray
 let remindWindow
 
-
 app.on('ready', async () => {
-
-  session.defaultSession.loadExtension("C:/Users/Karle/AppData/Local/Google/Chrome/User Data/Default/Extensions/nhdogjmejiglipccpnnnanhbledajbpd/6.5.0_0");
+  session.defaultSession.loadExtension(
+    'C:/Users/Karle/AppData/Local/Google/Chrome/User Data/Default/Extensions/nhdogjmejiglipccpnnnanhbledajbpd/6.5.0_0'
+  )
   mainWindow = new BrowserWindow({
     width: 1200,
-    // width: 1000,
     height: 600,
     transparent: true,
     frame: false,
@@ -31,7 +29,6 @@ app.on('ready', async () => {
     alwaysOnTop: false,
     icon: path.join(__dirname, '../src/assets/my.png'),
     resizable: false,
-    // movable:false,
     webPreferences: {
       webSecurity: false,
       enableRemoteModule: true,
@@ -40,24 +37,15 @@ app.on('ready', async () => {
     },
   })
   if (process.env.WEBPACK_DEV_SERVER_URL) {
-    // Load the url of the dev server if in development mode
     await mainWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
     mainWindow.webContents.openDevTools()
   } else {
     createProtocol('app')
-    // Load the index.html when not in development
-    mainWindow.loadURL(`file://${__dirname}/main.html`)
+    mainWindow.loadURL(`file://${__dirname}/index.html`)
   }
-
 })
-
-app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) createWindow()
-})
-
 
 ipcMain.on('closeNewWindow', () => {
-
   remindWindow.destroy()
   remindWindow = undefined
 })
@@ -81,7 +69,9 @@ ipcMain.on('sendVuexMsg', (e, data) => {
 })
 
 function setTray() {
-  tray = new Tray(nativeImage.createFromPath(path.join(__dirname, '../src/assets/my.png')))
+  tray = new Tray(
+    nativeImage.createFromPath(path.join(__dirname, '../src/assets/my.png'))
+  )
   tray.setToolTip('Barrage')
   tray.on('click', () => {
     if (mainWindow.isVisible()) {
@@ -92,38 +82,34 @@ function setTray() {
   })
   tray.on('right-click', () => {
     const menuConfig = Menu.buildFromTemplate([
-
       {
         label: 'Open Barrage',
         click: () => {
-
           createRemindWindow()
           mainWindow.webContents.send('hasOpenBarrage')
           mainWindow.minimize()
-
-        }
+        },
       },
       {
         label: 'Close Barrage',
         click: () => {
           remindWindow.close()
           remindWindow = undefined
-          console.log(remindWindow);
+          console.log(remindWindow)
           mainWindow.show()
           mainWindow.webContents.send('hasCloseBarrage')
-        }
+        },
       },
       {
         label: 'Quit',
-        click: () => app.quit()
+        click: () => app.quit(),
       },
     ])
     tray.popUpContextMenu(menuConfig)
   })
-
 }
 
-function createRemindWindow() {
+async function createRemindWindow() {
   remindWindow = new BrowserWindow({
     x: 0,
     y: 0,
@@ -139,17 +125,18 @@ function createRemindWindow() {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      enableRemoteModule: true
-    }
+      enableRemoteModule: true,
+    },
   })
   remindWindow.setIgnoreMouseEvents(true)
   remindWindow.setAlwaysOnTop(true)
+
   if (process.env.WEBPACK_DEV_SERVER_URL) {
-    remindWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '/public/danmu.html')
-    // remindWindow.webContents.openDevTools()
+    remindWindow.loadURL(
+      process.env.WEBPACK_DEV_SERVER_URL + '/public/danmu.html'
+    )
   } else {
     createProtocol('app')
-    // remindWindow.loadURL(`file://${__dirname}/public/danmu.html`)
+    remindWindow.loadURL(`file://${__dirname}/danmu.html`)
   }
-  console.log(remindWindow);
 }
