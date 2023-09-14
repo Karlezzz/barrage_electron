@@ -73,28 +73,28 @@ export default {
 		classRoomName() {
 			return this.classRoom ? this.classRoom.name : ''
 		},
-    classRoomCode() {
-      return this.classRoom ? this.classRoom.id : ''
-    },
+		classRoomCode() {
+			return this.classRoom ? this.classRoom.id : ''
+		},
 	},
 	methods: {
 		createQrCode() {
 			this.$nextTick(() => {
-				setTimeout(() => {
-					this.qrcode = new QRCode(this.$refs.qrCodeUrl, {
-						text: this.url,
-						width: 150,
-						height: 150,
-						colorDark: '#1d1d1f',
-						colorLight: '#e1e1e3',
-						correctLevel: QRCode.CorrectLevel.H,
-					})
-				}, 2000)
+				this.qrcode = new QRCode(this.$refs.qrCodeUrl, {
+					text: this.url,
+					width: 150,
+					height: 150,
+					colorDark: '#1d1d1f',
+					colorLight: '#e1e1e3',
+					correctLevel: QRCode.CorrectLevel.H,
+				})
 			})
 		},
 	},
-	mounted() {
-		this.createQrCode()
+	watch: {
+		isShowShareRoom: function (newV, oldV) {
+			if (newV) this.createQrCode()
+		},
 	},
 }
 </script>
@@ -141,7 +141,7 @@ export default {
 	font-size: 12px;
 	user-select: all;
 	color: #ea7724;
-  overflow: auto;
+	overflow: auto;
 }
 .message .__label {
 	font-size: 16px;
