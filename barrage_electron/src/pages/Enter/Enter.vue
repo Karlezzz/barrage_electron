@@ -71,28 +71,28 @@
 						class="sign-up-form"
 					>
 						<h2 class="title">Setting SEVER</h2>
-						<!-- 房间名称 -->
 						<div class="input-filed">
 							<i class="fa-solid fa-lock"></i>
 							<input
 								type="text"
 								placeholder="IPADRESS"
+								v-model="ipAddress"
 							/>
 						</div>
-						<!-- 房间密码 -->
 						<div class="input-filed">
 							<i class="fa-solid fa-envelope"></i>
 							<input
 								type="test"
 								placeholder="PORT"
+								v-model="port"
 							/>
 						</div>
 
 						<input
 							type="submit"
-							value="CREATE"
+							value="SAVE"
 							class="btn solid"
-							@click="created"
+							@click="saveIP"
 						/>
 					</form>
 				</div>
@@ -105,7 +105,7 @@
 						<button
 							class="btn transparent"
 							id="sign-up-btn"
-							@click="create"
+							@click="goToSetting"
 						>
 							Setting
 						</button>
@@ -123,7 +123,7 @@
 						<button
 							class="btn transparent"
 							id="sign-in-btn"
-							@click="addRoom"
+							@click="goToAdd"
 						>
 							Add
 						</button>
@@ -148,6 +148,7 @@ import { Room } from '../../../lib/models'
 import { nanoid } from 'nanoid'
 import Alert from '../../components/Popup/Alert.vue'
 import { endpoint } from '@/api/endpoint'
+import { ipcRenderer } from 'electron'
 export default {
 	name: 'Enter',
 	components: {
@@ -161,21 +162,39 @@ export default {
 			roomPassword: null,
 			// roomInfoList: [],
 			popUpContent: null,
+			ipAddress: null,
+			port: null,
 		}
 	},
+	created() {
+		ipcRenderer.on('sendIpInfo', (e, data) => {
+			const { ip, port } = data
+			this.ipAddress = ip
+			this.port = port
+			this.$store.commit('room/SETIPPORT', {
+				ip: this.ip,
+				port: this.port,
+			})
+		})
+	},
 	methods: {
-		create() {
+		goToSetting() {
 			this.$refs.container.classList.add('sign-up-mode')
 			this.isShowRoomName = false
 		},
-		addRoom() {
+		goToAdd() {
 			this.$refs.container.classList.remove('sign-up-mode')
 		},
-		select() {
-			this.$refs.container.classList.add('sign-up-mode')
-		},
-		created() {
-			this.$refs.container.classList.remove('sign-up-mode')
+		saveIP() {
+			// this.$refs.container.classList.remove('sign-up-mode')
+			const ipInfo = {
+				ip: this.ipAddress,
+				port: this.port,
+			}
+			this.$store.commit('room/SETIPPORT', ipInfo)
+			// setTimeout(() => {
+				ipcRenderer.send('getIpInfo', ipInfo)
+			// }, 5000)
 		},
 		onSubmitAlert() {
 			this.popUpContent = null
