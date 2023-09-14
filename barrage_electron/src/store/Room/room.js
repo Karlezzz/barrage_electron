@@ -2,7 +2,8 @@ import { _createOne } from "@/api";
 
 const state = {
   roomInfo: null,
-  classRoomInfo: null
+  classRoomInfo: null,
+  ipInfo: null
 };
 const mutations = {
   SETROOMINFO(state, data) {
@@ -10,7 +11,9 @@ const mutations = {
   },
   SETCLASSROOMINFO(state, data) {
     state.classRoomInfo = data
-    // state.classRoomInfo.isOnClass = !state.classRoomInfo.isOnClass
+  },
+  SETIPPORT(state,data) {
+    state.ipInfo = data
   }
 };
 const actions = {
