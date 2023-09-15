@@ -9,10 +9,11 @@ import {
   Menu,
   screen,
   session,
-  nativeImage
+  nativeImage,
 } from 'electron'
 
 const path = require('path')
+const fs = require('fs')
 let mainWindow
 let tray
 let remindWindow
@@ -20,10 +21,9 @@ let remindWindow
 
 app.on('ready', async () => {
 
-  session.defaultSession.loadExtension("C:/Users/Karle/AppData/Local/Google/Chrome/User Data/Default/Extensions/nhdogjmejiglipccpnnnanhbledajbpd/6.5.0_0");
+  session.defaultSession.loadExtension("C:/Users/Karle/AppData/Local/Google/Chrome/User Data/Default/Extensions/nhdogjmejiglipccpnnnanhbledajbpd/6.5.0_1");
   mainWindow = new BrowserWindow({
     width: 1200,
-    // width: 1000,
     height: 600,
     transparent: true,
     frame: false,
@@ -31,7 +31,6 @@ app.on('ready', async () => {
     alwaysOnTop: false,
     icon: path.join(__dirname, '../src/assets/my.png'),
     resizable: false,
-    // movable:false,
     webPreferences: {
       webSecurity: false,
       enableRemoteModule: true,
@@ -48,16 +47,23 @@ app.on('ready', async () => {
     // Load the index.html when not in development
     mainWindow.loadURL(`file://${__dirname}/main.html`)
   }
-
+  const { ip, port } = getIpInfo()
+  mainWindow.webContents.send('sendIpInfo', { ip, port })
 })
 
-app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) createWindow()
-})
+function getIpInfo() {
+  const fileUrl = path.resolve(app.getAppPath(), '../dist_electron/ipAddress.json')
+  const fileDataJson = fs.readFileSync(fileUrl, 'utf-8')
+  const fileData = JSON.parse(fileDataJson)
+  const { ip, port } = fileData
+  return {
+    ip,
+    port
+  }
+}
 
 
 ipcMain.on('closeNewWindow', () => {
-
   remindWindow.destroy()
   remindWindow = undefined
 })
@@ -70,6 +76,13 @@ ipcMain.on('newWindow', () => {
   createRemindWindow()
   mainWindow.minimize()
 })
+
+ipcMain.handle('getIpInfo', (event, data) => {
+  console.log(data)
+  const fileUrl = path.resolve(app.getAppPath(), '../dist_electron/ipAddress.json')
+  fs.writeFileSync(fileUrl, JSON.stringify(data, null, "\t"), 'utf-8') 
+})
+
 
 app.whenReady().then(() => {
   setTray()
@@ -149,7 +162,6 @@ function createRemindWindow() {
     // remindWindow.webContents.openDevTools()
   } else {
     createProtocol('app')
-    // remindWindow.loadURL(`file://${__dirname}/public/danmu.html`)
+    remindWindow.loadURL(`file://${__dirname}/public/danmu.html`)
   }
-  console.log(remindWindow);
 }
