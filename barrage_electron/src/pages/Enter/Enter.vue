@@ -6,8 +6,7 @@
 		>
 			<div class="forms-container">
 				<div class="signin-signup">
-					<form
-						action="#"
+					<section
 						class="sign-in-form"
 					>
 						<h2 class="title">Welcome Barrage</h2>
@@ -27,7 +26,6 @@
 									alt=""
 								/>
 							</div>
-							<!-- 房间信息列表 -->
 							<!-- <div
 								class="roomIdList"
 								v-if="isShowRoomName"
@@ -65,9 +63,8 @@
 						>
 							ADD
 						</div>
-					</form>
-					<form
-						action="#"
+					</section>
+					<section
 						class="sign-up-form"
 					>
 						<h2 class="title">Setting SEVER</h2>
@@ -88,13 +85,13 @@
 							/>
 						</div>
 
-						<input
-							type="submit"
-							value="SAVE"
+						<button
 							class="btn solid"
 							@click="saveIP"
-						/>
-					</form>
+						>
+							SAVE
+						</button>
+					</section>
 				</div>
 			</div>
 			<div class="panels-container">
@@ -172,7 +169,7 @@ export default {
 			this.ipAddress = ip
 			this.port = port
 			this.$store.commit('room/SETIPPORT', {
-				ip: this.ip,
+				ip: this.ipAddress,
 				port: this.port,
 			})
 		})
@@ -186,14 +183,14 @@ export default {
 			this.$refs.container.classList.remove('sign-up-mode')
 		},
 		saveIP() {
-			// this.$refs.container.classList.remove('sign-up-mode')
+			this.$refs.container.classList.remove('sign-up-mode')
 			const ipInfo = {
 				ip: this.ipAddress,
 				port: this.port,
 			}
 			this.$store.commit('room/SETIPPORT', ipInfo)
 			// setTimeout(() => {
-				ipcRenderer.send('getIpInfo', ipInfo)
+			ipcRenderer.invoke('getIpInfo', ipInfo)
 			// }, 5000)
 		},
 		onSubmitAlert() {
@@ -291,7 +288,7 @@ export default {
 	transition: 1s 0.7s ease-in-out;
 }
 
-form {
+section {
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -303,11 +300,11 @@ form {
 	transition: 0.2s 0.7s ease-in-out;
 }
 
-form.sign-in-form {
+section.sign-in-form {
 	z-index: 2;
 }
 
-form.sign-up-form {
+section.sign-up-form {
 	z-index: 1;
 	opacity: 0;
 }
@@ -467,12 +464,12 @@ form.sign-up-form {
 	left: 25%;
 }
 
-.container.sign-up-mode form.sign-in-form {
+.container.sign-up-mode section.sign-in-form {
 	opacity: 0;
 	z-index: 1;
 }
 
-.container.sign-up-mode form.sign-up-form {
+.container.sign-up-mode section.sign-up-form {
 	z-index: 2;
 	opacity: 1;
 }

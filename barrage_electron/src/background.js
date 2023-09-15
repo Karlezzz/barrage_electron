@@ -14,7 +14,6 @@ import {
 
 const path = require('path')
 const fs = require('fs')
-const { writeJson } = require('fs-extra')
 let mainWindow
 let tray
 let remindWindow
@@ -48,7 +47,8 @@ app.on('ready', async () => {
     // Load the index.html when not in development
     mainWindow.loadURL(`file://${__dirname}/main.html`)
   }
-  getIpInfo()
+  const { ip, port } = getIpInfo()
+  mainWindow.webContents.send('sendIpInfo', { ip, port })
 })
 
 function getIpInfo() {
@@ -56,7 +56,10 @@ function getIpInfo() {
   const fileDataJson = fs.readFileSync(fileUrl, 'utf-8')
   const fileData = JSON.parse(fileDataJson)
   const { ip, port } = fileData
-  mainWindow.webContents.send('sendIpInfo', { ip, port })
+  return {
+    ip,
+    port
+  }
 }
 
 
@@ -74,13 +77,11 @@ ipcMain.on('newWindow', () => {
   mainWindow.minimize()
 })
 
-ipcMain.on('getIpInfo', (event, data) => {
+ipcMain.handle('getIpInfo', (event, data) => {
   console.log(data)
   const fileUrl = path.resolve(app.getAppPath(), '../dist_electron/ipAddress.json')
-  fs.writeFileSync(fileUrl, JSON.stringify(data, null, "\t"), 'utf-8')
+  fs.writeFileSync(fileUrl, JSON.stringify(data, null, "\t"), 'utf-8') 
 })
-
-
 
 
 app.whenReady().then(() => {
@@ -161,7 +162,6 @@ function createRemindWindow() {
     // remindWindow.webContents.openDevTools()
   } else {
     createProtocol('app')
-    // remindWindow.loadURL(`file://${__dirname}/public/danmu.html`)
+    remindWindow.loadURL(`file://${__dirname}/public/danmu.html`)
   }
-  console.log(remindWindow);
 }
