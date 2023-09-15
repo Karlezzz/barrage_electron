@@ -189,9 +189,7 @@ export default {
 				port: this.port,
 			}
 			this.$store.commit('room/SETIPPORT', ipInfo)
-			// setTimeout(() => {
 			ipcRenderer.invoke('getIpInfo', ipInfo)
-			// }, 5000)
 		},
 		onSubmitAlert() {
 			this.popUpContent = null
