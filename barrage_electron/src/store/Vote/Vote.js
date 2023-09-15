@@ -27,6 +27,10 @@ const mutations = {
   SETVOTES(state, data) {
     state.votes.push(data)
   },
+  UPDATEALLVOTES(state,data) {
+    state.votes = []
+    state.votes = [data]
+  }
 }
 const actions = {
   async getAllVotes({ commit }) {
