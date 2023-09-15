@@ -116,14 +116,19 @@ export default {
 					transports: ['websocket'],
 				})
 				this.socket.removeAllListeners()
+        
 				this.socket.on('broadcast', data => {
 					this.$store.commit('barrage/PUTMESSAGE', JSON.parse(data))
 				})
+
 				this.socket.on('userLogin', res => {
           const {data} = res
           this.$store.commit('barrage/SETUSERS', data[0])
-					console.log(data)
 				})
+
+        this.socket.on('updateVote', data => {
+          this.$store.commit('vote/UPDATEALLVOTES', data)
+        })
 			} catch (error) {
 				console.log(error)
 			}
