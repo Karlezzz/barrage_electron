@@ -6,8 +6,7 @@
 		>
 			<div class="forms-container">
 				<div class="signin-signup">
-					<div
-						action="#"
+					<section
 						class="sign-in-form"
 					>
 						<h2 class="title">Welcome Barrage</h2>
@@ -27,7 +26,6 @@
 									alt=""
 								/>
 							</div>
-							<!-- 房间信息列表 -->
 							<!-- <div
 								class="roomIdList"
 								v-if="isShowRoomName"
@@ -65,17 +63,70 @@
 						>
 							ADD
 						</div>
-					</div>
+					</section>
+					<section
+						class="sign-up-form"
+					>
+						<h2 class="title">Setting SEVER</h2>
+						<div class="input-filed">
+							<i class="fa-solid fa-lock"></i>
+							<input
+								type="text"
+								placeholder="IPADRESS"
+								v-model="ipAddress"
+							/>
+						</div>
+						<div class="input-filed">
+							<i class="fa-solid fa-envelope"></i>
+							<input
+								type="test"
+								placeholder="PORT"
+								v-model="port"
+							/>
+						</div>
+
+						<button
+							class="btn solid"
+							@click="saveIP"
+						>
+							SAVE
+						</button>
+					</section>
 				</div>
 			</div>
 			<div class="panels-container">
 				<div class="panel left-panel">
 					<div class="content">
 						<h2>Having a meeting or class ?</h2>
-						<p>Help you solve the live chat !</p>
+						<p>Set the ip and port of sever first !</p>
+						<button
+							class="btn transparent"
+							id="sign-up-btn"
+							@click="goToSetting"
+						>
+							Setting
+						</button>
 					</div>
 					<img
 						src="./svg/undraw_maker_launch_re_rq81.svg"
+						class="image"
+						alt=""
+					/>
+				</div>
+				<div class="panel right-panel">
+					<div class="content">
+						<h3>Ready?</h3>
+						<p>Add the barrage room now !</p>
+						<button
+							class="btn transparent"
+							id="sign-in-btn"
+							@click="goToAdd"
+						>
+							Add
+						</button>
+					</div>
+					<img
+						src="./svg/undraw_on_the_office_re_cxds.svg"
 						class="image"
 						alt=""
 					/>
@@ -94,6 +145,7 @@ import { Room } from '../../../lib/models'
 import { nanoid } from 'nanoid'
 import Alert from '../../components/Popup/Alert.vue'
 import { endpoint } from '@/api/endpoint'
+import { ipcRenderer } from 'electron'
 export default {
 	name: 'Enter',
 	components: {
@@ -107,9 +159,40 @@ export default {
 			roomPassword: null,
 			// roomInfoList: [],
 			popUpContent: null,
+			ipAddress: null,
+			port: null,
 		}
 	},
+	created() {
+		ipcRenderer.on('sendIpInfo', (e, data) => {
+			const { ip, port } = data
+			this.ipAddress = ip
+			this.port = port
+			this.$store.commit('room/SETIPPORT', {
+				ip: this.ipAddress,
+				port: this.port,
+			})
+		})
+	},
 	methods: {
+		goToSetting() {
+			this.$refs.container.classList.add('sign-up-mode')
+			this.isShowRoomName = false
+		},
+		goToAdd() {
+			this.$refs.container.classList.remove('sign-up-mode')
+		},
+		saveIP() {
+			this.$refs.container.classList.remove('sign-up-mode')
+			const ipInfo = {
+				ip: this.ipAddress,
+				port: this.port,
+			}
+			this.$store.commit('room/SETIPPORT', ipInfo)
+			// setTimeout(() => {
+			ipcRenderer.invoke('getIpInfo', ipInfo)
+			// }, 5000)
+		},
 		onSubmitAlert() {
 			this.popUpContent = null
 		},
@@ -176,6 +259,7 @@ export default {
 	width: 2000px;
 	height: 2000px;
 	border-radius: 50%;
+	/* background: linear-gradient(-45deg, #4481eb, #04befe); */
 	background-color: #ea7724;
 	top: -10%;
 	right: 48%;
@@ -204,7 +288,7 @@ export default {
 	transition: 1s 0.7s ease-in-out;
 }
 
-.sign-in-form {
+section {
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -213,6 +297,16 @@ export default {
 	grid-row: 1/2;
 	padding: 0 5rem;
 	overflow: hidden;
+	transition: 0.2s 0.7s ease-in-out;
+}
+
+section.sign-in-form {
+	z-index: 2;
+}
+
+section.sign-up-form {
+	z-index: 1;
+	opacity: 0;
 }
 
 .title {
@@ -252,6 +346,7 @@ export default {
 }
 
 .input-filed input::placeholder {
+	/* color: #aaa; */
 	color: #ea7724;
 	font-weight: 550;
 }
@@ -302,6 +397,11 @@ export default {
 	pointer-events: all;
 }
 
+.right-panel {
+	pointer-events: none;
+	padding: 3rem 12% 2rem 17%;
+}
+
 .panel .content {
 	color: #fff;
 	transition: 0.9s 0.6s ease-in-out;
@@ -321,7 +421,7 @@ export default {
 .btn.transparent {
 	background: none;
 	border: 2px solid #fff;
-	margin: 0;
+	margin: 20px 90px;
 	font-size: 1.1rem;
 	width: 130px;
 	height: 41px;
@@ -330,10 +430,53 @@ export default {
 
 .image {
 	width: 100%;
+	transition: 0.9s 0.8s ease-in-out;
+}
+
+.right-panel .content,
+.right-panel .image {
+	transform: translateX(800px);
+}
+
+.container.sign-up-mode:before {
+	transform: translate(100%, -49%);
+}
+
+.container.sign-up-mode .left-panel .image,
+.container.sign-up-mode .left-panel .content {
+	transform: translateX(-800px);
+}
+
+.container.sign-up-mode .right-panel .content,
+.container.sign-up-mode .right-panel .image {
+	transform: translateX(0px);
+}
+
+.container.sign-up-mode .right-panel {
+	pointer-events: all;
+}
+
+.container.sign-up-mode .left-panel {
+	pointer-events: none;
+}
+
+.container.sign-up-mode .signin-signup {
+	left: 25%;
+}
+
+.container.sign-up-mode section.sign-in-form {
+	opacity: 0;
+	z-index: 1;
+}
+
+.container.sign-up-mode section.sign-up-form {
+	z-index: 2;
+	opacity: 1;
 }
 
 .moreRoomName {
 	position: relative;
+	/* background-color: red; */
 }
 
 .moreRoomName .img {
@@ -357,7 +500,9 @@ export default {
 }
 
 .roomIdList {
+	/* display: none; */
 	position: absolute;
+	/* top: 159px; */
 	top: 100%;
 	left: 7%;
 	height: 160px;
@@ -371,8 +516,10 @@ export default {
 }
 
 .roomIdList .listItem {
+	/* margin-bottom: 5px; */
 	height: 40px;
 	width: 100%;
+
 	background-color: #f0f0f0;
 	display: flex;
 	justify-content: center;
