@@ -148,6 +148,7 @@ export default {
 		async backToEnter() {
 			await this.$store.commit('room/SETCLASSROOMINFO', null)
 			await this.$store.commit('room/SETROOMINFO', null)
+      await this.$store.commit('room/SETROOMLIST', [])
 			await this.$store.commit('barrage/SETMESSAGE', [])
 			this.$router.push('/enter')
 		},
