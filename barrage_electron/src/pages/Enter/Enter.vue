@@ -26,22 +26,22 @@
 									alt=""
 								/>
 							</div>
-							<!-- <div
+							<div
 								class="roomIdList"
 								v-if="isShowRoomName"
 							>
 								<div
 									class="listItem"
-									v-for="item in roomInfoList"
-									:key="item.roomId"
-									@click="selectRoomName(item)"
+									v-for="(item,idx) in roomList"
+									:key="idx"
+									@click="selectRoom(item)"
 								>
-									{{ item.roomName }}
+									{{ item.name }}
 								</div>
-							</div> -->
+							</div>
 						</div>
 						<!-- 房间id -->
-						<div class="input-filed moreRoomName">
+						<div class="input-filed ">
 							<i class="fa-solid fa-user"></i>
 							<input
 								type="text"
@@ -157,10 +157,10 @@ export default {
 			roomName: null,
 			roomCode: null,
 			roomPassword: null,
-			// roomInfoList: [],
 			popUpContent: null,
 			ipAddress: null,
 			port: null,
+      selectedRoom:null
 		}
 	},
 	created() {
@@ -174,7 +174,15 @@ export default {
 			})
 		})
 	},
+  computed:{
+    roomList() {
+      return this.$store.state.room.roomList || []
+    }
+  },
 	methods: {
+    getRoomList() {
+      this.$store.dispatch('room/getRoomList', {endpoint: endpoint.room})
+    },
 		goToSetting() {
 			this.$refs.container.classList.add('sign-up-mode')
 			this.isShowRoomName = false
@@ -195,18 +203,24 @@ export default {
 			this.popUpContent = null
 		},
 		showRoomNameList() {
+      this.getRoomList()
 			this.isShowRoomName = !this.isShowRoomName
 		},
-		selectRoomName(item) {
+		selectRoom(item) {
 			this.isShowRoomName = false
-			this.roomId = item.roomId
-			this.roomName = item.roomName
+			this.roomCode = item.code
+			this.roomName = item.name
+      this.selectedRoom = item
 		},
 		async addBarrage() {
 			if (!!this.roomCode && !!this.roomName) {
 				await this.$store.dispatch('room/enterRoom', {
 					endpoint: endpoint.room,
-					data: this.initRoom(),
+					data: this.initRoom({
+            ...this.selectedRoom,
+            name:this.roomName,
+            code:this.roomCode
+          }),
 				})
 				if (this.$store.state.room.roomInfo) {
 					this.$router.push('/main')
@@ -223,13 +237,8 @@ export default {
 				}
 			}
 		},
-		initRoom() {
-			return Room.init({
-				id: nanoid(),
-				name: this.roomName,
-				code: this.roomCode,
-				password: this.roomPassword,
-			})
+		initRoom(room) {
+			return Room.init(room)
 		},
 	},
 }
@@ -503,9 +512,8 @@ section.sign-up-form {
 	/* top: 159px; */
 	top: 100%;
 	left: 7%;
-	height: 160px;
-	width: 292px;
-	background-color: #ea7724;
+	width: 85%;
+	background-color: white;
 	border-bottom-left-radius: 50px;
 	border-bottom-right-radius: 50px;
 	/* background-color: red; */
@@ -514,15 +522,15 @@ section.sign-up-form {
 }
 
 .roomIdList .listItem {
-	/* margin-bottom: 5px; */
 	height: 40px;
 	width: 100%;
 
-	background-color: #f0f0f0;
+	background-color: #ea7724;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	color: #ea7724;
+	/* color: #ea7724; */
+  color: white;
 	font-size: 1.1rem;
 	font-weight: 600;
 	border-bottom: 1px solid #c3c3c7c9;
@@ -530,7 +538,7 @@ section.sign-up-form {
 }
 
 .roomIdList .listItem:hover {
-	background-color: #ea7724;
+	background-color: #e96405;
 	color: white;
 }
 </style>

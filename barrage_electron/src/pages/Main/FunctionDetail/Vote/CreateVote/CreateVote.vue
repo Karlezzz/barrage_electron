@@ -5,7 +5,6 @@
 	>
 		<div
 			class="createVoteCard"
-			v-show="isShowCreateVote"
 		>
 			<div class="topic">
 				<input
@@ -80,7 +79,6 @@ import { Vote } from '../../../../../../lib/models'
 
 export default {
 	name: 'CreateVote',
-	props: ['isShowCreateVote'],
 	data() {
 		return {
 			voteQuestion: '',

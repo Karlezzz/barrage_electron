@@ -127,7 +127,7 @@ export default {
 				})
 
         this.socket.on('updateVote', data => {
-          this.$store.commit('vote/UPDATEALLVOTES', data)
+          this.$store.commit('vote/UPDATEVOTE', data)
         })
 			} catch (error) {
 				console.log(error)
@@ -137,7 +137,8 @@ export default {
 			try {
 				const result = await _createOne(endpoint.vote, vote)
 				if (result) {
-					this.$store.commit('vote/SETVOTES', result)
+          console.log(result);
+					this.$store.commit('vote/SETVOTES', [result])
 					this.alertContent = {
 						content: 'Create vote successfully!',
 						button: 'OK',
@@ -175,7 +176,7 @@ export default {
 			}
 			await this._submitClassRoom({ classRoom })
 			await this.initSocket()
-      // await this.getAllVotes()
+      await this.getAllVotes()
 			this.classRoomCallback()
 		},
 		async onSubmitName(user) {
