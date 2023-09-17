@@ -6,9 +6,7 @@
 		>
 			<div class="forms-container">
 				<div class="signin-signup">
-					<section
-						class="sign-in-form"
-					>
+					<section class="sign-in-form">
 						<h2 class="title">Welcome Barrage</h2>
 						<div class="input-filed moreRoomName">
 							<i class="fa-solid fa-user"></i>
@@ -32,7 +30,7 @@
 							>
 								<div
 									class="listItem"
-									v-for="(item,idx) in roomList"
+									v-for="(item, idx) in roomList"
 									:key="idx"
 									@click="selectRoom(item)"
 								>
@@ -41,7 +39,7 @@
 							</div>
 						</div>
 						<!-- 房间id -->
-						<div class="input-filed ">
+						<div class="input-filed">
 							<i class="fa-solid fa-user"></i>
 							<input
 								type="text"
@@ -64,9 +62,7 @@
 							ADD
 						</div>
 					</section>
-					<section
-						class="sign-up-form"
-					>
+					<section class="sign-up-form">
 						<h2 class="title">Setting SEVER</h2>
 						<div class="input-filed">
 							<i class="fa-solid fa-lock"></i>
@@ -160,7 +156,7 @@ export default {
 			popUpContent: null,
 			ipAddress: null,
 			port: null,
-      selectedRoom:null
+			selectedRoom: null,
 		}
 	},
 	created() {
@@ -174,15 +170,15 @@ export default {
 			})
 		})
 	},
-  computed:{
-    roomList() {
-      return this.$store.state.room.roomList || []
-    }
-  },
+	computed: {
+		roomList() {
+			return this.$store.state.room.roomList || []
+		},
+	},
 	methods: {
-    getRoomList() {
-      this.$store.dispatch('room/getRoomList', {endpoint: endpoint.room})
-    },
+		getRoomList() {
+			this.$store.dispatch('room/getRoomList', { endpoint: endpoint.room })
+		},
 		goToSetting() {
 			this.$refs.container.classList.add('sign-up-mode')
 			this.isShowRoomName = false
@@ -203,24 +199,24 @@ export default {
 			this.popUpContent = null
 		},
 		showRoomNameList() {
-      this.getRoomList()
+			this.getRoomList()
 			this.isShowRoomName = !this.isShowRoomName
 		},
 		selectRoom(item) {
 			this.isShowRoomName = false
 			this.roomCode = item.code
 			this.roomName = item.name
-      this.selectedRoom = item
+			this.selectedRoom = item
 		},
 		async addBarrage() {
 			if (!!this.roomCode && !!this.roomName) {
 				await this.$store.dispatch('room/enterRoom', {
 					endpoint: endpoint.room,
-					data: this.initRoom({
-            ...this.selectedRoom,
-            name:this.roomName,
-            code:this.roomCode
-          }),
+					data: Room.init({
+						...this.selectedRoom,
+						name: this.roomName,
+						code: this.roomCode,
+					}),
 				})
 				if (this.$store.state.room.roomInfo) {
 					this.$router.push('/main')
@@ -236,9 +232,6 @@ export default {
 					button: 'OK',
 				}
 			}
-		},
-		initRoom(room) {
-			return Room.init(room)
 		},
 	},
 }
@@ -530,7 +523,7 @@ section.sign-up-form {
 	justify-content: center;
 	align-items: center;
 	/* color: #ea7724; */
-  color: white;
+	color: white;
 	font-size: 1.1rem;
 	font-weight: 600;
 	border-bottom: 1px solid #c3c3c7c9;

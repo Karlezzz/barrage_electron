@@ -1,8 +1,9 @@
+const { nanoid } = require('nanoid')
 const { ClassRoom } = require('../ClassRoom/index')
 class Room {
   constructor(options) {
     options = options || {}
-    this.id = options.id
+    this.id = options.id || nanoid()
     this.code = parseInt(options.code) || 10000
     this.name = options.name || 'Classroom'
     this.password = options.password
