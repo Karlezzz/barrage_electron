@@ -6,11 +6,10 @@
 		<div
 			class="historyVoteCard"
 			style="width: 100%; height: 100%"
-			v-show="isShowHistoryVote"
 		>
 			<div
 				class="itemArea"
-				v-show="!isShowDetail"
+				v-if="!isShowDetail"
 			>
 				<div
 					class="historyVoteItem"
@@ -20,14 +19,13 @@
 				>
 					<a
 						href="#"
-						:title="item.content"
 						>{{ item.question }}</a
 					>
 				</div>
 			</div>
 			<div
 				class="HistoryVoteDetailBG"
-				v-show="isShowDetail"
+				v-if="isShowDetail"
 			>
 				<div
 					class="showArea"
@@ -43,31 +41,25 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
 	name: 'HistoryVote',
-	props: ['isShowHistoryVote'],
 	data() {
 		return {
 			isShowDetail: false,
-			detailInfo: '',
 		}
 	},
 	computed: {
-		historyVoteList() {
-			return this.$store.state.vote.votes || []
-		},
-		isShow() {
-			if (this.isShowHistoryVote == true) {
-				if (this.isShowDetail == true) return false
-				else if (this.isShowDetail == false) return true
-			} else if (this.isShowHistoryVote == false) return false
-			return false
-		},
+		// historyVoteList() {
+		// 	return this.$store.state.vote.votes || []
+		// },
+    ...mapGetters('vote',{
+      historyVoteList: 'votes'
+    })
 	},
 	methods: {
 		showHistoryVoteDetail(vote) {
 			this.isShowDetail = true
-
 			this.charts(this.convert(vote))
 		},
 		getBackDetail() {
@@ -84,7 +76,6 @@ export default {
 		},
 		getBack() {
 			this.myEcharts.dispose()
-
 			this.isShowDetail = false
 		},
 		convert(vote) {
@@ -93,7 +84,7 @@ export default {
 				return {
 					...vo,
 					name: vo.optionValue,
-					value: vo.selectMembers.length,
+					value: vo.selectMembersId.length,
 				}
 			})
 			const option = {
@@ -134,10 +125,13 @@ export default {
 	watch: {
 		historyVoteList: {
 			deep: true,
-			handler() {
+			handler(newV, oldV) {
+				if (newV.length !== oldV) return
+				if (!this.isShowDetail) return
 				const newVote = this.historyVoteList[this.historyVoteList.length - 1]
-        this.myEcharts.dispose()
+				this.myEcharts.dispose()
 				this.charts(this.convert(newVote))
+        
 			},
 		},
 	},

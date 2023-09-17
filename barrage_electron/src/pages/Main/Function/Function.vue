@@ -148,7 +148,9 @@ export default {
 		async backToEnter() {
 			await this.$store.commit('room/SETCLASSROOMINFO', null)
 			await this.$store.commit('room/SETROOMINFO', null)
+      await this.$store.commit('room/SETROOMLIST', [])
 			await this.$store.commit('barrage/SETMESSAGE', [])
+      await this.$store.commit('vote/SETVOTES', [])
 			this.$router.push('/enter')
 		},
 		editName() {
