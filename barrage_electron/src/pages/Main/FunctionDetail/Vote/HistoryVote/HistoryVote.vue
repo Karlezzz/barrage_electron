@@ -6,11 +6,11 @@
 		<div
 			class="historyVoteCard"
 			style="width: 100%; height: 100%"
-			v-show="isShowHistoryVote"
+			v-if="isShowHistoryVote"
 		>
 			<div
 				class="itemArea"
-				v-show="!isShowDetail"
+				v-if="!isShowDetail"
 			>
 				<div
 					class="historyVoteItem"
@@ -27,7 +27,7 @@
 			</div>
 			<div
 				class="HistoryVoteDetailBG"
-				v-show="isShowDetail"
+				v-if="isShowDetail"
 			>
 				<div
 					class="showArea"
@@ -67,7 +67,6 @@ export default {
 	methods: {
 		showHistoryVoteDetail(vote) {
 			this.isShowDetail = true
-
 			this.charts(this.convert(vote))
 		},
 		getBackDetail() {
@@ -93,7 +92,7 @@ export default {
 				return {
 					...vo,
 					name: vo.optionValue,
-					value: vo.selectMembers.length,
+					value: vo.selectMembersId.length,
 				}
 			})
 			const option = {
@@ -134,10 +133,18 @@ export default {
 	watch: {
 		historyVoteList: {
 			deep: true,
-			handler() {
+			handler(newV, oldV) {
+        this.isShowDetail = false
+        this.$nextTick(()=> {
+          this.isShowDetail = true
+        })
+
+				if (newV.length !== oldV) return
+				if (!this.isShowDetail) return
 				const newVote = this.historyVoteList[this.historyVoteList.length - 1]
-        this.myEcharts.dispose()
+				this.myEcharts.dispose()
 				this.charts(this.convert(newVote))
+        
 			},
 		},
 	},
