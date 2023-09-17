@@ -6,11 +6,15 @@ const state = {
   votes: []
 }
 const mutations = {
-  SETVOTES(state, data) { 
-    state.votes = [...data,...state.votes].flat(1)
+  SETVOTES(state, data) {
+    state.votes = [...data, ...state.votes].flat(1)
   },
-  UPDATEALLVOTES(state, data) {
-    state.votes = data
+  UPDATEVOTE(state, data) {
+    const { votes } = state
+    const originVoteIndex = votes.findIndex((v) => {
+      return v.id === data.id
+    })
+    votes[originVoteIndex] = data
   },
 }
 const actions = {

@@ -127,7 +127,7 @@ export default {
 				})
 
         this.socket.on('updateVote', data => {
-          this.$store.commit('vote/UPDATEALLVOTES', data)
+          this.$store.commit('vote/UPDATEVOTE', data)
         })
 			} catch (error) {
 				console.log(error)
