@@ -22,7 +22,6 @@ const actions = {
     try {
       const result = await _findAll(endpoint.vote)
       if (result) {
-        console.log(result);
         const votes = Vote.initFromArray(result)
         commit('SETVOTES', votes)
         return
@@ -32,9 +31,17 @@ const actions = {
     }
   },
 }
+
+const getters = {
+  votes(state) {
+    return Vote.initFromArray(state.votes)
+  }
+}
+
 export default {
   namespaced: true,
   state,
   mutations,
   actions,
+  getters
 }

@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
 	name: 'HistoryVote',
 	data() {
@@ -50,9 +51,12 @@ export default {
 		}
 	},
 	computed: {
-		historyVoteList() {
-			return this.$store.state.vote.votes || []
-		},
+		// historyVoteList() {
+		// 	return this.$store.state.vote.votes || []
+		// },
+    ...mapGetters('vote',{
+      historyVoteList: 'votes'
+    })
 	},
 	methods: {
 		showHistoryVoteDetail(vote) {
