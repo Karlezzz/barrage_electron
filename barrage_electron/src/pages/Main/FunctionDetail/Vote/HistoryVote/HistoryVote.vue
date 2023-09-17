@@ -19,7 +19,6 @@
 				>
 					<a
 						href="#"
-						:title="item.content"
 						>{{ item.question }}</a
 					>
 				</div>

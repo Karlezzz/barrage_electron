@@ -137,7 +137,8 @@ export default {
 			try {
 				const result = await _createOne(endpoint.vote, vote)
 				if (result) {
-					this.$store.commit('vote/SETVOTES', result)
+          console.log(result);
+					this.$store.commit('vote/SETVOTES', [result])
 					this.alertContent = {
 						content: 'Create vote successfully!',
 						button: 'OK',
