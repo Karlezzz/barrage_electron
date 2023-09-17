@@ -175,7 +175,7 @@ export default {
 			}
 			await this._submitClassRoom({ classRoom })
 			await this.initSocket()
-      // await this.getAllVotes()
+      await this.getAllVotes()
 			this.classRoomCallback()
 		},
 		async onSubmitName(user) {

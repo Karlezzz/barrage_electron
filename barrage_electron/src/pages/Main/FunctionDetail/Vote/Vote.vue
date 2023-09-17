@@ -29,10 +29,10 @@
 			</div>
 			<div class="vote_body">
 				<CreateVote
-					:isShowCreateVote="isShowCreateVote"
 					@onSubmitVote="onSubmitVote"
+					v-if="isShowCreateVote"
 				></CreateVote>
-				<HistoryVote :isShowHistoryVote="isShowHistoryVote"></HistoryVote>
+				<HistoryVote v-if="isShowHistoryVote"></HistoryVote>
 			</div>
 		</div>
 	</transition>
@@ -58,8 +58,16 @@ export default {
 		selectVote(index) {
 			this.isShowCreateVote = false
 			this.isShowHistoryVote = false
-			if (index == 1) this.isShowCreateVote = true
-			if (index == 2) this.isShowHistoryVote = true
+			switch (index) {
+				case 1:
+					this.isShowCreateVote = true
+					break
+				case 2:
+					this.isShowHistoryVote = true
+					break
+				default:
+					break
+			}
 		},
 		onSubmitVote({ vote }) {
 			this.$emit('onSubmitVote', { vote })

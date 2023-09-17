@@ -6,7 +6,6 @@
 		<div
 			class="historyVoteCard"
 			style="width: 100%; height: 100%"
-			v-if="isShowHistoryVote"
 		>
 			<div
 				class="itemArea"
@@ -45,23 +44,14 @@
 <script>
 export default {
 	name: 'HistoryVote',
-	props: ['isShowHistoryVote'],
 	data() {
 		return {
 			isShowDetail: false,
-			detailInfo: '',
 		}
 	},
 	computed: {
 		historyVoteList() {
 			return this.$store.state.vote.votes || []
-		},
-		isShow() {
-			if (this.isShowHistoryVote == true) {
-				if (this.isShowDetail == true) return false
-				else if (this.isShowDetail == false) return true
-			} else if (this.isShowHistoryVote == false) return false
-			return false
 		},
 	},
 	methods: {
@@ -83,7 +73,6 @@ export default {
 		},
 		getBack() {
 			this.myEcharts.dispose()
-
 			this.isShowDetail = false
 		},
 		convert(vote) {
@@ -134,11 +123,6 @@ export default {
 		historyVoteList: {
 			deep: true,
 			handler(newV, oldV) {
-        this.isShowDetail = false
-        this.$nextTick(()=> {
-          this.isShowDetail = true
-        })
-
 				if (newV.length !== oldV) return
 				if (!this.isShowDetail) return
 				const newVote = this.historyVoteList[this.historyVoteList.length - 1]
