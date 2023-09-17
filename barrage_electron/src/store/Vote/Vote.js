@@ -25,14 +25,8 @@ const state = {
   votes: []
 }
 const mutations = {
-  SETVOTES(state, data) {
-    // let _data = [...data,state.votes]
-    // _data = _data.flat(1)
-    let _data = []
-    _data.push(data)
-    _data.push(state.votes)
-    _data = _data.flat(1)
-    state.votes = _data
+  SETVOTES(state, data) { 
+    state.votes = [...data,...state.votes].flat(1)
   },
   UPDATEALLVOTES(state, data) {
     state.votes = data
