@@ -1,10 +1,11 @@
+const { nanoid } = require("nanoid")
 const { Connection } = require("../Connection")
 
 class User {
   constructor(options = {}) {
     options = options || {}
     this.name = options.name
-    this.id = options.id
+    this.id = options.id || nanoid()
     this.ipAddress = options.ipAddress
     this.created = options.created || new Date().getTime()
     this.modified = options.modified || this.created

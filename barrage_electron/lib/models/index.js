@@ -3,7 +3,6 @@ const { ClassRoom } = require('./ClassRoom')
 const { Connection } = require('./Connection')
 const { Comment } = require('./Comment')
 const { Message } = require('./Message')
-const { Response } = require('./Response')
 const { Room } = require('./Room')
 const { Score } = require('./Score')
 const { User } = require('./User')
@@ -16,7 +15,6 @@ module.exports = {
   Connection,
   Comment,
   Message,
-  Response,
   Room,
   Score,
   User,

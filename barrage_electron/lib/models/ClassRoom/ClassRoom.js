@@ -1,8 +1,10 @@
+const { nanoid } = require("nanoid")
+
 class ClassRoom {
   constructor(options) {
     options = options || {}
     this.name = options.name || 'class'
-    this.id = options.id
+    this.id = options.id || nanoid()
     this.beginTime = options.beginTime || (new Date().valueOf())
     this.endTime = options.endTime
     this.ownerRoomCode = options.ownerRoomCode

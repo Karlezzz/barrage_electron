@@ -3,7 +3,7 @@ const { VoteOption } = require('../VoteOption')
 class Vote {
   constructor(options) {
     options = options || {}
-    this.id = nanoid()
+    this.id = options.id || nanoid()
     this.created = options.created || (new Date().valueOf())
     this.duration = options.duration
     this.endTime = this.created + options.duration

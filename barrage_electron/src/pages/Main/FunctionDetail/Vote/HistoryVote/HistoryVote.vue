@@ -17,10 +17,7 @@
 					:key="index"
 					@click="showHistoryVoteDetail(item)"
 				>
-					<a
-						href="#"
-						>{{ item.question }}</a
-					>
+					<a href="#">{{ item.question }}</a>
 				</div>
 			</div>
 			<div
@@ -47,20 +44,19 @@ export default {
 	data() {
 		return {
 			isShowDetail: false,
+			selectedVote: null,
 		}
 	},
 	computed: {
-		// historyVoteList() {
-		// 	return this.$store.state.vote.votes || []
-		// },
-    ...mapGetters('vote',{
-      historyVoteList: 'votes'
-    })
+		...mapGetters('vote', {
+			historyVoteList: 'votes',
+		}),
 	},
 	methods: {
 		showHistoryVoteDetail(vote) {
 			this.isShowDetail = true
-			this.charts(this.convert(vote))
+			this.selectedVote = vote
+			this.charts(this.convert(this.selectedVote))
 		},
 		getBackDetail() {
 			this.isShowDetail = false
@@ -126,12 +122,18 @@ export default {
 		historyVoteList: {
 			deep: true,
 			handler(newV, oldV) {
-				if (newV.length !== oldV) return
+				if (newV.length !== oldV.length) return
 				if (!this.isShowDetail) return
-				const newVote = this.historyVoteList[this.historyVoteList.length - 1]
-				this.myEcharts.dispose()
-				this.charts(this.convert(newVote))
-        
+				if (!this.selectedVote) return
+
+				const { id } = this.selectedVote
+				this.selectedVote = this.historyVoteList.find(v => {
+					return v.id === id
+				})
+				if (this.myEcharts) this.myEcharts.dispose()
+				if (this.selectedVote) {
+					this.charts(this.convert(this.selectedVote))
+				}
 			},
 		},
 	},
