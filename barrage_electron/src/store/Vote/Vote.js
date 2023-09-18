@@ -33,9 +33,7 @@ const actions = {
 }
 
 const getters = {
-  votes(state) {
-    return Vote.initFromArray(state.votes)
-  }
+  votes: state => Vote.initFromArray(state.votes)
 }
 
 export default {
