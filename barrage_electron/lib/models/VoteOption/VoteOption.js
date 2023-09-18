@@ -6,7 +6,7 @@ class VoteOption {
     options = options || {}
     this.id = options.id || nanoid()
     this.optionValue = options.optionValue
-    this.selectMembersId = options.Id || []
+    this.selectMembersId = options.selectMembersId || []
     this.selectMembers = User.initFromArray(options.selectMembers) || []
   }
 
