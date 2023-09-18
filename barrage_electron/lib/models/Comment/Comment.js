@@ -1,9 +1,11 @@
+const { nanoid } = require("nanoid")
 const { ClassRoom } = require("../ClassRoom")
 const { User } = require("../User")
 
 class Comment {
   constructor(options) {
     options = options || {}
+    this.id = options.id || nanoid()
     this.created = options.created || (new Date().valueOf())
     this.creator = User.init(options.creator)
     this.value = options.value
