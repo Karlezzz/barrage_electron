@@ -14,7 +14,7 @@ const mutations = {
     const originVoteIndex = votes.findIndex((v) => {
       return v.id === data.id
     })
-    votes[originVoteIndex] = data
+    state.votes.splice(originVoteIndex, 1, data)
   },
 }
 const actions = {
