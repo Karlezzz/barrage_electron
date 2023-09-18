@@ -22,8 +22,7 @@ const actions = {
     try {
       const result = await _findAll(endpoint.vote)
       if (result) {
-        const votes = Vote.initFromArray(result)
-        commit('SETVOTES', votes)
+        commit('SETVOTES', result)
         return
       }
     } catch (error) {
