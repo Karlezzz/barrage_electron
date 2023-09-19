@@ -24,6 +24,7 @@
 				class="HistoryVoteDetailBG"
 				v-if="isShowDetail"
 			>
+				<div class="__time">{{ remainingTime }}</div>
 				<div
 					class="showArea"
 					id="cartsArea"
@@ -45,6 +46,8 @@ export default {
 		return {
 			isShowDetail: false,
 			selectedVote: null,
+			timer: null,
+			remainingTime: null,
 		}
 	},
 	computed: {
@@ -56,10 +59,13 @@ export default {
 		showHistoryVoteDetail(vote) {
 			this.isShowDetail = true
 			this.selectedVote = vote
+			this.remainingTime = this.selectedVote.remainingTime()
+			this.timer = setInterval(() => {
+				if (this.selectedVote.isInValidTime) {
+					this.remainingTime = this.selectedVote.remainingTime()
+				}
+			}, 1000)
 			this.charts(this.convert(this.selectedVote))
-		},
-		getBackDetail() {
-			this.isShowDetail = false
 		},
 		charts(option) {
 			const ch = new Promise((resolve, reject) => {
@@ -73,6 +79,7 @@ export default {
 		getBack() {
 			this.myEcharts.dispose()
 			this.isShowDetail = false
+			this.timer = null
 		},
 		convert(vote) {
 			let { question, voteOptions } = vote
@@ -179,6 +186,12 @@ export default {
 .HistoryVoteDetailBG {
 	width: 100%;
 	height: 90%;
+}
+
+.__time {
+	text-align: center;
+	margin-top: 20px;
+	color: #ea7724;
 }
 
 .showArea {
