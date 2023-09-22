@@ -3,7 +3,7 @@ class Message {
     options = options || {}
     this.content = options.content || ''
     this.userId = options.userId
-    this.userName = options.userName
+    this.userName = options.userName || 'User'
     this.created = options.created || (new Date().valueOf())
     this.type = options.type || 'chat'
   }
@@ -26,7 +26,7 @@ class Message {
   }
 
   get isValid() {
-    return !!this.user
+    return !!this.userId
   }
 
 }
