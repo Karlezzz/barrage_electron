@@ -53,6 +53,7 @@
 							<input
 								type="password"
 								placeholder="PASSWORD"
+                v-model="roomPassword"
 							/>
 						</div>
 						<div
@@ -191,6 +192,7 @@ export default {
 			const ipInfo = {
 				ip: this.ipAddress,
 				port: this.port,
+        
 			}
 			this.$store.commit('room/SETIPPORT', ipInfo)
 			ipcRenderer.invoke('getIpInfo', ipInfo)
@@ -216,6 +218,7 @@ export default {
 						...this.selectedRoom,
 						name: this.roomName,
 						code: this.roomCode,
+            password: this.roomPassword
 					}),
 				})
 				if (this.$store.state.room.roomInfo) {

@@ -98,20 +98,17 @@ export default {
 			return content
 		},
 		messageUserName(message) {
-			const {
-				user: { name },
-			} = message
-			return name
+			const { userName } = message
+			return userName
 		},
 		messageUserId(message) {
-			const {
-				user: { id },
-			} = message
-			return id
+			const { userId } = message
+			return userId
 		},
 		onSendMessage() {
 			const msgInstance = Message.init({
-				user: this.user,
+				userId: this.userId,
+        userName: this.userName,
 				content: this.newMessage,
 				type: 'chat',
 			})
