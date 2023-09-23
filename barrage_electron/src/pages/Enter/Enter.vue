@@ -53,7 +53,7 @@
 							<input
 								type="password"
 								placeholder="PASSWORD"
-                v-model="roomPassword"
+								v-model="roomPassword"
 							/>
 						</div>
 						<div
@@ -143,6 +143,7 @@ import { nanoid } from 'nanoid'
 import Alert from '../../components/Popup/Alert.vue'
 import { endpoint } from '@/api/endpoint'
 import { ipcRenderer } from 'electron'
+import { mapGetters } from 'vuex'
 export default {
 	name: 'Enter',
 	components: {
@@ -171,14 +172,17 @@ export default {
 			})
 		})
 
-    ipcRenderer.on('sendUserInfo', (e, data) => {
-      this.$store.commit('user/SETUSER', data)
-    })
+		ipcRenderer.on('sendUserInfo', (e, data) => {
+			this.$store.commit('user/SETUSER', data)
+		})
 	},
 	computed: {
 		roomList() {
 			return this.$store.state.room.roomList || []
 		},
+		...mapGetters('user', {
+			user: 'user',
+		}),
 	},
 	methods: {
 		getRoomList() {
@@ -196,7 +200,6 @@ export default {
 			const ipInfo = {
 				ip: this.ipAddress,
 				port: this.port,
-        
 			}
 			this.$store.commit('room/SETIPPORT', ipInfo)
 			ipcRenderer.invoke('getIpInfo', ipInfo)
@@ -218,12 +221,21 @@ export default {
 			if (!!this.roomCode && !!this.roomName) {
 				await this.$store.dispatch('room/enterRoom', {
 					endpoint: endpoint.room,
-					data: Room.init({
-						...this.selectedRoom,
-						name: this.roomName,
-						code: this.roomCode,
-            password: this.roomPassword
-					}),
+					// data: Room.init({
+					// 	...this.selectedRoom,
+					// 	name: this.roomName,
+					// 	code: this.roomCode,
+					//   password: this.roomPassword
+					// }),
+					data: {
+						room: Room.init({
+							...this.selectedRoom,
+							name: this.roomName,
+							code: this.roomCode,
+							password: this.roomPassword,
+						}),
+						user: this.user
+					},
 				})
 				if (this.$store.state.room.roomInfo) {
 					this.$router.push('/main')
