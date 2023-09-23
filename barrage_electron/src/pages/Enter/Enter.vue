@@ -221,12 +221,6 @@ export default {
 			if (!!this.roomCode && !!this.roomName) {
 				await this.$store.dispatch('room/enterRoom', {
 					endpoint: endpoint.room,
-					// data: Room.init({
-					// 	...this.selectedRoom,
-					// 	name: this.roomName,
-					// 	code: this.roomCode,
-					//   password: this.roomPassword
-					// }),
 					data: {
 						room: Room.init({
 							...this.selectedRoom,
