@@ -170,6 +170,10 @@ export default {
 				port: this.port,
 			})
 		})
+
+    ipcRenderer.on('sendUserInfo', (e, data) => {
+      this.$store.commit('user/SETUSER', data)
+    })
 	},
 	computed: {
 		roomList() {

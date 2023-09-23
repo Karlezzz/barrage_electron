@@ -48,7 +48,9 @@ app.on('ready', async () => {
     mainWindow.loadURL(`file://${__dirname}/main.html`)
   }
   const { ip, port } = getIpInfo()
+  const { name, id } = getUserInfo()
   mainWindow.webContents.send('sendIpInfo', { ip, port })
+  mainWindow.webContents.send('sendUserInfo', { name, id })
 })
 
 function getIpInfo() {
@@ -59,6 +61,17 @@ function getIpInfo() {
   return {
     ip,
     port
+  }
+}
+
+function getUserInfo() {
+  const fileUrl = path.resolve(app.getAppPath(), '../dist_electron/userInfo.json')
+  const fileDataJson = fs.readFileSync(fileUrl, 'utf-8')
+  const fileData = JSON.parse(fileDataJson)
+  const { name, id } = fileData
+  return {
+    name,
+    id
   }
 }
 
@@ -80,7 +93,7 @@ ipcMain.on('newWindow', () => {
 ipcMain.handle('getIpInfo', (event, data) => {
   console.log(data)
   const fileUrl = path.resolve(app.getAppPath(), '../dist_electron/ipAddress.json')
-  fs.writeFileSync(fileUrl, JSON.stringify(data, null, "\t"), 'utf-8') 
+  fs.writeFileSync(fileUrl, JSON.stringify(data, null, "\t"), 'utf-8')
 })
 
 
