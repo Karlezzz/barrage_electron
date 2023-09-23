@@ -106,6 +106,7 @@ export default {
 			return userId
 		},
 		onSendMessage() {
+      if(this.newMessage.length === 0 || this.newMessage.trim().length === 0) return
 			const msgInstance = Message.init({
 				userId: this.userId,
         userName: this.userName,
