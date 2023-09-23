@@ -139,7 +139,6 @@
 
 <script>
 import { Room } from '../../../lib/models'
-import { nanoid } from 'nanoid'
 import Alert from '../../components/Popup/Alert.vue'
 import { endpoint } from '@/api/endpoint'
 import { ipcRenderer } from 'electron'

@@ -55,7 +55,7 @@
 import { nanoid } from 'nanoid'
 import { Message } from '../../../../lib/models'
 import { VEmojiPicker } from 'v-emoji-picker'
-
+import { mapGetters } from 'vuex'
 export default {
 	name: 'Barrage',
 	components: {
@@ -70,9 +70,6 @@ export default {
 			isShowEmojiList: false,
 		}
 	},
-	props: {
-		user: { type: Object, default: () => {} },
-	},
 	computed: {
 		userName() {
 			return this.user ? this.user.name : ''
@@ -83,6 +80,9 @@ export default {
 		messageList() {
 			return this.$store.state.barrage.messageList
 		},
+    ...mapGetters('user', {
+			user: 'user',
+		}),
 	},
 	methods: {
 		showEmojiList() {
