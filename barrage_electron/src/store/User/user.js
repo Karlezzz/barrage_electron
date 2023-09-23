@@ -11,7 +11,7 @@ const mutations = {
 }
 
 const getters = {
-  votes: state => User.init(state.user)
+  user: state => User.init(state.user)
 }
 
 export default {
