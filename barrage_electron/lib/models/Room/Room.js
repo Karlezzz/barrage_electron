@@ -5,7 +5,7 @@ class Room {
     options = options || {}
     this.id = options.id || nanoid()
     this.code = parseInt(options.code) || 10000
-    this.name = options.name || 'Classroom'
+    this.name = options.name || 'Room'
     this.password = options.password
     this.created = options.created || (new Date().valueOf())
     this.modified = options.modified || (new Date().valueOf())
