@@ -183,6 +183,7 @@ export default {
 			try {
 				const result = await _updateOne(endpoint.user, user)
 				if (result) {
+          this.$store.commit('user/SETUSER', result)
 					this.alertContent = {
 						content: 'Change name successfully!',
 						button: 'OK',
