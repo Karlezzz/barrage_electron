@@ -19,7 +19,6 @@
 					@onSubmitName="onSubmitName"
 				></Function>
 				<Barrage
-					:user="user"
 					@onSendMessage="onSendMessage"
 				></Barrage>
 				<FunctionDetail
@@ -52,6 +51,7 @@ import { _findOne, _updateOne, _createOne, _findAll } from '@/api'
 import { io } from 'socket.io-client'
 import { User } from '../../../lib/models'
 import { endpoint } from '@/api/endpoint'
+import {mapGetters} from 'vuex'
 export default {
 	name: 'Main',
 	components: {
@@ -68,7 +68,7 @@ export default {
 			classRoom: null,
 			classRoomCallback: null,
 			endClassContent: null,
-			user: null,
+			// user: null,
 		}
 	},
 	computed: {
@@ -81,10 +81,13 @@ export default {
 		roomName() {
 			return this.roomInfo ? this.roomInfo.name : ''
 		},
+    ...mapGetters('user', {
+			user: 'user',
+		}),
 	},
 	methods: {
 		async init() {
-			await this.initUser()
+			// await this.initUser()
 			await this.initClientUrl()
 		},
 		async getSocketUrl() {
@@ -115,15 +118,15 @@ export default {
 				this.socket = io(socketUrl, {
 					transports: ['websocket'],
 				})
+        // this.socket.emit('userLogin', {user:this.user})
 				this.socket.removeAllListeners()
         
 				this.socket.on('broadcast', data => {
 					this.$store.commit('barrage/PUTMESSAGE', JSON.parse(data))
 				})
 
-				this.socket.on('userLogin', res => {
-          const {data} = res
-          this.$store.commit('barrage/SETUSERS', data[0])
+				this.socket.on('sendOnlineUser', users => {
+          this.$store.commit('barrage/SETUSERS', users)
 				})
 
         this.socket.on('updateVote', data => {
@@ -215,12 +218,12 @@ export default {
 				}
 			}
 		},
-		initUser() {
-			this.user = User.init({
-				id: nanoid(),
-				name: 'Teacher',
-			})
-		},
+		// initUser() {
+		// 	this.user = User.init({
+		// 		id: nanoid(),
+		// 		name: 'Teacher',
+		// 	})
+		// },
 		onSendMessage(newMessage) {
 			try {
 				this.socket.emit('sendMsg', JSON.stringify(newMessage))
