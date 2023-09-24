@@ -146,12 +146,7 @@ export default {
 	},
 	methods: {
 		async backToEnter() {
-			await this.$store.commit('room/SETCLASSROOMINFO', null)
-			await this.$store.commit('room/SETROOMINFO', null)
-      await this.$store.commit('room/SETROOMLIST', [])
-			await this.$store.commit('barrage/SETMESSAGE', [])
-      await this.$store.commit('vote/SETVOTES', [])
-			this.$router.push('/enter')
+			this.$emit('onBackToEnter')
 		},
 		editName() {
 			this.isEditName = true
@@ -257,8 +252,6 @@ export default {
 	font-size: 16px;
 	color: #e1e1e3;
 }
-
-
 
 .adminName .__content {
 	width: 98%;

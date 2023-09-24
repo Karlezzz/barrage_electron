@@ -185,19 +185,19 @@ export default {
 
 .HistoryVoteDetailBG {
 	width: 100%;
-	height: 90%;
+	height: 85%;
 }
 
 .__time {
 	text-align: center;
-	margin-top: 20px;
+	margin-top: 10px;
 	color: #ea7724;
 }
 
 .showArea {
 	margin-left: 1%;
 	width: 98%;
-	height: 72%;
+	height: 60%;
 	display: flex;
 	justify-content: center;
 	align-items: center;
