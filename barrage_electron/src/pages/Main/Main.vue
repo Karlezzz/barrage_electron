@@ -17,6 +17,7 @@
 				<Function
 					:user="user"
 					@onSubmitName="onSubmitName"
+          @onBackToEnter="onBackToEnter"
 				></Function>
 				<Barrage
 					@onSendMessage="onSendMessage"
@@ -68,6 +69,7 @@ export default {
 			classRoom: null,
 			classRoomCallback: null,
 			endClassContent: null,
+      socket:null
 			// user: null,
 		}
 	},
@@ -86,8 +88,24 @@ export default {
 		}),
 	},
 	methods: {
+    async clearStore(isBack) {
+      if(isBack) {
+        await this.$store.commit('room/SETROOMINFO', null)
+        await this.$store.commit('room/SETROOMLIST', [])
+      }
+      await this.$store.commit('room/SETCLASSROOMINFO', null)
+			await this.$store.commit('barrage/SETMESSAGE', [])
+      await this.$store.commit('vote/SETVOTES', [])
+      await this.$store.commit('barrage/SETUSERS',[])
+    },
+    async onBackToEnter() {
+      if(this.socket) {
+        this.socket.emit('closeSocket', false)
+      }
+      await this.clearStore(true)
+			this.$router.push('/enter')
+    },
 		async init() {
-			// await this.initUser()
 			await this.initClientUrl()
 		},
 		async getSocketUrl() {
@@ -158,8 +176,10 @@ export default {
 			if (flag) {
 				await this._submitClassRoom({ classRoom: this.classRoom })
 				this.classRoomCallback()
-				await this.$store.commit('room/SETCLASSROOMINFO', null)
+        await this.clearStore(false)
+        this.socket.emit('closeSocket',false)
 				this.socket.disconnect()
+        this.socket = null
 			}
 			this.endClassContent = null
 		},
