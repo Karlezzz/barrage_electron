@@ -17,9 +17,9 @@
 				<Function
 					:user="user"
 					@onSubmitName="onSubmitName"
+          @onBackToEnter="onBackToEnter"
 				></Function>
 				<Barrage
-					:user="user"
 					@onSendMessage="onSendMessage"
 				></Barrage>
 				<FunctionDetail
@@ -52,6 +52,7 @@ import { _findOne, _updateOne, _createOne, _findAll } from '@/api'
 import { io } from 'socket.io-client'
 import { User } from '../../../lib/models'
 import { endpoint } from '@/api/endpoint'
+import {mapGetters} from 'vuex'
 export default {
 	name: 'Main',
 	components: {
@@ -68,7 +69,8 @@ export default {
 			classRoom: null,
 			classRoomCallback: null,
 			endClassContent: null,
-			user: null,
+      socket:null
+			// user: null,
 		}
 	},
 	computed: {
@@ -81,10 +83,29 @@ export default {
 		roomName() {
 			return this.roomInfo ? this.roomInfo.name : ''
 		},
+    ...mapGetters('user', {
+			user: 'user',
+		}),
 	},
 	methods: {
+    async clearStore(isBack) {
+      if(isBack) {
+        await this.$store.commit('room/SETROOMINFO', null)
+        await this.$store.commit('room/SETROOMLIST', [])
+      }
+      await this.$store.commit('room/SETCLASSROOMINFO', null)
+			await this.$store.commit('barrage/SETMESSAGE', [])
+      await this.$store.commit('vote/SETVOTES', [])
+      await this.$store.commit('barrage/SETUSERS',[])
+    },
+    async onBackToEnter() {
+      if(this.socket) {
+        this.socket.emit('closeSocket', false)
+      }
+      await this.clearStore(true)
+			this.$router.push('/enter')
+    },
 		async init() {
-			await this.initUser()
 			await this.initClientUrl()
 		},
 		async getSocketUrl() {
@@ -115,15 +136,15 @@ export default {
 				this.socket = io(socketUrl, {
 					transports: ['websocket'],
 				})
+        // this.socket.emit('userLogin', {user:this.user})
 				this.socket.removeAllListeners()
         
 				this.socket.on('broadcast', data => {
 					this.$store.commit('barrage/PUTMESSAGE', JSON.parse(data))
 				})
 
-				this.socket.on('userLogin', res => {
-          const {data} = res
-          this.$store.commit('barrage/SETUSERS', data[0])
+				this.socket.on('sendOnlineUser', users => {
+          this.$store.commit('barrage/SETUSERS', users)
 				})
 
         this.socket.on('updateVote', data => {
@@ -155,8 +176,10 @@ export default {
 			if (flag) {
 				await this._submitClassRoom({ classRoom: this.classRoom })
 				this.classRoomCallback()
-				await this.$store.commit('room/SETCLASSROOMINFO', null)
+        await this.clearStore(false)
+        this.socket.emit('closeSocket',false)
 				this.socket.disconnect()
+        this.socket = null
 			}
 			this.endClassContent = null
 		},
@@ -183,6 +206,7 @@ export default {
 			try {
 				const result = await _updateOne(endpoint.user, user)
 				if (result) {
+          this.$store.commit('user/SETUSER', result)
 					this.alertContent = {
 						content: 'Change name successfully!',
 						button: 'OK',
@@ -214,12 +238,12 @@ export default {
 				}
 			}
 		},
-		initUser() {
-			this.user = User.init({
-				id: nanoid(),
-				name: 'Teacher',
-			})
-		},
+		// initUser() {
+		// 	this.user = User.init({
+		// 		id: nanoid(),
+		// 		name: 'Teacher',
+		// 	})
+		// },
 		onSendMessage(newMessage) {
 			try {
 				this.socket.emit('sendMsg', JSON.stringify(newMessage))
