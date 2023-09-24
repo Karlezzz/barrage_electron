@@ -50,11 +50,10 @@ export default {
 					let sheet = document.styleSheets[0]
 					childNode.style.display = 'inline-block'
 					childNode.style.top = random * 10 + '%'
-					// childNode.style.left = documentWidth+'px'
 					sheet.insertRule(donghua, 0)
 					childNode.style.animation = 'move 20s ease-out'
 					childNode.style.animationFillMode = 'forwards'
-				}, 2000)
+				}, 0)
 				setTimeout(() => {
 					this.barrageList.shift()
 				}, 30000)

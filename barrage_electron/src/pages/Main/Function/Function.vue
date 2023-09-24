@@ -146,8 +146,7 @@ export default {
 	},
 	methods: {
 		async backToEnter() {
-      this.$emit('onBackToEnter')
-			
+			this.$emit('onBackToEnter')
 		},
 		editName() {
 			this.isEditName = true
@@ -253,8 +252,6 @@ export default {
 	font-size: 16px;
 	color: #e1e1e3;
 }
-
-
 
 .adminName .__content {
 	width: 98%;
