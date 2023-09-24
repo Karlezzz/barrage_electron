@@ -45,25 +45,3 @@ export {
   _createOne,
   _updateOne,
 }
-
-
-
-// import axios from 'axios';
-
-// const requests = axios.create({
-//   baseURL: "http://localhost:3000",
-//   timeout: 10000
-// })
-// requests.interceptors.response.use(config => {
-//   return config;
-// })
-// requests.interceptors.request.use(config => {
-//   return config;
-// })
-// export default requests;
-
-// export const reqUserLogin = (data) => requests({
-//   url: '/user',
-//   method: 'post',
-//   data
-// })

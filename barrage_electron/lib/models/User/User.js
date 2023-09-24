@@ -1,26 +1,24 @@
 const { nanoid } = require("nanoid")
 
-
 class User {
   constructor(options = {}) {
     options = options || {}
     this.name = options.name
     this.id = options.id || nanoid()
     this.ipAddress = options.ipAddress
-    this.created = options.created || new Date().getTime()
+    this.created = options.created || new Date().valueOf()
     this.modified = options.modified || this.created
-
     this.identify = options.identify || 'teacher'
   }
 
   updateModified() {
-    this.modified = new Date().getDate()
+    this.modified = new Date().valueOf()
     return this
   }
 
   updateUser(update) {
     Object.keys(update).forEach((key) => {
-        this[key] = update[key]
+      this[key] = update[key]
     })
     return this.updateModified()
   }

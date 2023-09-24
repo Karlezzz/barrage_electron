@@ -165,6 +165,8 @@ export default {
 			const { ip, port } = data
 			this.ipAddress = ip
 			this.port = port
+      sessionStorage.setItem('IP', ip)
+      sessionStorage.setItem('PORT', port)
 			this.$store.commit('room/SETIPPORT', {
 				ip: this.ipAddress,
 				port: this.port,
@@ -172,7 +174,10 @@ export default {
 		})
 
 		ipcRenderer.on('sendUserInfo', (e, data) => {
-			this.$store.commit('user/SETUSER', data)
+			this.$store.commit('user/SETUSER', {
+				...data,
+				ipAddress: this.ipAddress,
+			})
 		})
 	},
 	computed: {
@@ -227,7 +232,7 @@ export default {
 							code: this.roomCode,
 							password: this.roomPassword,
 						}),
-						user: this.user
+						user: this.user,
 					},
 				})
 				if (this.$store.state.room.roomInfo) {
