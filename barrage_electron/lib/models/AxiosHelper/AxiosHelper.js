@@ -2,12 +2,12 @@
 const axios = require('axios')
 // import store from '@/store/index'
 
-const ip = sessionStorage.getItem('IP')
-const port = sessionStorage.getItem('PORT')
-const baseURL = `http://${ip}:${port}`
+// const ip = sessionStorage.getItem('IP')
+// const port = sessionStorage.getItem('PORT')
+// const baseURL = `http://${ip}:${port}`
 const _axios = axios.create({
-  // baseURL: 'http://10.62.251.246:3000',
-  baseURL,
+  baseURL: 'http://10.62.251.246:3000',
+  // baseURL,
   timeout: 10000
 })
 
