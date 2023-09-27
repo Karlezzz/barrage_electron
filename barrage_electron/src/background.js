@@ -91,7 +91,6 @@ ipcMain.on('newWindow', () => {
 })
 
 ipcMain.handle('getIpInfo', (event, data) => {
-  console.log(data)
   const fileUrl = path.resolve(app.getAppPath(), '../dist_electron/ipAddress.json')
   fs.writeFileSync(fileUrl, JSON.stringify(data, null, "\t"), 'utf-8')
 })
@@ -134,7 +133,6 @@ function setTray() {
         click: () => {
           remindWindow.close()
           remindWindow = undefined
-          console.log(remindWindow);
           mainWindow.show()
           mainWindow.webContents.send('hasCloseBarrage')
         }

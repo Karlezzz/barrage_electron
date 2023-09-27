@@ -1,13 +1,21 @@
-// import store from '../../../src/store'
 const axios = require('axios')
-// import store from '@/store/index'
+const path = require('path')
+const fs = require('fs')
+const { ip, port } = getIpInfo()
+function getIpInfo() {
+  const fileUrl = path.resolve(__dirname, '../../../../../../dist_electron/ipAddress.json')
+  const fileDataJson = fs.readFileSync(fileUrl, 'utf-8')
+  const fileData = JSON.parse(fileDataJson)
+  const { ip, port } = fileData
+  return {
+    ip,
+    port
+  }
+}
 
-// const ip = sessionStorage.getItem('IP')
-// const port = sessionStorage.getItem('PORT')
-// const baseURL = `http://${ip}:${port}`
+const baseURL = `http://${ip}:${port}`
 const _axios = axios.create({
-  baseURL: 'http://10.62.251.246:3000',
-  // baseURL,
+  baseURL,
   timeout: 10000
 })
 
@@ -96,7 +104,8 @@ class AxiosHelper {
 }
 
 module.exports = {
-  AxiosHelper
+  AxiosHelper,
+  _axios
 }
 
 
