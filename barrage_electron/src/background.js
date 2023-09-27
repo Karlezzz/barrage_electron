@@ -1,7 +1,5 @@
-import {
-  createProtocol
-} from 'vue-cli-plugin-electron-builder/lib'
-import {
+import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
+const {
   app,
   BrowserWindow,
   ipcMain,
@@ -10,14 +8,14 @@ import {
   screen,
   session,
   nativeImage,
-} from 'electron'
+} = require('electron')
+
 
 const path = require('path')
 const fs = require('fs')
 let mainWindow
 let tray
 let remindWindow
-
 
 app.on('ready', async () => {
 
@@ -39,13 +37,11 @@ app.on('ready', async () => {
     },
   })
   if (process.env.WEBPACK_DEV_SERVER_URL) {
-    // Load the url of the dev server if in development mode
     await mainWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
     mainWindow.webContents.openDevTools()
   } else {
     createProtocol('app')
-    // Load the index.html when not in development
-    mainWindow.loadURL(`file://${__dirname}/main.html`)
+    mainWindow.loadURL(`file://${__dirname}/index.html`)
   }
   const { ip, port } = getIpInfo()
   const { name, id } = getUserInfo()
@@ -106,7 +102,9 @@ ipcMain.on('sendVuexMsg', (e, data) => {
 })
 
 function setTray() {
-  tray = new Tray(nativeImage.createFromPath(path.join(__dirname, '../src/assets/my.png')))
+  tray = new Tray(
+    nativeImage.createFromPath(path.join(__dirname, '../src/assets/my.png'))
+  )
   tray.setToolTip('Barrage')
   tray.on('click', () => {
     if (mainWindow.isVisible()) {
@@ -117,16 +115,13 @@ function setTray() {
   })
   tray.on('right-click', () => {
     const menuConfig = Menu.buildFromTemplate([
-
       {
         label: 'Open Barrage',
         click: () => {
-
           createRemindWindow()
           mainWindow.webContents.send('hasOpenBarrage')
           mainWindow.minimize()
-
-        }
+        },
       },
       {
         label: 'Close Barrage',
@@ -135,19 +130,18 @@ function setTray() {
           remindWindow = undefined
           mainWindow.show()
           mainWindow.webContents.send('hasCloseBarrage')
-        }
+        },
       },
       {
         label: 'Quit',
-        click: () => app.quit()
+        click: () => app.quit(),
       },
     ])
     tray.popUpContextMenu(menuConfig)
   })
-
 }
 
-function createRemindWindow() {
+async function createRemindWindow() {
   remindWindow = new BrowserWindow({
     x: 0,
     y: 0,
@@ -163,16 +157,18 @@ function createRemindWindow() {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      enableRemoteModule: true
-    }
+      enableRemoteModule: true,
+    },
   })
   remindWindow.setIgnoreMouseEvents(true)
   remindWindow.setAlwaysOnTop(true)
+
   if (process.env.WEBPACK_DEV_SERVER_URL) {
-    remindWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '/public/danmu.html')
-    // remindWindow.webContents.openDevTools()
+    remindWindow.loadURL(
+      process.env.WEBPACK_DEV_SERVER_URL + '/public/danmu.html'
+    )
   } else {
     createProtocol('app')
-    remindWindow.loadURL(`file://${__dirname}/public/danmu.html`)
+    remindWindow.loadURL(`file://${__dirname}/danmu.html`)
   }
 }
