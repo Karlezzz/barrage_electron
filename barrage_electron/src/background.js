@@ -17,8 +17,8 @@ let mainWindow
 let tray
 let remindWindow
 
-app.on('ready', async () => {
 
+app.on('ready', async () => {
   session.defaultSession.loadExtension("C:/Users/Karle/AppData/Local/Google/Chrome/User Data/Default/Extensions/nhdogjmejiglipccpnnnanhbledajbpd/6.5.0_1");
   mainWindow = new BrowserWindow({
     width: 1200,
@@ -36,6 +36,7 @@ app.on('ready', async () => {
       contextIsolation: false,
     },
   })
+
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     await mainWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
     mainWindow.webContents.openDevTools()
@@ -43,14 +44,10 @@ app.on('ready', async () => {
     createProtocol('app')
     mainWindow.loadURL(`file://${__dirname}/index.html`)
   }
-  const { ip, port } = getIpInfo()
-  const { name, id } = getUserInfo()
-  mainWindow.webContents.send('sendIpInfo', { ip, port })
-  mainWindow.webContents.send('sendUserInfo', { name, id })
 })
 
 function getIpInfo() {
-  const fileUrl = path.resolve(app.getAppPath(), '../dist_electron/ipAddress.json')
+  const fileUrl = path.resolve(app.getAppPath(), '../json/ipAddress.json')
   const fileDataJson = fs.readFileSync(fileUrl, 'utf-8')
   const fileData = JSON.parse(fileDataJson)
   const { ip, port } = fileData
@@ -87,10 +84,16 @@ ipcMain.on('newWindow', () => {
 })
 
 ipcMain.handle('getIpInfo', (event, data) => {
-  const fileUrl = path.resolve(app.getAppPath(), '../dist_electron/ipAddress.json')
+  const fileUrl = path.resolve(app.getAppPath(), '../json/ipAddress.json')
   fs.writeFileSync(fileUrl, JSON.stringify(data, null, "\t"), 'utf-8')
 })
 
+ipcMain.handle('reqInfo', (event, data) => {
+  const { ip, port } = getIpInfo()
+  const { name, id } = getUserInfo()
+  mainWindow.webContents.send('sendIpInfo', { ip, port })
+  mainWindow.webContents.send('sendIpInfo', { name, id })
+})
 
 app.whenReady().then(() => {
   setTray()
