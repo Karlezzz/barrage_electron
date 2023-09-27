@@ -143,7 +143,7 @@ import Alert from '../../components/Popup/Alert.vue'
 import { endpoint } from '@/api/endpoint'
 import { ipcRenderer } from 'electron'
 import { mapGetters } from 'vuex'
-import {_axios} from '../../../lib/models'
+import { _axios } from '../../../lib/models'
 export default {
 	name: 'Enter',
 	components: {
@@ -162,16 +162,12 @@ export default {
 		}
 	},
 	created() {
+		ipcRenderer.invoke('reqInfo')
+
 		ipcRenderer.on('sendIpInfo', (e, data) => {
 			const { ip, port } = data
 			this.ipAddress = ip
 			this.port = port
-      // sessionStorage.setItem('IP', ip)
-      // sessionStorage.setItem('PORT', port)
-			/* this.$store.commit('room/SETIPPORT', {
-				ip: this.ipAddress,
-				port: this.port,
-			}) */
 		})
 
 		ipcRenderer.on('sendUserInfo', (e, data) => {
@@ -206,9 +202,8 @@ export default {
 				ip: this.ipAddress,
 				port: this.port,
 			}
-      const baseURL = `http://${this.ipAddress}:${this.port}`
-      _axios.defaults.baseURL = baseURL
-			// this.$store.commit('room/SETIPPORT', ipInfo)
+			const baseURL = `http://${this.ipAddress}:${this.port}`
+			_axios.defaults.baseURL = baseURL
 			ipcRenderer.invoke('getIpInfo', ipInfo)
 		},
 		onSubmitAlert() {
