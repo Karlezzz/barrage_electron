@@ -2,8 +2,14 @@ const axios = require('axios')
 const path = require('path')
 const fs = require('fs')
 const { ip, port } = getIpInfo()
+
 function getIpInfo() {
-  const fileUrl = path.resolve(__dirname, '../../../../../../dist_electron/ipAddress.json')
+  let fileUrl
+  if(process.env.NODE_ENV === 'development') {
+    fileUrl = path.resolve(__dirname, '../../../../../../dist_electron/ipAddress.json') //develop
+  } else {
+    fileUrl = path.resolve(__dirname, '../json/ipAddress.json') //production
+  }
   const fileDataJson = fs.readFileSync(fileUrl, 'utf-8')
   const fileData = JSON.parse(fileDataJson)
   const { ip, port } = fileData
