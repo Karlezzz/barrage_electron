@@ -15,6 +15,10 @@ module.exports = defineConfig({
         productName: "Barrage",
         appId: "electron.app",
         asar: false,
+        extraResources: {
+          from:'./json',
+          to:'json'
+        },
         nsis: {
           "oneClick": false, // 是否一键安装
           "allowElevation": true, // 允许请求提升。若为false，则用户必须使用提升的权限重新启动安装程序。
