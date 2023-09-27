@@ -1,11 +1,10 @@
-const { User } = require('../User')
 class Message {
   constructor(options) {
     options = options || {}
     this.content = options.content || ''
-    this.user = User.init(options.user)
+    this.userId = options.userId
+    this.userName = options.userName || 'User'
     this.created = options.created || (new Date().valueOf())
-    this.modified = options.modified || this.created
     this.type = options.type || 'chat'
   }
 
@@ -27,7 +26,7 @@ class Message {
   }
 
   get isValid() {
-    return !!this.user
+    return !!this.userId
   }
 
 }

@@ -3,29 +3,18 @@ import { endpoint } from '@/api/endpoint'
 const { Vote } = require('../../../lib/models')
 
 const state = {
-  votes: Vote.initFromArray([{
-    question: 'How to learn Vue?',
-    content: 'test',
-    duration: 60000,
-    voteOptions: [
-      {
-        optionValue: 'Online',
-        selectMembers: [{ name: 'Tom', id: '001' }, { name: 'Sam', id: '002' }]
-      },
-      {
-        optionValue: 'Book',
-        selectMembers: [{ name: 'Karle', id: '011' }, { name: 'Mary', id: '032' }, { name: 'Don', id: '031' }]
-      },
-      {
-        optionValue: 'Class',
-        selectMembers: [{ name: 'Joe', id: '005' }, { name: 'Yan', id: '036' }, { name: 'Perry', id: '056' }]
-      }
-    ]
-  },]),
+  votes: []
 }
 const mutations = {
   SETVOTES(state, data) {
-    state.votes.push(data)
+    state.votes = [...data, ...state.votes].flat(1)
+  },
+  UPDATEVOTE(state, data) {
+    const { votes } = state
+    const originVoteIndex = votes.findIndex((v) => {
+      return v.id === data.id
+    })
+    state.votes.splice(originVoteIndex, 1, data)
   },
 }
 const actions = {
@@ -33,8 +22,7 @@ const actions = {
     try {
       const result = await _findAll(endpoint.vote)
       if (result) {
-        const votes = Vote.initFromArray(result)
-        commit('SETVOTES', votes)
+        commit('SETVOTES', result)
         return
       }
     } catch (error) {
@@ -42,9 +30,15 @@ const actions = {
     }
   },
 }
+
+const getters = {
+  votes: state => Vote.initFromArray(state.votes)
+}
+
 export default {
   namespaced: true,
   state,
   mutations,
   actions,
+  getters
 }

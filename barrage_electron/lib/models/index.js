@@ -1,9 +1,8 @@
-const { AxiosHelper } = require('./AxiosHelper')
+const { AxiosHelper, _axios } = require('./AxiosHelper')
 const { ClassRoom } = require('./ClassRoom')
 const { Connection } = require('./Connection')
 const { Comment } = require('./Comment')
 const { Message } = require('./Message')
-const { Response } = require('./Response')
 const { Room } = require('./Room')
 const { Score } = require('./Score')
 const { User } = require('./User')
@@ -12,11 +11,11 @@ const { VoteOption } = require('./VoteOption')
 
 module.exports = {
   AxiosHelper,
+  _axios,
   ClassRoom,
   Connection,
   Comment,
   Message,
-  Response,
   Room,
   Score,
   User,

@@ -55,7 +55,7 @@
 import { nanoid } from 'nanoid'
 import { Message } from '../../../../lib/models'
 import { VEmojiPicker } from 'v-emoji-picker'
-
+import { mapGetters } from 'vuex'
 export default {
 	name: 'Barrage',
 	components: {
@@ -70,9 +70,6 @@ export default {
 			isShowEmojiList: false,
 		}
 	},
-	props: {
-		user: { type: Object, default: () => {} },
-	},
 	computed: {
 		userName() {
 			return this.user ? this.user.name : ''
@@ -83,6 +80,9 @@ export default {
 		messageList() {
 			return this.$store.state.barrage.messageList
 		},
+    ...mapGetters('user', {
+			user: 'user',
+		}),
 	},
 	methods: {
 		showEmojiList() {
@@ -98,20 +98,18 @@ export default {
 			return content
 		},
 		messageUserName(message) {
-			const {
-				user: { name },
-			} = message
-			return name
+			const { userName } = message
+			return userName
 		},
 		messageUserId(message) {
-			const {
-				user: { id },
-			} = message
-			return id
+			const { userId } = message
+			return userId
 		},
 		onSendMessage() {
+      if(this.newMessage.length === 0 || this.newMessage.trim().length === 0) return
 			const msgInstance = Message.init({
-				user: this.user,
+				userId: this.userId,
+        userName: this.userName,
 				content: this.newMessage,
 				type: 'chat',
 			})

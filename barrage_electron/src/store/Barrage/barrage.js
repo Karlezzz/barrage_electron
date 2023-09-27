@@ -12,7 +12,7 @@ const mutations = {
     state.messageList = data
   },
   SETUSERS(state, data) {
-    state.users.push(data)
+    state.users = data
   }
 }
 const actions = {

@@ -4,8 +4,9 @@ const { User } = require('../User')
 class VoteOption {
   constructor(options) {
     options = options || {}
-    this.id = nanoid()
+    this.id = options.id || nanoid()
     this.optionValue = options.optionValue
+    this.selectMembersId = options.selectMembersId || []
     this.selectMembers = User.initFromArray(options.selectMembers) || []
   }
 

@@ -1,5 +1,6 @@
-const { AxiosHelper } = require('./AxiosHelper')
+const { AxiosHelper, _axios } = require('./AxiosHelper')
 
 module.exports = {
-  AxiosHelper
+  AxiosHelper,
+  _axios
 }
