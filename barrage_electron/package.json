@@ -1,7 +1,10 @@
 {
   "name": "barrage_electron",
+  "description": "barrage electron client",
+  "author": "karle",
   "version": "1.0.0",
   "private": true,
+  "main": "background.js",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -11,7 +14,6 @@
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"
   },
-  "main": "background.js",
   "dependencies": {
     "@vue/devtools": "^6.5.0",
     "animate.css": "^4.1.1",
@@ -19,6 +21,7 @@
     "core-js": "^3.8.3",
     "echarts": "^5.4.1",
     "nanoid": "^4.0.1",
+    "node-polyfill-webpack-plugin": "^2.0.1",
     "qrcodejs2": "^0.0.2",
     "socket.io-client": "^4.7.2",
     "v-emoji-picker": "^2.3.3",

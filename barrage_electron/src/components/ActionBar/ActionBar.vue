@@ -42,7 +42,7 @@
 					alt=""
 				/>
 			</div>
-			<div class="title">Close prompt</div>
+			<div class="title">Close</div>
 			<div
 				class="select"
 				ref="select"

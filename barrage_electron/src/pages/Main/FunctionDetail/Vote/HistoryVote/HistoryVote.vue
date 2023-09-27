@@ -6,11 +6,10 @@
 		<div
 			class="historyVoteCard"
 			style="width: 100%; height: 100%"
-			v-show="isShowHistoryVote"
 		>
 			<div
 				class="itemArea"
-				v-show="!isShowDetail"
+				v-if="!isShowDetail"
 			>
 				<div
 					class="historyVoteItem"
@@ -18,17 +17,14 @@
 					:key="index"
 					@click="showHistoryVoteDetail(item)"
 				>
-					<a
-						href="#"
-						:title="item.content"
-						>{{ item.question }}</a
-					>
+					<a href="#">{{ item.question }}</a>
 				</div>
 			</div>
 			<div
 				class="HistoryVoteDetailBG"
-				v-show="isShowDetail"
+				v-if="isShowDetail"
 			>
+				<div class="__time">{{ remainingTime }}</div>
 				<div
 					class="showArea"
 					id="cartsArea"
@@ -43,35 +39,33 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
 	name: 'HistoryVote',
-	props: ['isShowHistoryVote'],
 	data() {
 		return {
 			isShowDetail: false,
-			detailInfo: '',
+			selectedVote: null,
+			timer: null,
+			remainingTime: null,
 		}
 	},
 	computed: {
-		historyVoteList() {
-			return this.$store.state.vote.votes || []
-		},
-		isShow() {
-			if (this.isShowHistoryVote == true) {
-				if (this.isShowDetail == true) return false
-				else if (this.isShowDetail == false) return true
-			} else if (this.isShowHistoryVote == false) return false
-			return false
-		},
+		...mapGetters('vote', {
+			historyVoteList: 'votes',
+		}),
 	},
 	methods: {
 		showHistoryVoteDetail(vote) {
 			this.isShowDetail = true
-
-			this.charts(this.convert(vote))
-		},
-		getBackDetail() {
-			this.isShowDetail = false
+			this.selectedVote = vote
+			this.remainingTime = this.selectedVote.remainingTime()
+			this.timer = setInterval(() => {
+				if (this.selectedVote.isInValidTime) {
+					this.remainingTime = this.selectedVote.remainingTime()
+				}
+			}, 1000)
+			this.charts(this.convert(this.selectedVote))
 		},
 		charts(option) {
 			const ch = new Promise((resolve, reject) => {
@@ -84,8 +78,8 @@ export default {
 		},
 		getBack() {
 			this.myEcharts.dispose()
-
 			this.isShowDetail = false
+			this.timer = null
 		},
 		convert(vote) {
 			let { question, voteOptions } = vote
@@ -93,7 +87,7 @@ export default {
 				return {
 					...vo,
 					name: vo.optionValue,
-					value: vo.selectMembers.length,
+					value: vo.selectMembersId.length,
 				}
 			})
 			const option = {
@@ -134,10 +128,19 @@ export default {
 	watch: {
 		historyVoteList: {
 			deep: true,
-			handler() {
-				const newVote = this.historyVoteList[this.historyVoteList.length - 1]
-        this.myEcharts.dispose()
-				this.charts(this.convert(newVote))
+			handler(newV, oldV) {
+				if (newV.length !== oldV.length) return
+				if (!this.isShowDetail) return
+				if (!this.selectedVote) return
+
+				const { id } = this.selectedVote
+				this.selectedVote = this.historyVoteList.find(v => {
+					return v.id === id
+				})
+				if (this.myEcharts) this.myEcharts.dispose()
+				if (this.selectedVote) {
+					this.charts(this.convert(this.selectedVote))
+				}
 			},
 		},
 	},
@@ -182,13 +185,19 @@ export default {
 
 .HistoryVoteDetailBG {
 	width: 100%;
-	height: 90%;
+	height: 85%;
+}
+
+.__time {
+	text-align: center;
+	margin-top: 10px;
+	color: #ea7724;
 }
 
 .showArea {
 	margin-left: 1%;
 	width: 98%;
-	height: 72%;
+	height: 60%;
 	display: flex;
 	justify-content: center;
 	align-items: center;

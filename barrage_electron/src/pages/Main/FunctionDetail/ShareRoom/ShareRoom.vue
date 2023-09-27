@@ -53,7 +53,7 @@ export default {
 	},
 	computed: {
 		url() {
-			return `http://${this.clientUrl}:3000/#/barrage/${this.roomCode}/${this.classRoomCode}`
+			return `http://${this.clientUrl}:3000/#/barrage/${this.roomCode}/${this.classRoomId}`
 		},
 		room() {
 			return this.$store.state.room.roomInfo
@@ -73,28 +73,33 @@ export default {
 		classRoomName() {
 			return this.classRoom ? this.classRoom.name : ''
 		},
-    classRoomCode() {
-      return this.classRoom ? this.classRoom.id : ''
-    },
+		classRoomId() {
+			return this.classRoom ? this.classRoom.id : ''
+		},
 	},
 	methods: {
 		createQrCode() {
 			this.$nextTick(() => {
-				setTimeout(() => {
-					this.qrcode = new QRCode(this.$refs.qrCodeUrl, {
-						text: this.url,
-						width: 150,
-						height: 150,
-						colorDark: '#1d1d1f',
-						colorLight: '#e1e1e3',
-						correctLevel: QRCode.CorrectLevel.H,
-					})
-				}, 2000)
+				this.qrcode = new QRCode(this.$refs.qrCodeUrl, {
+					text: this.url,
+					width: 150,
+					height: 150,
+					colorDark: '#1d1d1f',
+					colorLight: '#e1e1e3',
+					correctLevel: QRCode.CorrectLevel.H,
+				})
 			})
 		},
 	},
-	mounted() {
-		this.createQrCode()
+	watch: {
+		isShowShareRoom: function (newV, oldV) {
+			if (newV && !this.qrcode) {
+        this.createQrCode()
+      } else if(newV && this.qrcode) {
+        this.qrcode.clear()
+        this.qrcode.makeCode(this.url)
+      }
+		},
 	},
 }
 </script>
@@ -141,7 +146,10 @@ export default {
 	font-size: 12px;
 	user-select: all;
 	color: #ea7724;
-  overflow: auto;
+	overflow: hidden;
+	word-wrap:break-word;
+	white-space:pre-wrap;
+	text-overflow: ellipsis;
 }
 .message .__label {
 	font-size: 16px;

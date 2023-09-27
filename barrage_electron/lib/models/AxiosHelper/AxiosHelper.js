@@ -1,12 +1,27 @@
 const axios = require('axios')
+const path = require('path')
+const fs = require('fs')
+const { ip, port } = getIpInfo()
 
-// const protocol = window.location.protocol
-// const host = window.location.host
-// const baseUrl = `${protocol}://${host}`
+function getIpInfo() {
+  let fileUrl
+  if(process.env.NODE_ENV === 'development') {
+    fileUrl = path.resolve(__dirname, '../../../../../../dist_electron/ipAddress.json') //develop
+  } else {
+    fileUrl = path.resolve(__dirname, '../json/ipAddress.json') //production
+  }
+  const fileDataJson = fs.readFileSync(fileUrl, 'utf-8')
+  const fileData = JSON.parse(fileDataJson)
+  const { ip, port } = fileData
+  return {
+    ip,
+    port
+  }
+}
+
+const baseURL = `http://${ip}:${port}`
 const _axios = axios.create({
-  // baseURL: 'http://10.62.251.246:3000',
-  baseURL: 'http://10.62.247.107:3000',
-  // baseUrl,
+  baseURL,
   timeout: 10000
 })
 
@@ -95,7 +110,8 @@ class AxiosHelper {
 }
 
 module.exports = {
-  AxiosHelper
+  AxiosHelper,
+  _axios
 }
 
 
