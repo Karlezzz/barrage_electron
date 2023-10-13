@@ -58,7 +58,7 @@ function getIpInfo() {
 }
 
 function getUserInfo() {
-  const fileUrl = path.resolve(app.getAppPath(), '../dist_electron/userInfo.json')
+  const fileUrl = path.resolve(app.getAppPath(), '../json/userInfo.json')
   const fileDataJson = fs.readFileSync(fileUrl, 'utf-8')
   const fileData = JSON.parse(fileDataJson)
   const { name, id } = fileData
@@ -92,7 +92,7 @@ ipcMain.handle('reqInfo', (event, data) => {
   const { ip, port } = getIpInfo()
   const { name, id } = getUserInfo()
   mainWindow.webContents.send('sendIpInfo', { ip, port })
-  mainWindow.webContents.send('sendIpInfo', { name, id })
+  mainWindow.webContents.send('sendUserInfo', { name, id })
 })
 
 app.whenReady().then(() => {
