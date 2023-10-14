@@ -102,10 +102,11 @@ export default {
 	top: 80%;
 	width: 100%;
 	z-index: 999;
-	font-size: 25px;
+	font-size: 27px;
 	font-weight: 700;
-	color: #fb3037;
+	color: #f0f0f0;
 	white-space: nowrap;
 	display: none;
+	-webkit-text-stroke: 1px #000000;
 }
 </style>

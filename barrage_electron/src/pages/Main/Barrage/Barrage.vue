@@ -18,7 +18,7 @@
 				<input
 					type="text"
 					v-model="newMessage"
-					@keyup.enter="sendMessage"
+					@keyup.enter="onSendMessage"
 				/>
 				<div
 					class="emoji"
@@ -80,7 +80,7 @@ export default {
 		messageList() {
 			return this.$store.state.barrage.messageList
 		},
-    ...mapGetters('user', {
+		...mapGetters('user', {
 			user: 'user',
 		}),
 	},
@@ -106,10 +106,11 @@ export default {
 			return userId
 		},
 		onSendMessage() {
-      if(this.newMessage.length === 0 || this.newMessage.trim().length === 0) return
+			if (this.newMessage.length === 0 || this.newMessage.trim().length === 0)
+				return
 			const msgInstance = Message.init({
 				userId: this.userId,
-        userName: this.userName,
+				userName: this.userName,
 				content: this.newMessage,
 				type: 'chat',
 			})
