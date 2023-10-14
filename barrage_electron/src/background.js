@@ -47,7 +47,7 @@ app.on('ready', async () => {
 })
 
 function getIpInfo() {
-  const fileUrl = path.resolve(app.getAppPath(), '../json/ipAddress.json')
+  const fileUrl = path.resolve(app.getAppPath(), '../assets/ipAddress.json')
   const fileDataJson = fs.readFileSync(fileUrl, 'utf-8')
   const fileData = JSON.parse(fileDataJson)
   const { ip, port } = fileData
@@ -58,7 +58,7 @@ function getIpInfo() {
 }
 
 function getUserInfo() {
-  const fileUrl = path.resolve(app.getAppPath(), '../json/userInfo.json')
+  const fileUrl = path.resolve(app.getAppPath(), '../assets/userInfo.json')
   const fileDataJson = fs.readFileSync(fileUrl, 'utf-8')
   const fileData = JSON.parse(fileDataJson)
   const { name, id } = fileData
@@ -75,7 +75,12 @@ ipcMain.on('closeNewWindow', () => {
 })
 
 ipcMain.on('closeMainWindow', () => {
-  mainWindow.close()
+  // mainWindow.close()
+  // if (remindWindow) {
+  //   remindWindow.destroy()
+  //   remindWindow = undefined
+  // }
+  app.exit()
 })
 
 ipcMain.on('newWindow', () => {
@@ -84,7 +89,7 @@ ipcMain.on('newWindow', () => {
 })
 
 ipcMain.handle('getIpInfo', (event, data) => {
-  const fileUrl = path.resolve(app.getAppPath(), '../json/ipAddress.json')
+  const fileUrl = path.resolve(app.getAppPath(), '../assets/ipAddress.json')
   fs.writeFileSync(fileUrl, JSON.stringify(data, null, "\t"), 'utf-8')
 })
 
@@ -105,8 +110,9 @@ ipcMain.on('sendVuexMsg', (e, data) => {
 })
 
 function setTray() {
+
   tray = new Tray(
-    nativeImage.createFromPath(path.join(__dirname, '../src/assets/my.png'))
+    nativeImage.createFromPath(path.join(app.getAppPath(), '../assets/my.png'))
   )
   tray.setToolTip('Barrage')
   tray.on('click', () => {
@@ -129,7 +135,7 @@ function setTray() {
       {
         label: 'Close Barrage',
         click: () => {
-          remindWindow.close()
+          remindWindow.destroy()
           remindWindow = undefined
           mainWindow.show()
           mainWindow.webContents.send('hasCloseBarrage')
@@ -137,7 +143,7 @@ function setTray() {
       },
       {
         label: 'Quit',
-        click: () => app.quit(),
+        click: () => app.exit(),
       },
     ])
     tray.popUpContextMenu(menuConfig)
