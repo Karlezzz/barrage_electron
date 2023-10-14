@@ -189,7 +189,7 @@ export default {
 			const { isOnClass } = classRoom
 			if (isOnClass) {
 				this.endClassContent = {
-					content: 'Confirm the end of class?',
+					content: 'End the class?',
 					button: {
 						confirm: 'Confirm',
 						cancel: 'Cancel',
@@ -225,7 +225,7 @@ export default {
 				if (result) {
 					this.$store.commit('room/SETCLASSROOMINFO', result)
 					const { isOnClass } = this.$store.state.room.classRoomInfo
-					const content = isOnClass ? 'CLass begin !' : 'Class end !'
+					const content = isOnClass ? 'Class begin!' : 'Class end!'
 					this.alertContent = {
 						content,
 						button: 'OK',

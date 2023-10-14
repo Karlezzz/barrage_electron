@@ -106,6 +106,9 @@
 			</div>
 			<div
 				class="openBarrage"
+				:class="{
+					noBarrage: classRoom === null,
+				}"
 				@click="startBarrage"
 			>
 				<div class="icon">
@@ -185,7 +188,11 @@ export default {
 	},
 	computed: {
 		barStatus() {
-			return this.isOpenBarrage == false ? 'Open barrage' : 'Close barrage'
+			return this.classRoom
+				? this.isOpenBarrage == false
+					? 'Open barrage'
+					: 'Close barrage'
+				: 'No Class Room'
 		},
 		classRoom() {
 			return this.$store.state.room.classRoomInfo
@@ -349,6 +356,12 @@ export default {
 	position: absolute;
 	bottom: 8%;
 	left: 1%;
+}
+
+.function .functionList .openBarrage.noBarrage {
+	background-color: #232323;
+	color: #706e6e;
+	cursor: not-allowed;
 }
 
 .function .openBarrage .icon {
