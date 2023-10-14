@@ -6,9 +6,9 @@ const { ip, port } = getIpInfo()
 function getIpInfo() {
   let fileUrl
   if(process.env.NODE_ENV === 'development') {
-    fileUrl = path.resolve(__dirname, '../../../../../../dist_electron/ipAddress.json') //develop
+    fileUrl = path.resolve(__dirname, '../../../../../../assets/ipAddress.json') //develop
   } else {
-    fileUrl = path.resolve(__dirname, '../json/ipAddress.json') //production
+    fileUrl = path.resolve(__dirname, '../assets/ipAddress.json') //production
   }
   const fileDataJson = fs.readFileSync(fileUrl, 'utf-8')
   const fileData = JSON.parse(fileDataJson)

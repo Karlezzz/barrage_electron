@@ -16,8 +16,8 @@ module.exports = defineConfig({
         appId: "electron.app",
         asar: false,
         extraResources: {
-          from:'./json',
-          to:'json'
+          from:'./assets',
+          to:'assets'
         },
         nsis: {
           "oneClick": false, // 是否一键安装
