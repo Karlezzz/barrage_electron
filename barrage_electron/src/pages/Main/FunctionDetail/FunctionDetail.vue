@@ -9,28 +9,28 @@
 			:isShowShareRoom="functionStatusList.isShowShareRoom"
 			:clientUrl="clientUrl"
 		></ShareRoom>
-		<!-- <Screen :isShowScreen="functionStatusList.isShowScreen"></Screen> -->
 		<ClassRoom
 			:isShowClassRoom="functionStatusList.isShowClassRoom"
 			@onSubmitClassRoom="onSubmitClassRoom"
 		></ClassRoom>
+    <FeedbackList :isShowFeedbackList="functionStatusList.isShowFeedbackList"></FeedbackList>
 	</div>
 </template>
 
 <script>
-import Screen from './Screen/Screen.vue'
 import ShareRoom from './ShareRoom/ShareRoom.vue'
 import Vote from './Vote/Vote.vue'
 import Member from './Member/Member.vue'
 import ClassRoom from './ClassRoom/ClassRoom.vue'
+import FeedbackList from './FeedbackList/FeedbackList.vue'
 export default {
 	name: 'FunctionDetail',
 	components: {
 		Member,
 		Vote,
 		ShareRoom,
-		Screen,
 		ClassRoom,
+    FeedbackList
 	},
 	props: {
 		clientUrl: { type: String, default: '' },
@@ -43,6 +43,7 @@ export default {
 				isShowScreen: false,
 				isShowShareRoom: false,
 				isShowClassRoom: false,
+        isShowFeedbackList: false
 			},
 		}
 	},
