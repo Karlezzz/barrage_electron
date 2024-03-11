@@ -13,7 +13,10 @@
 			:isShowClassRoom="functionStatusList.isShowClassRoom"
 			@onSubmitClassRoom="onSubmitClassRoom"
 		></ClassRoom>
-    <FeedbackList :isShowFeedbackList="functionStatusList.isShowFeedbackList"></FeedbackList>
+		<FeedbackList
+			:isShowFeedbackList="functionStatusList.isShowFeedbackList"
+			@onSelectRoomCode="onSelectRoomCode"
+		></FeedbackList>
 	</div>
 </template>
 
@@ -30,7 +33,7 @@ export default {
 		Vote,
 		ShareRoom,
 		ClassRoom,
-    FeedbackList
+		FeedbackList,
 	},
 	props: {
 		clientUrl: { type: String, default: '' },
@@ -43,7 +46,7 @@ export default {
 				isShowScreen: false,
 				isShowShareRoom: false,
 				isShowClassRoom: false,
-        isShowFeedbackList: false
+				isShowFeedbackList: false,
 			},
 		}
 	},
@@ -58,6 +61,9 @@ export default {
 		},
 		onSubmitVote({ vote }) {
 			this.$emit('onSubmitVote', { vote })
+		},
+		onSelectRoomCode({ roomId }) {
+			this.$emit('onSelectRoomCode', { roomId })
 		},
 	},
 }

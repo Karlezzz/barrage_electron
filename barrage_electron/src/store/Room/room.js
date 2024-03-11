@@ -4,7 +4,8 @@ const state = {
   roomInfo: null,
   classRoomInfo: null,
   ipInfo: null,
-  roomList:[]
+  roomList: [],
+  classRoomList: []
 };
 const mutations = {
   SETROOMINFO(state, data) {
@@ -16,8 +17,11 @@ const mutations = {
   SETIPPORT(state, data) {
     state.ipInfo = data
   },
-  SETROOMLIST(state,data) {
+  SETROOMLIST(state, data) {
     state.roomList = data
+  },
+  SETCLASSROOMLIST(state, data) {
+    state.classRoomList = data
   }
 };
 const actions = {
@@ -33,7 +37,7 @@ const actions = {
       console.log(error)
     }
   },
-  async getRoomList({ commit },{endpoint}) {
+  async getRoomList({ commit }, { endpoint }) {
     try {
       const result = await _findAll(endpoint)
       if (result) {
@@ -42,6 +46,17 @@ const actions = {
       }
     } catch (error) {
       console.log(error)
+    }
+  },
+  async getClassRoomListFromRoom({ commit }, { endpoint, data }) {
+    try {
+      const result = await _findAll(endpoint, data)
+      if (result) {
+        commit('SETCLASSROOMLIST', result)
+        return
+      }
+    } catch (error) {
+      return Promise.reject(error)
     }
   }
 
