@@ -266,13 +266,8 @@ export default {
 			this.alertContent = null
 		},
 		async onSearchScoreAndComment({ classRoomId }) {
-			console.log(classRoomId)
 			await this.$store.dispatch('score/getScoreByClassRoomId', {
 				endpoint: endpoint.score,
-				data: { classRoomId },
-			})
-			await this.$store.dispatch('comment/getCommentByClassRoomId', {
-				endpoint: endpoint.comment,
 				data: { classRoomId },
 			})
 		},

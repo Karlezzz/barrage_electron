@@ -1,11 +1,11 @@
 import { _findAll } from "@/api";
 
 const state = {
-  scoreList: [],
+  scoreCommentList: [],
 };
 const mutations = {
-  SETSCORELIST(state, data) {
-    state.scoreList = data
+  SETSCORECOMMENTLIST(state, data) {
+    state.scoreCommentList = data
   }
 
 };
@@ -14,7 +14,7 @@ const actions = {
     try {
       const res = await _findAll(endpoint, data)
       if (res) {
-        commit("SETSCORELIST", res)
+        commit("SETSCORECOMMENTLIST", res)
         return
       }
     } catch (error) {

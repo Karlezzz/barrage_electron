@@ -87,29 +87,18 @@
 					</div>
 				</div>
 			</div>
-			<div class="feedback_head">
+			<div class="feedback__content">
 				<div
-					class="twoFeedbackSelect"
-					@click="selectFeedback(1)"
-					:style="{
-						'background-color': isShowScore ? '#526af0' : '#232227',
-					}"
+					class="card"
+					v-for="(item, idx) in scoreCommentList"
+					:key="idx"
 				>
-					Score
+					<div class="card__head">
+						<div class="card__name">{{ item.user.name }}</div>
+						<div class="card__score">{{ item.score.value }}</div>
+					</div>
+					<div class="card__comment">{{ item.comment.value }}</div>
 				</div>
-				<div
-					class="twoFeedbackSelect"
-					@click="selectFeedback(2)"
-					:style="{
-						'background-color': isShowComment ? '#526af0' : '#232227',
-					}"
-				>
-					Comment
-				</div>
-			</div>
-			<div class="feedback_body">
-				<FeedbackScore v-if="isShowScore"></FeedbackScore>
-				<FeedbackComment v-if="isShowComment"></FeedbackComment>
 			</div>
 		</div>
 	</transition>
@@ -165,19 +154,10 @@ export default {
 			this.inputRoomId = name
 			this.$emit('onSelectRoomCode', { roomId: id })
 			this.showDropdownRoom = false
-			// if (this.classRoomList.length > 0) {
-			// 	this.$nextTick(() => {
-			// 		this.selectClassRoom(this.classRoomList[0])
-			// 		this.onSearchScoreAndComment({
-			// 			classRoomId: this.selectedClassRoom.id,
-			// 		})
-			// 	})
-			// }
 		},
 		selectClassRoom(classRoom) {
 			const { name, id } = classRoom
 			this.inputClassRoomId = name
-			// this.selectedClassRoom = classRoom
 			this.showDropdownClass = false
 			this.onSearchScoreAndComment({ classRoomId: id })
 		},
@@ -191,6 +171,9 @@ export default {
 		},
 		classRoomList() {
 			return this.$store.state.room.classRoomList || []
+		},
+		scoreCommentList() {
+			return this.$store.state.score.scoreCommentList || []
 		},
 	},
 }
@@ -206,10 +189,11 @@ export default {
 
 	&__search {
 		width: 100%;
-		height: 110px;
+		height: 120px;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-around;
+		// border-bottom: 1px solid #e1e1e3;
 
 		.search {
 			&__item {
@@ -325,38 +309,73 @@ export default {
 		}
 	}
 
-	&_head {
+	&__content {
 		width: 100%;
-		height: 15%;
-		display: flex;
-		justify-content: space-around;
-		align-items: center;
-		border-bottom: 1px solid #e1e1e3;
-
-		.twoFeedbackSelect {
-			float: left;
-			width: 100px;
-			height: 50px;
-			color: #e1e1e3;
-			background-color: #526af0;
-			font-size: 18px;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			border-radius: 15px;
-			cursor: pointer;
-
-			&:nth-child(2) {
-				background-color: #232227;
+		height: 63%;
+		margin-top: 9%;
+		// background-color: pink;
+		overflow: scroll;
+		.card {
+			width: 90%;
+			// height: 100px;
+			border-radius: 20px;
+			background-color: #ef945482;
+			margin-left: 5%;
+			&__head {
+				height: 30px;
+				width: 94%;
+				margin-left: 3%;
+				padding: 0 1%;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding-top: 5px;
+			}
+			&__comment {
+				width: 94%;
+				margin-left: 3%;
+				word-wrap: break-word;
+				word-break: normal;
+				font-size: 15px;
+				color: #fff;
+				margin-top: 5px;
+				padding-bottom: 20px;
 			}
 		}
 	}
 
-	&_body {
-		width: 98%;
-		height: 90%;
-		margin-left: 1%;
-		margin-top: 3%;
-	}
+	// &_head {
+	// 	width: 100%;
+	// 	height: 15%;
+	// 	display: flex;
+	// 	justify-content: space-around;
+	// 	align-items: center;
+	// 	border-bottom: 1px solid #e1e1e3;
+
+	// 	.twoFeedbackSelect {
+	// 		float: left;
+	// 		width: 100px;
+	// 		height: 50px;
+	// 		color: #e1e1e3;
+	// 		background-color: #526af0;
+	// 		font-size: 18px;
+	// 		display: flex;
+	// 		justify-content: center;
+	// 		align-items: center;
+	// 		border-radius: 15px;
+	// 		cursor: pointer;
+
+	// 		&:nth-child(2) {
+	// 			background-color: #232227;
+	// 		}
+	// 	}
+	// }
+
+	// &_body {
+	// 	width: 98%;
+	// 	height: 90%;
+	// 	margin-left: 1%;
+	// 	margin-top: 3%;
+	// }
 }
 </style>
