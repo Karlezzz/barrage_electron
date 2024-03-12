@@ -88,17 +88,23 @@
 				</div>
 			</div>
 			<div class="feedback__content">
-				<div
-					class="card"
-					v-for="(item, idx) in scoreCommentList"
-					:key="idx"
-				>
-					<div class="card__head">
-						<div class="card__name">{{ item.user.name }}</div>
-						<div class="card__score">{{ item.score.value }}</div>
+				<template v-if="scoreCommentList.length !== 0">
+					<div
+						class="card"
+						v-for="(item, idx) in scoreCommentList"
+						:key="idx"
+					>
+						<div class="card__head">
+							<div class="card__name">{{ item?.user?.name }}</div>
+							<div class="card__score">
+								{{ item?.score?.value ?? 'No Score' }}
+							</div>
+						</div>
+						<div class="card__comment">
+							{{ item?.comment?.value ?? 'No Comment' }}
+						</div>
 					</div>
-					<div class="card__comment">{{ item.comment.value }}</div>
-				</div>
+				</template>
 			</div>
 		</div>
 	</transition>
