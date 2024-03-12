@@ -133,6 +133,7 @@ export default {
 			showDropdownClass: false,
 			inputRoomId: null,
 			inputClassRoomId: null,
+			selectedClassRoom: null,
 		}
 	},
 	methods: {
@@ -164,14 +165,19 @@ export default {
 			this.inputRoomId = name
 			this.$emit('onSelectRoomCode', { roomId: id })
 			this.showDropdownRoom = false
-			if (this.classRoomList.length > 0) {
-				this.inputClassRoomId = this.classRoomList[0].name
-				this.onSearchScoreAndComment({ classRoomId: id })
-			}
+			// if (this.classRoomList.length > 0) {
+			// 	this.$nextTick(() => {
+			// 		this.selectClassRoom(this.classRoomList[0])
+			// 		this.onSearchScoreAndComment({
+			// 			classRoomId: this.selectedClassRoom.id,
+			// 		})
+			// 	})
+			// }
 		},
 		selectClassRoom(classRoom) {
 			const { name, id } = classRoom
 			this.inputClassRoomId = name
+			// this.selectedClassRoom = classRoom
 			this.showDropdownClass = false
 			this.onSearchScoreAndComment({ classRoomId: id })
 		},
