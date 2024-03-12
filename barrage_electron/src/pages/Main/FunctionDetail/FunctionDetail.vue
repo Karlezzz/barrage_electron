@@ -16,6 +16,7 @@
 		<FeedbackList
 			:isShowFeedbackList="functionStatusList.isShowFeedbackList"
 			@onSelectRoomCode="onSelectRoomCode"
+			@onSearchScoreAndComment="onSearchScoreAndComment"
 		></FeedbackList>
 	</div>
 </template>
@@ -64,6 +65,9 @@ export default {
 		},
 		onSelectRoomCode({ roomId }) {
 			this.$emit('onSelectRoomCode', { roomId })
+		},
+		onSearchScoreAndComment({ classRoomId }) {
+			this.$emit('onSearchScoreAndComment', { classRoomId })
 		},
 	},
 }

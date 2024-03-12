@@ -3,10 +3,10 @@
 		<div class="main">
 			<div class="head">
 				<div class="logo">
-					<img
+					<!-- <img
 						src="../../assets/dgut2.png"
 						alt=""
-					/>
+					/> -->
 				</div>
 				<div class="roomName">
 					<div class="name">{{ roomName }}</div>
@@ -25,6 +25,7 @@
 					@onSubmitClassRoom="onSubmitClassRoom"
 					@onSubmitVote="onSubmitVote"
 					@onSelectRoomCode="onSelectRoomCode"
+					@onSearchScoreAndComment="onSearchScoreAndComment"
 				>
 				</FunctionDetail>
 			</div>
@@ -263,6 +264,17 @@ export default {
 		},
 		onSubmitAlert() {
 			this.alertContent = null
+		},
+		async onSearchScoreAndComment({ classRoomId }) {
+			console.log(classRoomId)
+			await this.$store.dispatch('score/getScoreByClassRoomId', {
+				endpoint: endpoint.score,
+				data: { classRoomId },
+			})
+			await this.$store.dispatch('comment/getCommentByClassRoomId', {
+				endpoint: endpoint.comment,
+				data: { classRoomId },
+			})
 		},
 	},
 	mounted() {

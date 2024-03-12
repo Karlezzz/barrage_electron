@@ -9,7 +9,7 @@
 		>
 			<div class="feedback__search">
 				<div class="search__item search__item--room">
-					<div class="search__label">Room ID</div>
+					<div class="search__label">Room Name</div>
 					<div class="search__image">
 						<img
 							src="../../image/search.png"
@@ -48,7 +48,7 @@
 					</div>
 				</div>
 				<div class="search__item search__item--classRoom">
-					<div class="search__label">Classroom ID</div>
+					<div class="search__label">Classroom Name</div>
 					<div class="search__image">
 						<img
 							src="../../image/search.png"
@@ -79,13 +79,10 @@
 								class="list-item"
 								v-for="list in classRoomList"
 								:key="list.id"
+								@click="selectClassRoom(list)"
 							>
 								{{ list.name }}
 							</div>
-							<div class="list-item">111</div>
-							<div class="list-item">111</div>
-							<div class="list-item">111</div>
-							<div class="list-item">111</div>
 						</div>
 					</div>
 				</div>
@@ -167,7 +164,19 @@ export default {
 			this.inputRoomId = name
 			this.$emit('onSelectRoomCode', { roomId: id })
 			this.showDropdownRoom = false
-			console.log(this.classRoomList)
+			if (this.classRoomList.length > 0) {
+				this.inputClassRoomId = this.classRoomList[0].name
+				this.onSearchScoreAndComment({ classRoomId: id })
+			}
+		},
+		selectClassRoom(classRoom) {
+			const { name, id } = classRoom
+			this.inputClassRoomId = name
+			this.showDropdownClass = false
+			this.onSearchScoreAndComment({ classRoomId: id })
+		},
+		onSearchScoreAndComment({ classRoomId }) {
+			this.$emit('onSearchScoreAndComment', { classRoomId })
 		},
 	},
 	computed: {
