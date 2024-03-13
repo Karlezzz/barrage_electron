@@ -9,8 +9,8 @@ const actions = {
     return state.axiosHelper.createOne({ url, body, config })
   },
 
-  findAll({ state }, { url, query }) {
-    return state.axiosHelper.findAll({ url, query })
+  async findAll({ state }, { url, query }) {
+    return await state.axiosHelper.findAll({ url, query })
   },
 
   findOne({ state }, { url, query }) {

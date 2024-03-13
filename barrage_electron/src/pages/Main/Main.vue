@@ -3,10 +3,10 @@
 		<div class="main">
 			<div class="head">
 				<div class="logo">
-					<img
+					<!-- <img
 						src="../../assets/dgut2.png"
 						alt=""
-					/>
+					/> -->
 				</div>
 				<div class="roomName">
 					<div class="name">{{ roomName }}</div>
@@ -17,16 +17,17 @@
 				<Function
 					:user="user"
 					@onSubmitName="onSubmitName"
-          @onBackToEnter="onBackToEnter"
+					@onBackToEnter="onBackToEnter"
 				></Function>
-				<Barrage
-					@onSendMessage="onSendMessage"
-				></Barrage>
+				<Barrage @onSendMessage="onSendMessage"></Barrage>
 				<FunctionDetail
 					:clientUrl="clientUrl"
 					@onSubmitClassRoom="onSubmitClassRoom"
 					@onSubmitVote="onSubmitVote"
-				></FunctionDetail>
+					@onSelectRoomCode="onSelectRoomCode"
+					@onSearchScoreAndComment="onSearchScoreAndComment"
+				>
+				</FunctionDetail>
 			</div>
 			<Confirm
 				:content="endClassContent"
@@ -52,7 +53,7 @@ import { _findOne, _updateOne, _createOne, _findAll } from '@/api'
 import { io } from 'socket.io-client'
 import { User } from '../../../lib/models'
 import { endpoint } from '@/api/endpoint'
-import {mapGetters} from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
 	name: 'Main',
 	components: {
@@ -69,7 +70,7 @@ export default {
 			classRoom: null,
 			classRoomCallback: null,
 			endClassContent: null,
-      socket:null
+			socket: null,
 			// user: null,
 		}
 	},
@@ -83,28 +84,28 @@ export default {
 		roomName() {
 			return this.roomInfo ? this.roomInfo.name : ''
 		},
-    ...mapGetters('user', {
+		...mapGetters('user', {
 			user: 'user',
 		}),
 	},
 	methods: {
-    async clearStore(isBack) {
-      if(isBack) {
-        await this.$store.commit('room/SETROOMINFO', null)
-        await this.$store.commit('room/SETROOMLIST', [])
-      }
-      await this.$store.commit('room/SETCLASSROOMINFO', null)
+		async clearStore(isBack) {
+			if (isBack) {
+				await this.$store.commit('room/SETROOMINFO', null)
+				await this.$store.commit('room/SETROOMLIST', [])
+			}
+			await this.$store.commit('room/SETCLASSROOMINFO', null)
 			await this.$store.commit('barrage/SETMESSAGE', [])
-      await this.$store.commit('vote/SETVOTES', [])
-      await this.$store.commit('barrage/SETUSERS',[])
-    },
-    async onBackToEnter() {
-      if(this.socket) {
-        this.socket.emit('closeSocket', false)
-      }
-      await this.clearStore(true)
+			await this.$store.commit('vote/SETVOTES', [])
+			await this.$store.commit('barrage/SETUSERS', [])
+		},
+		async onBackToEnter() {
+			if (this.socket) {
+				this.socket.emit('closeSocket', false)
+			}
+			await this.clearStore(true)
 			this.$router.push('/enter')
-    },
+		},
 		async init() {
 			await this.initClientUrl()
 		},
@@ -124,6 +125,12 @@ export default {
 				return 'https://www.dgut.edu.cn/'
 			}
 		},
+		async getClassRoomList({ roomId }) {
+			await this.$store.dispatch('room/getClassRoomListFromRoom', {
+				endpoint: endpoint.classRoom,
+				data: { roomId },
+			})
+		},
 		async getAllVotes() {
 			await this.$store.dispatch('vote/getAllVotes')
 		},
@@ -136,20 +143,20 @@ export default {
 				this.socket = io(socketUrl, {
 					transports: ['websocket'],
 				})
-        // this.socket.emit('userLogin', {user:this.user})
+				// this.socket.emit('userLogin', {user:this.user})
 				this.socket.removeAllListeners()
-        
+
 				this.socket.on('broadcast', data => {
 					this.$store.commit('barrage/PUTMESSAGE', JSON.parse(data))
 				})
 
 				this.socket.on('sendOnlineUser', users => {
-          this.$store.commit('barrage/SETUSERS', users)
+					this.$store.commit('barrage/SETUSERS', users)
 				})
 
-        this.socket.on('updateVote', data => {
-          this.$store.commit('vote/UPDATEVOTE', data)
-        })
+				this.socket.on('updateVote', data => {
+					this.$store.commit('vote/UPDATEVOTE', data)
+				})
 			} catch (error) {
 				console.log(error)
 			}
@@ -158,7 +165,7 @@ export default {
 			try {
 				const result = await _createOne(endpoint.vote, vote)
 				if (result) {
-          console.log(result);
+					console.log(result)
 					this.$store.commit('vote/SETVOTES', [result])
 					this.alertContent = {
 						content: 'Create vote successfully!',
@@ -174,12 +181,14 @@ export default {
 		},
 		async onSubmitConfirm(flag) {
 			if (flag) {
-				await this._submitClassRoom({ classRoom: this.classRoom })
+				await this._submitClassRoom({
+					classRoom: this.classRoom,
+				})
 				this.classRoomCallback()
-        await this.clearStore(false)
-        this.socket.emit('closeSocket',false)
+				await this.clearStore(false)
+				this.socket.emit('closeSocket', false)
 				this.socket.disconnect()
-        this.socket = null
+				this.socket = null
 			}
 			this.endClassContent = null
 		},
@@ -197,16 +206,18 @@ export default {
 				}
 				return
 			}
-			await this._submitClassRoom({ classRoom })
+			await this._submitClassRoom({
+				classRoom,
+			})
 			await this.initSocket()
-      await this.getAllVotes()
+			await this.getAllVotes()
 			this.classRoomCallback()
 		},
 		async onSubmitName(user) {
 			try {
 				const result = await _updateOne(endpoint.user, user)
 				if (result) {
-          this.$store.commit('user/SETUSER', result)
+					this.$store.commit('user/SETUSER', result)
 					this.alertContent = {
 						content: 'Change name successfully!',
 						button: 'OK',
@@ -224,6 +235,7 @@ export default {
 				const result = await _createOne(endpoint.classRoom, classRoom)
 				if (result) {
 					this.$store.commit('room/SETCLASSROOMINFO', result)
+					this.$store.commit('room/SETLASTCLASSROOMINFO', result)
 					const { isOnClass } = this.$store.state.room.classRoomInfo
 					const content = isOnClass ? 'Class begin!' : 'Class end!'
 					this.alertContent = {
@@ -238,12 +250,11 @@ export default {
 				}
 			}
 		},
-		// initUser() {
-		// 	this.user = User.init({
-		// 		id: nanoid(),
-		// 		name: 'Teacher',
-		// 	})
-		// },
+		async onSelectRoomCode({ roomId }) {
+			await this.getClassRoomList({
+				roomId,
+			})
+		},
 		onSendMessage(newMessage) {
 			try {
 				this.socket.emit('sendMsg', JSON.stringify(newMessage))
@@ -254,6 +265,12 @@ export default {
 		},
 		onSubmitAlert() {
 			this.alertContent = null
+		},
+		async onSearchScoreAndComment({ classRoomId }) {
+			await this.$store.dispatch('score/getScoreByClassRoomId', {
+				endpoint: endpoint.score,
+				data: { classRoomId },
+			})
 		},
 	},
 	mounted() {
