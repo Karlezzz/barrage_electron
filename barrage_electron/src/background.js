@@ -19,7 +19,7 @@ let remindWindow
 
 
 app.on('ready', async () => {
-  session.defaultSession.loadExtension("C:/Users/Karle/AppData/Local/Google/Chrome/User Data/Default/Extensions/nhdogjmejiglipccpnnnanhbledajbpd/6.5.0_1");
+  session.defaultSession.loadExtension("C:/Users/Karle/AppData/Local/Google/Chrome/User Data/Default/Extensions/nhdogjmejiglipccpnnnanhbledajbpd/6.6.1_0");
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 600,

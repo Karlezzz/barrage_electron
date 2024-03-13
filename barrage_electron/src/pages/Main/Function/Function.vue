@@ -104,6 +104,18 @@
 					{{ $classRoomLabel }}
 				</div>
 			</div>
+      <div
+				class="functionItem"
+				@click="selectFunction(6)"
+			>
+				<div class="icon">
+					<img
+						src="../image/feedback.png"
+						alt=""
+					/>
+				</div>
+				<div class="functionName">Feedback List</div>
+			</div>
 			<div
 				class="openBarrage"
 				:class="{
@@ -137,6 +149,7 @@ export default {
 				isShowScreen: false,
 				isShowShareRoom: false,
 				isShowClassRoom: false,
+        isShowFeedbackList:false
 			},
 			isOpenBarrage: false,
 			barrageStatus: null,
@@ -172,6 +185,7 @@ export default {
 			if (index == 3) this.functionStatusList.isShowScreen = true
 			if (index == 4) this.functionStatusList.isShowShareRoom = true
 			if (index == 5) this.functionStatusList.isShowClassRoom = true
+      if(index === 6) this.functionStatusList.isShowFeedbackList = true
 
 			this.$bus.$emit('getFunctionStatusList', this.functionStatusList)
 		},

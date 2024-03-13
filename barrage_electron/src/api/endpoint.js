@@ -5,11 +5,9 @@ const endpoint = {
   classRoom: '/classRoom',
   room: '/room',
   vote: '/vote',
+  score: '/score',
+  comment: '/comment'
 }
-
-// module.exports = {
-//   endpoint
-// }
 
 export {
   endpoint
