@@ -12,9 +12,11 @@
 		<ClassRoom
 			:isShowClassRoom="functionStatusList.isShowClassRoom"
 			@onSubmitClassRoom="onSubmitClassRoom"
+			@onEndClassAndShowFeedback="onEndClassAndShowFeedback"
 		></ClassRoom>
 		<FeedbackList
 			:isShowFeedbackList="functionStatusList.isShowFeedbackList"
+			:isEndClassShowFeedback="isEndClassShowFeedback"
 			@onSelectRoomCode="onSelectRoomCode"
 			@onSearchScoreAndComment="onSearchScoreAndComment"
 		></FeedbackList>
@@ -49,6 +51,7 @@ export default {
 				isShowClassRoom: false,
 				isShowFeedbackList: false,
 			},
+			isEndClassShowFeedback: false,
 		}
 	},
 	mounted() {
@@ -68,6 +71,13 @@ export default {
 		},
 		onSearchScoreAndComment({ classRoomId }) {
 			this.$emit('onSearchScoreAndComment', { classRoomId })
+		},
+		onEndClassAndShowFeedback() {
+			Object.keys(this.functionStatusList).forEach(key => {
+				this.functionStatusList[key] = false
+			})
+			this.isEndClassShowFeedback = true
+			this.functionStatusList.isShowFeedbackList = true
 		},
 	},
 }

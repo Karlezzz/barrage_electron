@@ -106,7 +106,8 @@ export default {
 			} else {
 				clearInterval(this.endTimer)
 				this.endTime = '-- : -- : --'
-				this.className = ''
+        this.className = ''
+        this.$emit('onEndClassAndShowFeedback')
 			}
 		},
 	},

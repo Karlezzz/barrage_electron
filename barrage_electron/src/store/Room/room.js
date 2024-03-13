@@ -3,6 +3,7 @@ import { _createOne, _findAll } from "@/api";
 const state = {
   roomInfo: null,
   classRoomInfo: null,
+  lastClassRoomInfo: null,
   ipInfo: null,
   roomList: [],
   classRoomList: []
@@ -13,6 +14,9 @@ const mutations = {
   },
   SETCLASSROOMINFO(state, data) {
     state.classRoomInfo = data
+  },
+  SETLASTCLASSROOMINFO(state, data) {
+    state.lastClassRoomInfo = data
   },
   SETIPPORT(state, data) {
     state.ipInfo = data
@@ -34,7 +38,7 @@ const actions = {
       }
     }
     catch (error) {
-      console.log(error)
+      return Promise.reject(error)
     }
   },
   async getRoomList({ commit }, { endpoint }) {
@@ -45,7 +49,7 @@ const actions = {
         return
       }
     } catch (error) {
-      console.log(error)
+      return Promise.reject(error)
     }
   },
   async getClassRoomListFromRoom({ commit }, { endpoint, data }) {

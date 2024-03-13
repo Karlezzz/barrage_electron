@@ -235,6 +235,7 @@ export default {
 				const result = await _createOne(endpoint.classRoom, classRoom)
 				if (result) {
 					this.$store.commit('room/SETCLASSROOMINFO', result)
+					this.$store.commit('room/SETLASTCLASSROOMINFO', result)
 					const { isOnClass } = this.$store.state.room.classRoomInfo
 					const content = isOnClass ? 'Class begin!' : 'Class end!'
 					this.alertContent = {

@@ -111,15 +111,9 @@
 </template>
 
 <script>
-import FeedbackScore from './FeedbackScore.vue'
-import FeedbackComment from './FeedbackComment.vue'
 export default {
 	name: 'FeedbackList',
-	props: ['isShowFeedbackList'],
-	components: {
-		FeedbackComment,
-		FeedbackScore,
-	},
+	props: ['isShowFeedbackList', 'isEndClassShowFeedback'],
 	data() {
 		return {
 			isShowScore: true,
@@ -180,6 +174,18 @@ export default {
 		},
 		scoreCommentList() {
 			return this.$store.state.score.scoreCommentList || []
+		},
+	},
+	watch: {
+		isEndClassShowFeedback(newV, oldV) {
+			if (newV === true && oldV === false) {
+				console.log(this.$store.state.room.lastClassRoomInfo)
+				this.inputRoomId = this.$store.state.room.roomInfo?.name
+				this.inputClassRoomId = this.$store.state.room.lastClassRoomInfo?.name
+				this.onSearchScoreAndComment({
+					classRoomId: this.$store.state.room.lastClassRoomInfo?.id,
+				})
+			}
 		},
 	},
 }
