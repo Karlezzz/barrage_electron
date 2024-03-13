@@ -88,6 +88,9 @@
 				</div>
 			</div>
 			<div class="feedback__content">
+				<div class="card card--empty">
+					{{ scoreCommentList.length }} Feedback
+				</div>
 				<template v-if="scoreCommentList.length !== 0">
 					<div
 						class="card"
@@ -97,7 +100,7 @@
 						<div class="card__head">
 							<div class="card__name">{{ item?.user?.name }}</div>
 							<div class="card__score">
-								{{ item?.score?.value ?? 'No Score' }}
+								{{ item?.score?.value + '⭐' ?? 'No Score' }}
 							</div>
 						</div>
 						<div class="card__comment">
@@ -343,6 +346,9 @@ export default {
 				justify-content: space-between;
 				padding-top: 5px;
 			}
+			&__score {
+				color: #fff;
+			}
 			&__comment {
 				width: 94%;
 				margin-left: 3%;
@@ -352,6 +358,14 @@ export default {
 				color: #fff;
 				margin-top: 5px;
 				padding-bottom: 20px;
+			}
+			&--empty {
+				font-size: 15px;
+				color: #fff;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				margin-bottom: 10px;
 			}
 		}
 	}
