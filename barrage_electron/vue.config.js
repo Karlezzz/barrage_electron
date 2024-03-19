@@ -16,8 +16,8 @@ module.exports = defineConfig({
         appId: "electron.app",
         asar: false,
         extraResources: {
-          from:'./assets',
-          to:'assets'
+          from: './assets',
+          to: 'assets'
         },
         nsis: {
           "oneClick": false, // 是否一键安装
@@ -59,7 +59,13 @@ module.exports = defineConfig({
       entry: './src/barrage.js',
       template: './public/danmu.html',
       filename: 'danmu.html',
-      title: 'danmu Page'
+      title: 'Danmu page'
+    },
+    contentList: {
+      entry: './src/barrage.js',
+      template: './public/danmuHistory.html',
+      filename: 'danmuHistory.html',
+      title: 'Danmu History'
     }
   },
 })
