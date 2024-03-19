@@ -62,7 +62,7 @@ module.exports = defineConfig({
       title: 'Danmu page'
     },
     contentList: {
-      entry: './src/barrage.js',
+      entry: './src/barrageHistory.js',
       template: './public/danmuHistory.html',
       filename: 'danmuHistory.html',
       title: 'Danmu History'
