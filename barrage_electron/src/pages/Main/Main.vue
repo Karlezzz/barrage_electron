@@ -3,10 +3,10 @@
 		<div class="main">
 			<div class="head">
 				<div class="logo">
-					<!-- <img
+					<img
 						src="../../assets/dgut2.png"
 						alt=""
-					/> -->
+					/>
 				</div>
 				<div class="roomName">
 					<div class="name">{{ roomName }}</div>
