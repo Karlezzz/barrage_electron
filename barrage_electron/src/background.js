@@ -16,6 +16,7 @@ const fs = require('fs')
 let mainWindow
 let tray
 let remindWindow
+let barrageHistoryWindow
 
 
 app.on('ready', async () => {
@@ -75,11 +76,6 @@ ipcMain.on('closeNewWindow', () => {
 })
 
 ipcMain.on('closeMainWindow', () => {
-  // mainWindow.close()
-  // if (remindWindow) {
-  //   remindWindow.destroy()
-  //   remindWindow = undefined
-  // }
   app.exit()
 })
 
@@ -110,7 +106,6 @@ ipcMain.on('sendVuexMsg', (e, data) => {
 })
 
 function setTray() {
-
   tray = new Tray(
     nativeImage.createFromPath(path.join(app.getAppPath(), '../assets/my.png'))
   )
@@ -179,5 +174,35 @@ async function createRemindWindow() {
   } else {
     createProtocol('app')
     remindWindow.loadURL(`file://${__dirname}/danmu.html`)
+  }
+}
+
+async function createBarrageHistory() {
+  barrageHistoryWindow = new BrowserWindow({
+    width: 1200,
+    height: 600,
+    transparent: false,
+    frame: false,
+    toolbar: true,
+    resizable: true,
+    skipTaskbar: true,
+    alwaysOnTop: true,
+    movable: true,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
+    },
+  })
+  barrageHistoryWindow.setIgnoreMouseEvents(true)
+  barrageHistoryWindow.setAlwaysOnTop(true)
+
+  if (process.env.WEBPACK_DEV_SERVER_URL) {
+    barrageHistoryWindow.loadURL(
+      process.env.WEBPACK_DEV_SERVER_URL + '/public/danmuHistory.html'
+    )
+  } else {
+    createProtocol('app')
+    barrageHistoryWindow.loadURL(`file://${__dirname}/danmuHistory.html`)
   }
 }
