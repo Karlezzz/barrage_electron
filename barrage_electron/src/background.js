@@ -23,7 +23,7 @@ app.on('ready', async () => {
   session.defaultSession.loadExtension("C:/Users/Karle/AppData/Local/Google/Chrome/User Data/Default/Extensions/nhdogjmejiglipccpnnnanhbledajbpd/6.6.1_0");
   mainWindow = new BrowserWindow({
     width: 1200,
-    height: 600,
+    height: 700,
     transparent: true,
     frame: false,
     center: true,
@@ -84,6 +84,13 @@ ipcMain.on('newWindow', () => {
   mainWindow.minimize()
 })
 
+ipcMain.on('openMessageHistory', (e, data) => {
+  createBarrageHistory()
+  if (barrageHistoryWindow != undefined)
+    barrageHistoryWindow.webContents.send('getAllVuexMsg', data)
+})
+
+
 ipcMain.handle('getIpInfo', (event, data) => {
   const fileUrl = path.resolve(app.getAppPath(), '../assets/ipAddress.json')
   fs.writeFileSync(fileUrl, JSON.stringify(data, null, "\t"), 'utf-8')
@@ -98,6 +105,7 @@ ipcMain.handle('reqInfo', (event, data) => {
 
 app.whenReady().then(() => {
   setTray()
+  createBarrageHistory()
 })
 
 ipcMain.on('sendVuexMsg', (e, data) => {
@@ -179,23 +187,40 @@ async function createRemindWindow() {
 
 async function createBarrageHistory() {
   barrageHistoryWindow = new BrowserWindow({
-    width: 1200,
-    height: 600,
-    transparent: false,
+    // width: 200,
+    // height: 300,
+    // x: 0,
+    // y: 300,
+    // transparent: false,
+    // frame: false,
+    // toolbar: false,
+    // resizable: false,
+    // skipTaskbar: true,
+    // alwaysOnTop: true,
+    // movable: true,
+    // opacity: 0.4,
+    // webPreferences: {
+    //   nodeIntegration: true,
+    //   contextIsolation: false,
+    //   enableRemoteModule: true,
+    // },
+    width: 200,
+    height: 300,
+    x: 0,
+    y: 300,
+    transparent: true,
     frame: false,
-    toolbar: true,
-    resizable: true,
-    skipTaskbar: true,
     alwaysOnTop: true,
-    movable: true,
+    resizable: false,
     webPreferences: {
+      webSecurity: false,
+      enableRemoteModule: true,
       nodeIntegration: true,
       contextIsolation: false,
-      enableRemoteModule: true,
     },
   })
-  barrageHistoryWindow.setIgnoreMouseEvents(true)
-  barrageHistoryWindow.setAlwaysOnTop(true)
+  // barrageHistoryWindow.setIgnoreMouseEvents(true)
+  // barrageHistoryWindow.setAlwaysOnTop(true)
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     barrageHistoryWindow.loadURL(
