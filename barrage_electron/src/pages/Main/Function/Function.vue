@@ -106,14 +106,14 @@
 			</div>
 			<div
 				class="openBarrageHistory functionItem"
+				@click="openMessageHistory"
 				:class="{
 					noBarrage: classRoom === null,
 				}"
-				@click="openMessageHistory"
 			>
 				<div class="icon">
 					<img
-						src="../image/弹幕数_32.png"
+						src="../image/单列列表.png"
 						alt=""
 					/>
 				</div>
@@ -223,7 +223,7 @@ export default {
 			return this.classRoom ? this.classRoom.isOnClass : false
 		},
 		messageList() {
-			return this.store.state.barrage.messageList || []
+			return this.$store.state.barrage.messageList || []
 		},
 		$classRoomLabel() {
 			return this.classRoomOnClass ? 'In class' : 'Create classroom'
@@ -238,6 +238,9 @@ export default {
 		})
 		ipcRenderer.on('hasCloseMessageHistory', () => {
 			this.isOpenMessageHistory = false
+		})
+		ipcRenderer.on('messageHistoryStatus', (e, data) => {
+			this.isOpenMessageHistory = data
 		})
 	},
 }

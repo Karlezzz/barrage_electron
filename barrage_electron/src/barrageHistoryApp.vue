@@ -14,11 +14,13 @@
 		</div>
 
 		<div class="content">
-			<div class="message">1111111111111111111111</div>
-			<div class="message">1111111111111111111111</div>
-			<div class="message">1111111111111111111111</div>
-			<div class="message">1111111111111111111111</div>
-			<div class="message">1111111111111111111111</div>
+			<div
+				class="message"
+				v-for="(i, idx) in barrageList"
+				:key="idx"
+			>
+				{{ i?.content }}
+			</div>
 		</div>
 	</div>
 </template>
@@ -31,8 +33,14 @@ export default {
 			barrageList: [],
 		}
 	},
-	method: {
-		onCloseHistoryPage() {},
+	methods: {
+		onCloseHistoryPage() {
+			ipcRenderer.send('closeMessageHistory')
+		},
+		initScroll() {
+			let div = document.querySelector('.content')
+			div.scrollTop = div.scrollHeight
+		},
 	},
 
 	created() {
@@ -40,9 +48,20 @@ export default {
 			this.barrageList = [...this.barrageList, ...data]
 		})
 		ipcRenderer.on('getVuexMsg', (e, data) => {
-			this.barrageList.push(data)
-			this.handlerBarrage(data)
+			this.barrageList = [...this.barrageList, data]
 		})
+	},
+	mounted() {
+		ipcRenderer.send('messageHistoryComplete')
+		this.initScroll()
+	},
+	watch: {
+		barrageList() {
+			this.$nextTick(() => {
+				let div = document.querySelector('.content')
+				div.scrollTop = div.scrollHeight
+			})
+		},
 	},
 }
 </script>
@@ -92,7 +111,7 @@ input:-ms-input-placeholder {
 	background-color: #cccccc;
 	color: rgb(252, 63, 63);
 	border-radius: 20px;
-	opacity: 0.4;
+	opacity: 0.6;
 	&:hover {
 		opacity: 1;
 	}
@@ -113,7 +132,7 @@ input:-ms-input-placeholder {
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			user-select: none;
+			//user-select: none;
 			cursor: pointer;
 			img {
 				width: 70%;

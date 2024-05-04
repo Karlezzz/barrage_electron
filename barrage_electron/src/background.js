@@ -16,7 +16,7 @@ const fs = require('fs')
 let mainWindow
 let tray
 let remindWindow
-let barrageHistoryWindow
+let barrageHistoryWindow = null
 
 
 app.on('ready', async () => {
@@ -84,10 +84,22 @@ ipcMain.on('newWindow', () => {
   mainWindow.minimize()
 })
 
+let historyMessage = null
 ipcMain.on('openMessageHistory', (e, data) => {
+  historyMessage = data
   createBarrageHistory()
-  if (barrageHistoryWindow != undefined)
-    barrageHistoryWindow.webContents.send('getAllVuexMsg', data)
+})
+
+ipcMain.on('messageHistoryComplete', () => {
+  if (barrageHistoryWindow)
+    barrageHistoryWindow.webContents.send('getAllVuexMsg', historyMessage)
+  mainWindow.webContents.send('messageHistoryStatus', true)
+})
+
+ipcMain.on('closeMessageHistory', () => {
+  barrageHistoryWindow.destroy()
+  barrageHistoryWindow = null
+  mainWindow.webContents.send('messageHistoryStatus', false)
 })
 
 
@@ -105,12 +117,12 @@ ipcMain.handle('reqInfo', (event, data) => {
 
 app.whenReady().then(() => {
   setTray()
-  createBarrageHistory()
+  // createBarrageHistory()
 })
 
 ipcMain.on('sendVuexMsg', (e, data) => {
-  if (remindWindow != undefined)
-    remindWindow.webContents.send('getVuexMsg', data)
+  if (remindWindow != undefined) remindWindow.webContents.send('getVuexMsg', data)
+  if (barrageHistoryWindow) barrageHistoryWindow.webContents.send('getVuexMsg', data)
 })
 
 function setTray() {
@@ -187,23 +199,6 @@ async function createRemindWindow() {
 
 async function createBarrageHistory() {
   barrageHistoryWindow = new BrowserWindow({
-    // width: 200,
-    // height: 300,
-    // x: 0,
-    // y: 300,
-    // transparent: false,
-    // frame: false,
-    // toolbar: false,
-    // resizable: false,
-    // skipTaskbar: true,
-    // alwaysOnTop: true,
-    // movable: true,
-    // opacity: 0.4,
-    // webPreferences: {
-    //   nodeIntegration: true,
-    //   contextIsolation: false,
-    //   enableRemoteModule: true,
-    // },
     width: 200,
     height: 300,
     x: 0,
@@ -226,6 +221,7 @@ async function createBarrageHistory() {
     barrageHistoryWindow.loadURL(
       process.env.WEBPACK_DEV_SERVER_URL + '/public/danmuHistory.html'
     )
+    // barrageHistoryWindow.webContents.openDevTools()
   } else {
     createProtocol('app')
     barrageHistoryWindow.loadURL(`file://${__dirname}/danmuHistory.html`)
