@@ -146,6 +146,7 @@ export default {
 				question: this.voteQuestion,
 				voteOptions: this.voteOptions,
 				duration: this.duration.timestamp,
+        classRoomId: this.$store.state.room.classRoomInfo.id
 			})
 			this.$emit('onSubmitVote', { vote })
 		},

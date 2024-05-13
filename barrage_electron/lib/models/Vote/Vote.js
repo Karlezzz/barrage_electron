@@ -9,6 +9,7 @@ class Vote {
     this.endTime = this.created + options.duration
     this.question = options.question
     this.voteOptions = VoteOption.initFromArray(options.voteOptions) || []
+    this.classRoomId = options.classRoomId
   }
 
   get isValid() {
@@ -17,6 +18,7 @@ class Vote {
     && this.voteOptions.length >= 2
     && this.created
     && this.duration
+    && this.classRoomId
   }
 
   isInValidTime() {

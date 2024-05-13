@@ -12,8 +12,6 @@ async function _findAll(url, options) {
   const result = await store.dispatch('axios/findAll', {
     url,
     query: {
-      active: true,
-      deleted: false,
       ...options,
     },
   })
@@ -23,8 +21,6 @@ async function _findOne(url, options) {
   const result = await store.dispatch('axios/findAll', {
     url,
     query: {
-      // active: true,
-      // deleted: false,
       ...options,
     },
   })

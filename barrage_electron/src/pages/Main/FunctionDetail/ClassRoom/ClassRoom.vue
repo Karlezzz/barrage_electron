@@ -68,6 +68,9 @@ export default {
 		roomCode() {
 			return this.room ? this.room.code : null
 		},
+		roomId() {
+			return this.room ? this.room.id : null
+		},
 		classRoom() {
 			return this.$store.state.room.classRoomInfo
 		},
@@ -84,14 +87,14 @@ export default {
 		onSubmitClassRoom() {
 			const classRoom = ClassRoom.init({
 				name: this.className,
-				ownerRoomCode: this.roomCode,
+				ownerRoomId: this.roomId,
 				id: nanoid(),
 			})
 			const _classRoom = this.classRoom ? this.classRoom : classRoom
 
 			this.$emit('onSubmitClassRoom', {
 				classRoom: _classRoom,
-        callback: this.classRoomCallback
+				callback: this.classRoomCallback,
 			})
 		},
 		classRoomCallback() {
@@ -104,6 +107,7 @@ export default {
 				clearInterval(this.endTimer)
 				this.endTime = '-- : -- : --'
         this.className = ''
+        this.$emit('onEndClassAndShowFeedback')
 			}
 		},
 	},
