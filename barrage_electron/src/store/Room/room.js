@@ -3,8 +3,10 @@ import { _createOne, _findAll } from "@/api";
 const state = {
   roomInfo: null,
   classRoomInfo: null,
+  lastClassRoomInfo: null,
   ipInfo: null,
-  roomList:[]
+  roomList: [],
+  classRoomList: []
 };
 const mutations = {
   SETROOMINFO(state, data) {
@@ -13,11 +15,17 @@ const mutations = {
   SETCLASSROOMINFO(state, data) {
     state.classRoomInfo = data
   },
+  SETLASTCLASSROOMINFO(state, data) {
+    state.lastClassRoomInfo = data
+  },
   SETIPPORT(state, data) {
     state.ipInfo = data
   },
-  SETROOMLIST(state,data) {
+  SETROOMLIST(state, data) {
     state.roomList = data
+  },
+  SETCLASSROOMLIST(state, data) {
+    state.classRoomList = data
   }
 };
 const actions = {
@@ -30,10 +38,10 @@ const actions = {
       }
     }
     catch (error) {
-      console.log(error)
+      return Promise.reject(error)
     }
   },
-  async getRoomList({ commit },{endpoint}) {
+  async getRoomList({ commit }, { endpoint }) {
     try {
       const result = await _findAll(endpoint)
       if (result) {
@@ -41,7 +49,18 @@ const actions = {
         return
       }
     } catch (error) {
-      console.log(error)
+      return Promise.reject(error)
+    }
+  },
+  async getClassRoomListFromRoom({ commit }, { endpoint, data }) {
+    try {
+      const result = await _findAll(endpoint, data)
+      if (result) {
+        commit('SETCLASSROOMLIST', result)
+        return
+      }
+    } catch (error) {
+      return Promise.reject(error)
     }
   }
 

@@ -89,7 +89,7 @@ export default {
 		},
 		largeBrowser() {
 			if (remote.getCurrentWindow().isMaximized()) {
-				remote.getCurrentWindow().setContentSize(1200, 600)
+				remote.getCurrentWindow().setContentSize(1200, 700)
 				remote.getCurrentWindow().center()
 			} else {
 				remote.getCurrentWindow().maximize()

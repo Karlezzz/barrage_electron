@@ -63,18 +63,6 @@
 				</div>
 				<div class="functionName">Vote</div>
 			</div>
-			<!-- <div
-				class="functionItem"
-				@click="selectFunction(3)"
-			>
-				<div class="icon">
-					<img
-						src="../image/投屏.png"
-						alt=""
-					/>
-				</div>
-				<div class="functionName">Screen sharing</div>
-			</div> -->
 			<div
 				class="functionItem"
 				@click="selectFunction(4)"
@@ -103,6 +91,33 @@
 				>
 					{{ $classRoomLabel }}
 				</div>
+			</div>
+			<div
+				class="functionItem"
+				@click="selectFunction(6)"
+			>
+				<div class="icon">
+					<img
+						src="../image/feedback.png"
+						alt=""
+					/>
+				</div>
+				<div class="functionName">Feedback List</div>
+			</div>
+			<div
+				class="openBarrageHistory functionItem"
+				@click="openMessageHistory"
+				:class="{
+					noBarrage: classRoom === null,
+				}"
+			>
+				<div class="icon">
+					<img
+						src="../image/单列列表.png"
+						alt=""
+					/>
+				</div>
+				<div class="functionName">Message List</div>
 			</div>
 			<div
 				class="openBarrage"
@@ -137,8 +152,10 @@ export default {
 				isShowScreen: false,
 				isShowShareRoom: false,
 				isShowClassRoom: false,
+				isShowFeedbackList: false,
 			},
 			isOpenBarrage: false,
+			isOpenMessageHistory: false,
 			barrageStatus: null,
 			isEditName: false,
 			adminName: 'Teacher',
@@ -172,6 +189,7 @@ export default {
 			if (index == 3) this.functionStatusList.isShowScreen = true
 			if (index == 4) this.functionStatusList.isShowShareRoom = true
 			if (index == 5) this.functionStatusList.isShowClassRoom = true
+			if (index === 6) this.functionStatusList.isShowFeedbackList = true
 
 			this.$bus.$emit('getFunctionStatusList', this.functionStatusList)
 		},
@@ -184,6 +202,10 @@ export default {
 				ipcRenderer.send('closeNewWindow')
 				this.barrageStatus = '开启弹幕'
 			}
+		},
+		openMessageHistory() {
+			if (this.isOpenMessageHistory) return
+			ipcRenderer.send('openMessageHistory', this.messageList)
 		},
 	},
 	computed: {
@@ -200,6 +222,9 @@ export default {
 		classRoomOnClass() {
 			return this.classRoom ? this.classRoom.isOnClass : false
 		},
+		messageList() {
+			return this.$store.state.barrage.messageList || []
+		},
 		$classRoomLabel() {
 			return this.classRoomOnClass ? 'In class' : 'Create classroom'
 		},
@@ -210,6 +235,12 @@ export default {
 		})
 		ipcRenderer.on('hasOpenBarrage', () => {
 			this.isOpenBarrage = true
+		})
+		ipcRenderer.on('hasCloseMessageHistory', () => {
+			this.isOpenMessageHistory = false
+		})
+		ipcRenderer.on('messageHistoryStatus', (e, data) => {
+			this.isOpenMessageHistory = data
 		})
 	},
 }
@@ -304,7 +335,7 @@ export default {
 	margin-left: 10px;
 	width: 94%;
 	height: 80%;
-	overflow: hidden;
+	overflow: scroll;
 	position: relative;
 }
 
@@ -358,7 +389,7 @@ export default {
 	left: 1%;
 }
 
-.function .functionList .openBarrage.noBarrage {
+.function .functionList .noBarrage {
 	background-color: #232323;
 	color: #706e6e;
 	cursor: not-allowed;

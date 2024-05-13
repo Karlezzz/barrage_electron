@@ -9,28 +9,34 @@
 			:isShowShareRoom="functionStatusList.isShowShareRoom"
 			:clientUrl="clientUrl"
 		></ShareRoom>
-		<!-- <Screen :isShowScreen="functionStatusList.isShowScreen"></Screen> -->
 		<ClassRoom
 			:isShowClassRoom="functionStatusList.isShowClassRoom"
 			@onSubmitClassRoom="onSubmitClassRoom"
+			@onEndClassAndShowFeedback="onEndClassAndShowFeedback"
 		></ClassRoom>
+		<FeedbackList
+			:isShowFeedbackList="functionStatusList.isShowFeedbackList"
+			:isEndClassShowFeedback="isEndClassShowFeedback"
+			@onSelectRoomCode="onSelectRoomCode"
+			@onSearchScoreAndComment="onSearchScoreAndComment"
+		></FeedbackList>
 	</div>
 </template>
 
 <script>
-import Screen from './Screen/Screen.vue'
 import ShareRoom from './ShareRoom/ShareRoom.vue'
 import Vote from './Vote/Vote.vue'
 import Member from './Member/Member.vue'
 import ClassRoom from './ClassRoom/ClassRoom.vue'
+import FeedbackList from './FeedbackList/FeedbackList.vue'
 export default {
 	name: 'FunctionDetail',
 	components: {
 		Member,
 		Vote,
 		ShareRoom,
-		Screen,
 		ClassRoom,
+		FeedbackList,
 	},
 	props: {
 		clientUrl: { type: String, default: '' },
@@ -43,7 +49,9 @@ export default {
 				isShowScreen: false,
 				isShowShareRoom: false,
 				isShowClassRoom: false,
+				isShowFeedbackList: false,
 			},
+			isEndClassShowFeedback: false,
 		}
 	},
 	mounted() {
@@ -57,6 +65,19 @@ export default {
 		},
 		onSubmitVote({ vote }) {
 			this.$emit('onSubmitVote', { vote })
+		},
+		onSelectRoomCode({ roomId }) {
+			this.$emit('onSelectRoomCode', { roomId })
+		},
+		onSearchScoreAndComment({ classRoomId }) {
+			this.$emit('onSearchScoreAndComment', { classRoomId })
+		},
+		onEndClassAndShowFeedback() {
+			Object.keys(this.functionStatusList).forEach(key => {
+				this.functionStatusList[key] = false
+			})
+			this.isEndClassShowFeedback = true
+			this.functionStatusList.isShowFeedbackList = true
 		},
 	},
 }

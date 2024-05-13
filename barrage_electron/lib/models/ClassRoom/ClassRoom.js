@@ -7,7 +7,7 @@ class ClassRoom {
     this.id = options.id || nanoid()
     this.beginTime = options.beginTime || (new Date().valueOf())
     this.endTime = options.endTime
-    this.ownerRoomCode = options.ownerRoomCode
+    this.ownerRoomId = options.ownerRoomId
     this.members = options.members || []
     this.isOnClass = options.isOnClass || false
     // this.creator = options.creator
@@ -15,7 +15,7 @@ class ClassRoom {
 
   get isValid() {
     return !!this.id
-    && !!this.ownerRoomCode 
+      && !!this.ownerRoomId
     // && !!this.creator 
   }
 
