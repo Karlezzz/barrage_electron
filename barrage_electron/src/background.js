@@ -215,7 +215,7 @@ async function createBarrageHistory() {
     },
   })
   // barrageHistoryWindow.setIgnoreMouseEvents(true)
-  // barrageHistoryWindow.setAlwaysOnTop(true)
+  barrageHistoryWindow.setAlwaysOnTop(true)
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     barrageHistoryWindow.loadURL(

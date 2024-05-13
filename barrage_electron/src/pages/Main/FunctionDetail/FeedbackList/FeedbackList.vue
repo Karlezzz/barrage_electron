@@ -336,6 +336,7 @@ export default {
 			border-radius: 20px;
 			background-color: #ef945482;
 			margin-left: 5%;
+			margin-top: 10px;
 			&__head {
 				height: 30px;
 				width: 94%;
